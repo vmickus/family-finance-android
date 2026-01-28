@@ -96,6 +96,15 @@ fun DashboardScreen(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // Monthly Chart
+                    item {
+                        MonthlyChart(
+                            transactions = uiState.transactions,
+                            month = uiState.month,
+                            year = uiState.year
+                        )
+                    }
+
                     // Summary
                     uiState.summary?.let { summary ->
                         item {

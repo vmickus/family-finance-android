@@ -158,8 +158,8 @@ fun DashboardScreen(
             categories = uiState.categories,
             isLoading = uiState.isLoading,
             onDismiss = { dashboardViewModel.hideTransactionForm() },
-            onCreateTransaction = { categoryId, type, amount, description, photoPath, date ->
-                dashboardViewModel.createTransaction(categoryId, type, amount, description, photoPath, date)
+            onCreateTransaction = { categoryId, type, amount, description, date ->
+                dashboardViewModel.createTransaction(categoryId, type, amount, description, date)
             },
             onCreateCategory = { name, color ->
                 dashboardViewModel.createCategory(name, color)

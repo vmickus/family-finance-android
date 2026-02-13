@@ -16,6 +16,9 @@ interface ApiService {
     suspend fun getMe(): Response<User>
 
     // Families
+    @GET("families")
+    suspend fun listFamilies(): Response<List<Family>>
+
     @POST("families")
     suspend fun createFamily(@Body request: CreateFamilyRequest): Response<Family>
 

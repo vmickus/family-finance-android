@@ -10,6 +10,19 @@ class FinancasRepository @Inject constructor(
     private val apiService: ApiService
 ) {
     // Families
+    suspend fun listFamilies(): Result<List<Family>> {
+        return try {
+            val response = apiService.listFamilies()
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Erro ao carregar famílias"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun createFamily(name: String): Result<Family> {
         return try {
             val response = apiService.createFamily(CreateFamilyRequest(name))

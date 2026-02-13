@@ -35,17 +35,36 @@ class DashboardViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            authRepository.selectedFamilyId.collect { familyId ->
+            authRepository.selectedFamilyId.distinctUntilChanged().collect { familyId ->
                 if (familyId != null) {
-                    loadFamily(familyId)
+                    loadFamily(familyId, allowFallback = true)
                 } else {
-                    _uiState.update { it.copy(showFamilySetup = true) }
+                    loadUserFamiliesAndSelect()
                 }
             }
         }
     }
 
-    private fun loadFamily(familyId: String) {
+    private fun loadUserFamiliesAndSelect() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, showFamilySetup = false, error = null) }
+            financasRepository.listFamilies()
+                .onSuccess { families ->
+                    if (families.isNotEmpty()) {
+                        val selectedFamily = families.first()
+                        authRepository.saveSelectedFamily(selectedFamily.id)
+                        loadFamily(selectedFamily.id, allowFallback = false)
+                    } else {
+                        _uiState.update { it.copy(isLoading = false, showFamilySetup = true) }
+                    }
+                }
+                .onFailure {
+                    _uiState.update { it.copy(isLoading = false, showFamilySetup = true) }
+                }
+        }
+    }
+
+    private fun loadFamily(familyId: String, allowFallback: Boolean = false) {
         viewModelScope.launch {
             financasRepository.getFamily(familyId)
                 .onSuccess { family ->
@@ -53,7 +72,11 @@ class DashboardViewModel @Inject constructor(
                     loadData(familyId)
                 }
                 .onFailure {
-                    _uiState.update { it.copy(showFamilySetup = true) }
+                    if (allowFallback) {
+                        loadUserFamiliesAndSelect()
+                    } else {
+                        _uiState.update { it.copy(isLoading = false, showFamilySetup = true) }
+                    }
                 }
         }
     }

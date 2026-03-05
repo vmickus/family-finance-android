@@ -37,6 +37,41 @@
     <!-- Home placeholder -->
     <string name="home_placeholder">Home (coming in Phase 2)</string>
 
+    <!-- Summary -->
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
+    <string name="balance">Balance</string>
+
+    <!-- Transactions -->
+    <string name="no_transactions">No transactions yet</string>
+    <string name="scheduled">Scheduled</string>
+    <string name="chart_no_data">No data for this period</string>
+    <string name="new_transaction">New Transaction</string>
+    <string name="edit_transaction">Edit Transaction</string>
+    <string name="amount">Amount</string>
+    <string name="description">Description</string>
+    <string name="select_category">Select category</string>
+    <string name="recurring">Recurring</string>
+    <string name="occurrences">Occurrences</string>
+    <string name="occurrences_range">Between 2 and 12</string>
+    <string name="save">Save</string>
+
+    <!-- Delete dialog -->
+    <string name="delete">Delete</string>
+    <string name="delete_transaction_title">Delete transaction</string>
+    <string name="delete_transaction_description">This action cannot be undone.</string>
+    <string name="delete_recurring_title">Delete recurring transaction</string>
+    <string name="delete_recurring_description">Choose how to handle this recurring transaction.</string>
+    <string name="delete_this_only">Delete this only</string>
+    <string name="cancel_from_date">Cancel from this date</string>
+
+    <!-- Form errors -->
+    <string name="error_select_category">Please select a category</string>
+    <string name="error_amount_positive">Amount must be greater than zero</string>
+    <string name="error_description_required">Description is required</string>
+    <string name="error_description_max">Description must be 50 characters or less</string>
+    <string name="error_save_failed">Failed to save. Try again.</string>
+
     <!-- Bottom Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_budgets">Budgets</string>

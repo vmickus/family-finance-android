@@ -1,0 +1,106 @@
+package com.financasdacasa.app.ui.components
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.*
+import com.financasdacasa.app.R
+import com.financasdacasa.app.data.model.TransactionSummary
+import com.financasdacasa.app.util.formatCurrency
+import java.math.BigDecimal
+
+private val incomeColor = Color(0xFF10B981)
+private val expenseColor = Color(0xFFF43F5E)
+private val balancePositiveColor = Color(0xFF0284C7)
+private val balanceNegativeColor = Color(0xFFD97706)
+
+@Composable
+fun MonthlySummary(
+    summary: TransactionSummary,
+    activeFilter: String?,
+    onFilterChange: (String?) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        SummaryCard(
+            label = stringResource(R.string.income),
+            value = formatCurrency(summary.totalIncome),
+            icon = Lucide.TrendingUp,
+            color = incomeColor,
+            isSelected = activeFilter == "income",
+            isFaded = activeFilter != null && activeFilter != "income",
+            onClick = { onFilterChange(if (activeFilter == "income") null else "income") },
+            modifier = Modifier.weight(1f),
+        )
+        SummaryCard(
+            label = stringResource(R.string.expense),
+            value = formatCurrency(summary.totalExpense),
+            icon = Lucide.TrendingDown,
+            color = expenseColor,
+            isSelected = activeFilter == "expense",
+            isFaded = activeFilter != null && activeFilter != "expense",
+            onClick = { onFilterChange(if (activeFilter == "expense") null else "expense") },
+            modifier = Modifier.weight(1f),
+        )
+        val balance = try {
+            BigDecimal(summary.balance)
+        } catch (_: Exception) {
+            BigDecimal.ZERO
+        }
+        SummaryCard(
+            label = stringResource(R.string.balance),
+            value = formatCurrency(summary.balance),
+            icon = Lucide.Wallet,
+            color = if (balance >= BigDecimal.ZERO) balancePositiveColor else balanceNegativeColor,
+            isSelected = false,
+            isFaded = activeFilter != null,
+            onClick = {},
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun SummaryCard(
+    label: String,
+    value: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    color: Color,
+    isSelected: Boolean,
+    isFaded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .alpha(if (isFaded) 0.5f else 1f)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) {
+                color.copy(alpha = 0.1f)
+            } else {
+                MaterialTheme.colorScheme.surface
+            },
+        ),
+    ) {
+        Column(Modifier.padding(12.dp)) {
+            Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.height(4.dp))
+            Text(
+                label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        }
+    }
+}

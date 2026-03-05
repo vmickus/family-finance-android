@@ -33,6 +33,37 @@
 
     <string name="home_placeholder">Início (em breve na Fase 2)</string>
 
+    <string name="income">Receitas</string>
+    <string name="expense">Despesas</string>
+    <string name="balance">Saldo</string>
+
+    <string name="no_transactions">Nenhuma transação ainda</string>
+    <string name="scheduled">Agendado</string>
+    <string name="chart_no_data">Sem dados para este período</string>
+    <string name="new_transaction">Nova Transação</string>
+    <string name="edit_transaction">Editar Transação</string>
+    <string name="amount">Valor</string>
+    <string name="description">Descrição</string>
+    <string name="select_category">Selecionar categoria</string>
+    <string name="recurring">Recorrente</string>
+    <string name="occurrences">Ocorrências</string>
+    <string name="occurrences_range">Entre 2 e 12</string>
+    <string name="save">Salvar</string>
+
+    <string name="delete">Excluir</string>
+    <string name="delete_transaction_title">Excluir transação</string>
+    <string name="delete_transaction_description">Esta ação não pode ser desfeita.</string>
+    <string name="delete_recurring_title">Excluir transação recorrente</string>
+    <string name="delete_recurring_description">Escolha como lidar com esta transação recorrente.</string>
+    <string name="delete_this_only">Excluir somente esta</string>
+    <string name="cancel_from_date">Cancelar a partir desta data</string>
+
+    <string name="error_select_category">Selecione uma categoria</string>
+    <string name="error_amount_positive">O valor deve ser maior que zero</string>
+    <string name="error_description_required">Descrição é obrigatória</string>
+    <string name="error_description_max">Descrição deve ter no máximo 50 caracteres</string>
+    <string name="error_save_failed">Falha ao salvar. Tente novamente.</string>
+
     <!-- Bottom Navigation -->
     <string name="nav_home">Início</string>
     <string name="nav_budgets">Orçamentos</string>

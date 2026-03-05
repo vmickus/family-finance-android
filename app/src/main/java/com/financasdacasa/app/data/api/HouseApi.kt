@@ -1,6 +1,7 @@
 package com.financasdacasa.app.data.api
 
 import com.financasdacasa.app.data.model.House
+import com.financasdacasa.app.data.model.HouseMember
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,4 +16,7 @@ interface HouseApi {
 
     @POST("invites/{token}/accept")
     suspend fun acceptInvite(@Path("token") token: String): House
+
+    @GET("houses/{id}/members")
+    suspend fun getMembers(@Path("id") houseId: String): List<HouseMember>
 }

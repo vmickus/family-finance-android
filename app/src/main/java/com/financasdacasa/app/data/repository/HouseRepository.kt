@@ -2,6 +2,7 @@ package com.financasdacasa.app.data.repository
 
 import com.financasdacasa.app.data.api.HouseApi
 import com.financasdacasa.app.data.model.House
+import com.financasdacasa.app.data.model.HouseMember
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,4 +19,6 @@ class HouseRepository @Inject constructor(
     suspend fun acceptInvite(token: String): House {
         return houseApi.acceptInvite(token)
     }
+
+    suspend fun getMembers(houseId: String): List<HouseMember> = houseApi.getMembers(houseId)
 }

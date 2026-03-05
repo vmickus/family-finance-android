@@ -37,6 +37,10 @@
     <!-- Home placeholder -->
     <string name="home_placeholder">Home (coming in Phase 2)</string>
 
+    <!-- Date -->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+
     <!-- Errors -->
     <string name="error_invalid_credentials">Invalid email or password</string>
     <string name="error_google_only">This account uses Google Sign-In</string>

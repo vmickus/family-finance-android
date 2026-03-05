@@ -33,6 +33,9 @@
 
     <string name="home_placeholder">Inicio (próximamente en Fase 2)</string>
 
+    <string name="today">Hoy</string>
+    <string name="yesterday">Ayer</string>
+
     <string name="error_invalid_credentials">Correo o contraseña inválidos</string>
     <string name="error_google_only">Esta cuenta usa inicio de sesión de Google</string>
     <string name="error_email_password_required">Correo y contraseña son obligatorios</string>

@@ -33,6 +33,9 @@
 
     <string name="home_placeholder">Início (em breve na Fase 2)</string>
 
+    <string name="today">Hoje</string>
+    <string name="yesterday">Ontem</string>
+
     <string name="error_invalid_credentials">E-mail ou senha inválidos</string>
     <string name="error_google_only">Esta conta usa login do Google</string>
     <string name="error_email_password_required">E-mail e senha são obrigatórios</string>

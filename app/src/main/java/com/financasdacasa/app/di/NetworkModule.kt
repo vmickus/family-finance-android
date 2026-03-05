@@ -2,7 +2,10 @@ package com.financasdacasa.app.di
 
 import com.financasdacasa.app.BuildConfig
 import com.financasdacasa.app.data.api.AuthApi
+import com.financasdacasa.app.data.api.CategoryApi
 import com.financasdacasa.app.data.api.HouseApi
+import com.financasdacasa.app.data.api.RecurringTransactionApi
+import com.financasdacasa.app.data.api.TransactionApi
 import com.financasdacasa.app.data.interceptor.AuthInterceptor
 import com.financasdacasa.app.data.interceptor.ResponseInterceptor
 import com.squareup.moshi.Moshi
@@ -62,4 +65,19 @@ object NetworkModule {
     @Singleton
     fun provideHouseApi(retrofit: Retrofit): HouseApi =
         retrofit.create(HouseApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTransactionApi(retrofit: Retrofit): TransactionApi =
+        retrofit.create(TransactionApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCategoryApi(retrofit: Retrofit): CategoryApi =
+        retrofit.create(CategoryApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRecurringTransactionApi(retrofit: Retrofit): RecurringTransactionApi =
+        retrofit.create(RecurringTransactionApi::class.java)
 }

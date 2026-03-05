@@ -5,15 +5,20 @@ import com.composables.icons.lucide.*
 
 fun getLucideIcon(name: String): ImageVector = when (name) {
     "Wallet" -> Lucide.Wallet
+    "BadgeDollarSign" -> Lucide.BadgeDollarSign
     "PiggyBank" -> Lucide.PiggyBank
     "TrendingUp" -> Lucide.TrendingUp
     "TrendingDown" -> Lucide.TrendingDown
     "Receipt" -> Lucide.Receipt
     "Home" -> Lucide.House
     "Utensils" -> Lucide.Utensils
+    "Coffee" -> Lucide.Coffee
     "FileText" -> Lucide.FileText
     "Layers" -> Lucide.Layers
     "Car" -> Lucide.Car
+    "Bus" -> Lucide.Bus
+    "Bike" -> Lucide.Bike
+    "Helmet" -> Lucide.HardHat
     "Heart" -> Lucide.Heart
     "Sparkles" -> Lucide.Sparkles
     "GraduationCap" -> Lucide.GraduationCap
@@ -21,12 +26,14 @@ fun getLucideIcon(name: String): ImageVector = when (name) {
     "Gift" -> Lucide.Gift
     "Wifi" -> Lucide.Wifi
     "ShoppingCart" -> Lucide.ShoppingCart
+    "ShoppingBag" -> Lucide.ShoppingBag
     "Banknote" -> Lucide.Banknote
     "CreditCard" -> Lucide.CreditCard
     "Building" -> Lucide.Building
     "Plane" -> Lucide.Plane
-    "Coffee" -> Lucide.Coffee
     "Music" -> Lucide.Music
+    "Tv" -> Lucide.Tv
+    "Smartphone" -> Lucide.Smartphone
     "BookOpen" -> Lucide.BookOpen
     "Briefcase" -> Lucide.Briefcase
     "Phone" -> Lucide.Phone
@@ -34,6 +41,7 @@ fun getLucideIcon(name: String): ImageVector = when (name) {
     "Scissors" -> Lucide.Scissors
     "Wrench" -> Lucide.Wrench
     "Baby" -> Lucide.Baby
+    "PawPrint" -> Lucide.PawPrint
     "Dog" -> Lucide.Dog
     "Dumbbell" -> Lucide.Dumbbell
     "Paintbrush" -> Lucide.Paintbrush
@@ -42,5 +50,8 @@ fun getLucideIcon(name: String): ImageVector = when (name) {
     "Stethoscope" -> Lucide.Stethoscope
     "Pill" -> Lucide.Pill
     "Flame" -> Lucide.Flame
+    "Lightbulb" -> Lucide.Lightbulb
+    "Droplets" -> Lucide.Droplets
+    "Coins" -> Lucide.Coins
     else -> Lucide.Tag
 }

@@ -97,4 +97,35 @@
     <string name="error_password_mismatch">Passwords don\'t match</string>
     <string name="error_email_exists">An account with this email already exists</string>
     <string name="error_not_verified_yet">Email not verified yet. Check your inbox.</string>
+
+    <!-- Categories -->
+    <string name="categories">Categories</string>
+    <string name="categories_expenses">Expenses</string>
+    <string name="categories_income">Income</string>
+    <string name="new_category">New Category</string>
+    <string name="edit_category">Edit Category</string>
+    <string name="category_name">Name</string>
+    <string name="category_name_hint">Category name</string>
+    <string name="category_icon">Icon</string>
+    <string name="category_color">Color</string>
+    <string name="delete_category_title">Delete category</string>
+    <string name="delete_category_description">Transactions using this category will have their category cleared.</string>
+    <string name="error_category_name_required">Category name is required</string>
+    <string name="error_category_name_max">Name must be 50 characters or less</string>
+    <string name="error_category_save_failed">Failed to save category. Try again.</string>
+    <string name="error_category_delete_failed">Failed to delete category. Try again.</string>
+    <string name="error_reorder_failed">Failed to reorder. Try again.</string>
+    <string name="more">More</string>
+
+    <!-- Budgets -->
+    <string name="total_budget">Total Budget</string>
+    <string name="budget_remaining">%s remaining</string>
+    <string name="budget_exceeded">Exceeded by %s</string>
+    <string name="add_budget_limit">Add Budget Limit</string>
+    <string name="monthly_limit">Monthly limit</string>
+    <string name="no_budget_limits">No budget limits yet</string>
+    <string name="delete_budget_title">Delete budget limit</string>
+    <string name="delete_budget_description">This budget limit will be removed.</string>
+    <string name="error_budget_save_failed">Failed to save budget. Try again.</string>
+    <string name="error_budget_delete_failed">Failed to delete budget. Try again.</string>
 </resources>

@@ -87,4 +87,35 @@
     <string name="error_password_mismatch">As senhas não coincidem</string>
     <string name="error_email_exists">Já existe uma conta com este e-mail</string>
     <string name="error_not_verified_yet">E-mail ainda não verificado. Confira sua caixa de entrada.</string>
+
+    <!-- Categories -->
+    <string name="categories">Categorias</string>
+    <string name="categories_expenses">Despesas</string>
+    <string name="categories_income">Receitas</string>
+    <string name="new_category">Nova Categoria</string>
+    <string name="edit_category">Editar Categoria</string>
+    <string name="category_name">Nome</string>
+    <string name="category_name_hint">Nome da categoria</string>
+    <string name="category_icon">Ícone</string>
+    <string name="category_color">Cor</string>
+    <string name="delete_category_title">Excluir categoria</string>
+    <string name="delete_category_description">Transações que usam esta categoria terão a categoria removida.</string>
+    <string name="error_category_name_required">Nome da categoria é obrigatório</string>
+    <string name="error_category_name_max">O nome deve ter no máximo 50 caracteres</string>
+    <string name="error_category_save_failed">Falha ao salvar categoria. Tente novamente.</string>
+    <string name="error_category_delete_failed">Falha ao excluir categoria. Tente novamente.</string>
+    <string name="error_reorder_failed">Falha ao reordenar. Tente novamente.</string>
+    <string name="more">Mais</string>
+
+    <!-- Budgets -->
+    <string name="total_budget">Orçamento Total</string>
+    <string name="budget_remaining">%s restante</string>
+    <string name="budget_exceeded">Excedido em %s</string>
+    <string name="add_budget_limit">Adicionar Limite</string>
+    <string name="monthly_limit">Limite mensal</string>
+    <string name="no_budget_limits">Nenhum limite de orçamento ainda</string>
+    <string name="delete_budget_title">Excluir limite de orçamento</string>
+    <string name="delete_budget_description">Este limite de orçamento será removido.</string>
+    <string name="error_budget_save_failed">Falha ao salvar orçamento. Tente novamente.</string>
+    <string name="error_budget_delete_failed">Falha ao excluir orçamento. Tente novamente.</string>
 </resources>

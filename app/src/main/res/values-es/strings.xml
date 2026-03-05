@@ -87,4 +87,35 @@
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
     <string name="error_email_exists">Ya existe una cuenta con este correo</string>
     <string name="error_not_verified_yet">Correo aún no verificado. Revisa tu bandeja de entrada.</string>
+
+    <!-- Categories -->
+    <string name="categories">Categorías</string>
+    <string name="categories_expenses">Gastos</string>
+    <string name="categories_income">Ingresos</string>
+    <string name="new_category">Nueva Categoría</string>
+    <string name="edit_category">Editar Categoría</string>
+    <string name="category_name">Nombre</string>
+    <string name="category_name_hint">Nombre de la categoría</string>
+    <string name="category_icon">Ícono</string>
+    <string name="category_color">Color</string>
+    <string name="delete_category_title">Eliminar categoría</string>
+    <string name="delete_category_description">Las transacciones que usen esta categoría perderán su categoría.</string>
+    <string name="error_category_name_required">El nombre de la categoría es obligatorio</string>
+    <string name="error_category_name_max">El nombre debe tener 50 caracteres o menos</string>
+    <string name="error_category_save_failed">Error al guardar categoría. Intenta de nuevo.</string>
+    <string name="error_category_delete_failed">Error al eliminar categoría. Intenta de nuevo.</string>
+    <string name="error_reorder_failed">Error al reordenar. Intenta de nuevo.</string>
+    <string name="more">Más</string>
+
+    <!-- Budgets -->
+    <string name="total_budget">Presupuesto Total</string>
+    <string name="budget_remaining">%s restante</string>
+    <string name="budget_exceeded">Excedido por %s</string>
+    <string name="add_budget_limit">Agregar Límite</string>
+    <string name="monthly_limit">Límite mensual</string>
+    <string name="no_budget_limits">Sin límites de presupuesto aún</string>
+    <string name="delete_budget_title">Eliminar límite de presupuesto</string>
+    <string name="delete_budget_description">Este límite de presupuesto será eliminado.</string>
+    <string name="error_budget_save_failed">Error al guardar presupuesto. Intenta de nuevo.</string>
+    <string name="error_budget_delete_failed">Error al eliminar presupuesto. Intenta de nuevo.</string>
 </resources>

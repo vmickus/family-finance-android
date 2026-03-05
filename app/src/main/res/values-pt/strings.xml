@@ -33,6 +33,13 @@
 
     <string name="home_placeholder">Início (em breve na Fase 2)</string>
 
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Início</string>
+    <string name="nav_budgets">Orçamentos</string>
+    <string name="nav_garden">Jardim</string>
+    <string name="nav_dashboard">Painel</string>
+    <string name="coming_soon">Em breve</string>
+
     <string name="today">Hoje</string>
     <string name="yesterday">Ontem</string>
 

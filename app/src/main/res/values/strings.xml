@@ -37,6 +37,13 @@
     <!-- Home placeholder -->
     <string name="home_placeholder">Home (coming in Phase 2)</string>
 
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_budgets">Budgets</string>
+    <string name="nav_garden">Garden</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="coming_soon">Coming soon</string>
+
     <!-- Date -->
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>

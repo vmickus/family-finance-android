@@ -99,6 +99,9 @@ dependencies {
     // Lucide Icons
     implementation(libs.lucide)
 
+    // Drag reorder
+    implementation(libs.reorderable)
+
     // Date/Time
     implementation(libs.kotlinx.datetime)
 

@@ -40,6 +40,7 @@
     <string name="no_transactions">Nenhuma transação ainda</string>
     <string name="scheduled">Agendado</string>
     <string name="chart_no_data">Sem dados para este período</string>
+    <string name="search_transactions">Buscar transações\u2026</string>
     <string name="new_transaction">Nova Transação</string>
     <string name="edit_transaction">Editar Transação</string>
     <string name="amount">Valor</string>

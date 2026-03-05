@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.financasdacasa.app.R
 import com.financasdacasa.app.ui.components.BottomNavBar
 import com.financasdacasa.app.ui.components.BottomNavTab
+import com.financasdacasa.app.ui.screens.home.HomeScreen
 import com.financasdacasa.app.ui.screens.placeholder.PlaceholderScreen
 
 @Composable
@@ -26,7 +27,7 @@ fun MainShell() {
             modifier = Modifier.padding(padding),
         ) {
             composable(BottomNavTab.HOME.route) {
-                PlaceholderScreen(stringResource(R.string.nav_home))
+                HomeScreen()
             }
             composable(BottomNavTab.BUDGETS.route) {
                 PlaceholderScreen(stringResource(R.string.nav_budgets))

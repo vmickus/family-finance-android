@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finanças da Casa</string>
+
+    <!-- Auth -->
+    <string name="login">Log In</string>
+    <string name="login_subtitle">Sign in to your account</string>
+    <string name="login_with_google">Continue with Google</string>
+    <string name="signup_with_google">Sign up with Google</string>
+    <string name="create_account">Create Account</string>
+    <string name="register_subtitle">Start managing your finances</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="name">Name</string>
+    <string name="password_requirements">Min 8 characters, at least 1 letter and 1 number</string>
+    <string name="no_account_register">Don\'t have an account? Sign up</string>
+    <string name="have_account_login">Already have an account? Log in</string>
+    <string name="logout">Log out</string>
+
+    <!-- Email Verification -->
+    <string name="verify_email_title">Check your email</string>
+    <string name="verify_email_description">We sent a verification link to your email. Click the link to verify your account.</string>
+    <string name="verify_email_resend">Resend email</string>
+    <string name="verify_email_sent">Email sent!</string>
+    <string name="verify_email_check">I\'ve verified my email</string>
+
+    <!-- House Selection -->
+    <string name="select_house">Select a house</string>
+    <string name="create_house">Create house</string>
+    <string name="house_name">House name</string>
+    <string name="no_houses_title">No houses yet</string>
+    <string name="no_houses_description">Create your first house to get started</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Home placeholder -->
+    <string name="home_placeholder">Home (coming in Phase 2)</string>
+
+    <!-- Errors -->
+    <string name="error_invalid_credentials">Invalid email or password</string>
+    <string name="error_google_only">This account uses Google Sign-In</string>
+    <string name="error_email_password_required">Email and password are required</string>
+    <string name="error_network">Connection error. Check your internet.</string>
+    <string name="error_unknown">Something went wrong. Try again.</string>
+    <string name="error_name_too_short">Name must be at least 2 characters</string>
+    <string name="error_email_required">Email is required</string>
+    <string name="error_password_too_short">Password must be at least 8 characters</string>
+    <string name="error_password_weak">Password must contain at least 1 letter and 1 number</string>
+    <string name="error_password_mismatch">Passwords don\'t match</string>
+    <string name="error_email_exists">An account with this email already exists</string>
+    <string name="error_not_verified_yet">Email not verified yet. Check your inbox.</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finanças da Casa</string>
+
+    <string name="login">Entrar</string>
+    <string name="login_subtitle">Acesse sua conta</string>
+    <string name="login_with_google">Continuar com Google</string>
+    <string name="signup_with_google">Cadastrar com Google</string>
+    <string name="create_account">Criar conta</string>
+    <string name="register_subtitle">Comece a gerenciar suas finanças</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="confirm_password">Confirmar senha</string>
+    <string name="name">Nome</string>
+    <string name="password_requirements">Mín. 8 caracteres, pelo menos 1 letra e 1 número</string>
+    <string name="no_account_register">Não tem conta? Cadastre-se</string>
+    <string name="have_account_login">Já tem conta? Entre</string>
+    <string name="logout">Sair</string>
+
+    <string name="verify_email_title">Verifique seu e-mail</string>
+    <string name="verify_email_description">Enviamos um link de verificação para o seu e-mail. Clique no link para verificar sua conta.</string>
+    <string name="verify_email_resend">Reenviar e-mail</string>
+    <string name="verify_email_sent">E-mail enviado!</string>
+    <string name="verify_email_check">Já verifiquei meu e-mail</string>
+
+    <string name="select_house">Selecione uma casa</string>
+    <string name="create_house">Criar casa</string>
+    <string name="house_name">Nome da casa</string>
+    <string name="no_houses_title">Nenhuma casa ainda</string>
+    <string name="no_houses_description">Crie sua primeira casa para começar</string>
+    <string name="create">Criar</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="home_placeholder">Início (em breve na Fase 2)</string>
+
+    <string name="error_invalid_credentials">E-mail ou senha inválidos</string>
+    <string name="error_google_only">Esta conta usa login do Google</string>
+    <string name="error_email_password_required">E-mail e senha são obrigatórios</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_unknown">Algo deu errado. Tente novamente.</string>
+    <string name="error_name_too_short">O nome deve ter pelo menos 2 caracteres</string>
+    <string name="error_email_required">E-mail é obrigatório</string>
+    <string name="error_password_too_short">A senha deve ter pelo menos 8 caracteres</string>
+    <string name="error_password_weak">A senha deve conter pelo menos 1 letra e 1 número</string>
+    <string name="error_password_mismatch">As senhas não coincidem</string>
+    <string name="error_email_exists">Já existe uma conta com este e-mail</string>
+    <string name="error_not_verified_yet">E-mail ainda não verificado. Confira sua caixa de entrada.</string>
+</resources>

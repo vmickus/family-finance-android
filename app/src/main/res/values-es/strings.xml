@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finanzas del Hogar</string>
+
+    <string name="login">Iniciar sesión</string>
+    <string name="login_subtitle">Accede a tu cuenta</string>
+    <string name="login_with_google">Continuar con Google</string>
+    <string name="signup_with_google">Registrarse con Google</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="register_subtitle">Empieza a gestionar tus finanzas</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="name">Nombre</string>
+    <string name="password_requirements">Mín. 8 caracteres, al menos 1 letra y 1 número</string>
+    <string name="no_account_register">¿No tienes cuenta? Regístrate</string>
+    <string name="have_account_login">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="logout">Cerrar sesión</string>
+
+    <string name="verify_email_title">Revisa tu correo</string>
+    <string name="verify_email_description">Enviamos un enlace de verificación a tu correo. Haz clic en el enlace para verificar tu cuenta.</string>
+    <string name="verify_email_resend">Reenviar correo</string>
+    <string name="verify_email_sent">¡Correo enviado!</string>
+    <string name="verify_email_check">Ya verifiqué mi correo</string>
+
+    <string name="select_house">Selecciona un hogar</string>
+    <string name="create_house">Crear hogar</string>
+    <string name="house_name">Nombre del hogar</string>
+    <string name="no_houses_title">Sin hogares aún</string>
+    <string name="no_houses_description">Crea tu primer hogar para empezar</string>
+    <string name="create">Crear</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="home_placeholder">Inicio (próximamente en Fase 2)</string>
+
+    <string name="error_invalid_credentials">Correo o contraseña inválidos</string>
+    <string name="error_google_only">Esta cuenta usa inicio de sesión de Google</string>
+    <string name="error_email_password_required">Correo y contraseña son obligatorios</string>
+    <string name="error_network">Error de conexión. Revisa tu internet.</string>
+    <string name="error_unknown">Algo salió mal. Intenta de nuevo.</string>
+    <string name="error_name_too_short">El nombre debe tener al menos 2 caracteres</string>
+    <string name="error_email_required">El correo es obligatorio</string>
+    <string name="error_password_too_short">La contraseña debe tener al menos 8 caracteres</string>
+    <string name="error_password_weak">La contraseña debe contener al menos 1 letra y 1 número</string>
+    <string name="error_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="error_email_exists">Ya existe una cuenta con este correo</string>
+    <string name="error_not_verified_yet">Correo aún no verificado. Revisa tu bandeja de entrada.</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Dollar sign in white on transparent -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,28 L54,32 C48.5,32.5 44,35.5 44,40 C44,45 48,47 54,48.5 C60,50 62,51.5 62,54 C62,56.5 59.5,58.5 54,59 L54,63 L50,63 L50,59 C44.5,58.5 41,55.5 41,51 L46,51 C46,53.5 48,55 52,55 C56,55 57,53.5 57,52 C57,50.5 56,49.5 52,48.5 C46,47 39,45 39,39 C39,35.5 42.5,32.5 50,32 L50,28 Z" />
+</vector>

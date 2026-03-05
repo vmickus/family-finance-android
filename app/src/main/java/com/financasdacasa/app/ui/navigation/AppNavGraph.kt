@@ -1,23 +1,15 @@
 package com.financasdacasa.app.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.financasdacasa.app.R
 import com.financasdacasa.app.ui.screens.auth.LoginScreen
 import com.financasdacasa.app.ui.screens.auth.RegisterScreen
 import com.financasdacasa.app.ui.screens.auth.VerifyEmailScreen
 import com.financasdacasa.app.ui.screens.house.HouseSelectionScreen
+import com.financasdacasa.app.ui.screens.main.MainShell
 
 object Routes {
     const val LOGIN = "login?inviteToken={inviteToken}"
@@ -80,14 +72,7 @@ fun MainNavGraph(navController: NavHostController = rememberNavController()) {
         }
 
         composable(Routes.HOME) {
-            Scaffold { padding ->
-                Box(
-                    Modifier.fillMaxSize().padding(padding),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(stringResource(R.string.home_placeholder))
-                }
-            }
+            MainShell()
         }
     }
 }

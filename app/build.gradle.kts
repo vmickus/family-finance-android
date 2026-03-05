@@ -21,6 +21,7 @@ android {
         buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api\"")
         buildConfigField("String", "GP_MONTHLY_PRODUCT_ID", "\"financas_monthly\"")
         buildConfigField("String", "GP_ANNUAL_PRODUCT_ID", "\"financas_annual\"")
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"\"")
     }
 
     buildTypes {
@@ -82,6 +83,11 @@ dependencies {
 
     // Security
     implementation(libs.security.crypto)
+
+    // Google Sign-In (Credential Manager)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play)
+    implementation(libs.googleid)
 
     // Image loading
     implementation(libs.coil.compose)

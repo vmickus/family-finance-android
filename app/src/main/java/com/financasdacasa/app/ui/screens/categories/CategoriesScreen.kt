@@ -1,6 +1,5 @@
 package com.financasdacasa.app.ui.screens.categories
 
-import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.compose.foundation.background
@@ -135,9 +134,7 @@ fun CategoriesScreen(
 
                             LaunchedEffect(isDragging) {
                                 if (isDragging && vibrator != null) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
-                                    }
+                                    vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
                                 }
                             }
 

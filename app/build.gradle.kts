@@ -93,6 +93,12 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
 
+    // Charts
+    implementation(libs.vico.compose.m3)
+
+    // Lucide Icons
+    implementation(libs.lucide)
+
     // Date/Time
     implementation(libs.kotlinx.datetime)
 

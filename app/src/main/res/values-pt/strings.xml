@@ -118,4 +118,60 @@
     <string name="delete_budget_description">Este limite de orçamento será removido.</string>
     <string name="error_budget_save_failed">Falha ao salvar orçamento. Tente novamente.</string>
     <string name="error_budget_delete_failed">Falha ao excluir orçamento. Tente novamente.</string>
+
+    <!-- More menu -->
+    <string name="more_title">Mais</string>
+
+    <!-- Garden -->
+    <string name="garden_title">Jardim</string>
+    <string name="free_balance">Saldo livre</string>
+    <string name="water_garden">Regar Jardim</string>
+    <string name="water_plant">Regar Planta</string>
+    <string name="create_goal">Nova Meta</string>
+    <string name="edit_goal">Editar Meta</string>
+    <string name="goal_name">Nome da meta</string>
+    <string name="goal_name_hint">Para que você está economizando?</string>
+    <string name="target_amount">Valor alvo</string>
+    <string name="priority_percent">Prioridade</string>
+    <string name="deadline">Prazo</string>
+    <string name="deadline_optional">Opcional</string>
+    <string name="plant_type">Tipo de planta</string>
+    <string name="plant_tree">Árvore</string>
+    <string name="plant_sunflower">Girassol</string>
+    <string name="plant_bonsai">Bonsai</string>
+    <string name="plant_cactus">Cacto</string>
+    <string name="goal_color">Cor</string>
+    <string name="archive_goal">Arquivar</string>
+    <string name="delete_goal_title">Excluir meta</string>
+    <string name="delete_goal_description">Esta meta e todas as alocações serão excluídas permanentemente.</string>
+    <string name="allocation_history">Histórico de alocações</string>
+    <string name="no_allocations">Nenhuma alocação ainda</string>
+    <string name="no_goals">Nenhuma meta ainda. Crie uma para começar a cultivar seu jardim!</string>
+    <string name="goal_completed">Concluída</string>
+    <string name="goal_archived">Arquivada</string>
+    <string name="remaining_to_goal">Faltam %s</string>
+    <string name="error_goal_name_required">Nome da meta é obrigatório</string>
+    <string name="error_goal_name_max">Nome deve ter no máximo 50 caracteres</string>
+    <string name="error_target_required">Valor alvo deve ser maior que zero</string>
+    <string name="error_goal_save_failed">Erro ao salvar meta. Tente novamente.</string>
+    <string name="error_goal_delete_failed">Erro ao excluir meta. Tente novamente.</string>
+    <string name="error_allocation_failed">Erro ao salvar alocação. Tente novamente.</string>
+    <string name="error_exceeds_balance">Total excede o saldo livre</string>
+    <string name="error_exceeds_target">Valor excede o alvo restante</string>
+    <string name="watered_successfully">Jardim regado!</string>
+    <string name="gardeners">Jardineiros</string>
+    <string name="contributions">%d contribuições</string>
+    <string name="contribution_single">1 contribuição</string>
+
+    <!-- Recurring management -->
+    <string name="recurring_title">Recorrentes</string>
+    <string name="recurring_active">Ativa</string>
+    <string name="recurring_cancelled">Cancelada</string>
+    <string name="recurring_progress">%d de %d meses</string>
+    <string name="edit_recurring">Editar Recorrência</string>
+    <string name="delete_recurring_confirm_title">Excluir recorrência</string>
+    <string name="delete_recurring_confirm_description">Transações futuras serão removidas. Transações passadas são mantidas.</string>
+    <string name="no_recurring">Nenhuma transação recorrente</string>
+    <string name="error_recurring_save_failed">Erro ao salvar. Tente novamente.</string>
+    <string name="error_recurring_delete_failed">Erro ao excluir. Tente novamente.</string>
 </resources>

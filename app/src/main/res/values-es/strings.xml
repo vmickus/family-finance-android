@@ -118,4 +118,60 @@
     <string name="delete_budget_description">Este límite de presupuesto será eliminado.</string>
     <string name="error_budget_save_failed">Error al guardar presupuesto. Intenta de nuevo.</string>
     <string name="error_budget_delete_failed">Error al eliminar presupuesto. Intenta de nuevo.</string>
+
+    <!-- More menu -->
+    <string name="more_title">Más</string>
+
+    <!-- Garden -->
+    <string name="garden_title">Jardín</string>
+    <string name="free_balance">Saldo libre</string>
+    <string name="water_garden">Regar Jardín</string>
+    <string name="water_plant">Regar Planta</string>
+    <string name="create_goal">Nueva Meta</string>
+    <string name="edit_goal">Editar Meta</string>
+    <string name="goal_name">Nombre de la meta</string>
+    <string name="goal_name_hint">¿Para qué estás ahorrando?</string>
+    <string name="target_amount">Monto objetivo</string>
+    <string name="priority_percent">Prioridad</string>
+    <string name="deadline">Fecha límite</string>
+    <string name="deadline_optional">Opcional</string>
+    <string name="plant_type">Tipo de planta</string>
+    <string name="plant_tree">Árbol</string>
+    <string name="plant_sunflower">Girasol</string>
+    <string name="plant_bonsai">Bonsái</string>
+    <string name="plant_cactus">Cactus</string>
+    <string name="goal_color">Color</string>
+    <string name="archive_goal">Archivar</string>
+    <string name="delete_goal_title">Eliminar meta</string>
+    <string name="delete_goal_description">Esta meta y todas sus asignaciones serán eliminadas permanentemente.</string>
+    <string name="allocation_history">Historial de asignaciones</string>
+    <string name="no_allocations">Sin asignaciones aún</string>
+    <string name="no_goals">Sin metas aún. ¡Crea una para empezar a cultivar tu jardín!</string>
+    <string name="goal_completed">Completada</string>
+    <string name="goal_archived">Archivada</string>
+    <string name="remaining_to_goal">Faltan %s</string>
+    <string name="error_goal_name_required">El nombre de la meta es obligatorio</string>
+    <string name="error_goal_name_max">El nombre debe tener 50 caracteres o menos</string>
+    <string name="error_target_required">El monto objetivo debe ser mayor a cero</string>
+    <string name="error_goal_save_failed">Error al guardar meta. Inténtalo de nuevo.</string>
+    <string name="error_goal_delete_failed">Error al eliminar meta. Inténtalo de nuevo.</string>
+    <string name="error_allocation_failed">Error al guardar asignación. Inténtalo de nuevo.</string>
+    <string name="error_exceeds_balance">El total excede el saldo libre</string>
+    <string name="error_exceeds_target">El monto excede el objetivo restante</string>
+    <string name="watered_successfully">¡Jardín regado!</string>
+    <string name="gardeners">Jardineros</string>
+    <string name="contributions">%d contribuciones</string>
+    <string name="contribution_single">1 contribución</string>
+
+    <!-- Recurring management -->
+    <string name="recurring_title">Recurrentes</string>
+    <string name="recurring_active">Activa</string>
+    <string name="recurring_cancelled">Cancelada</string>
+    <string name="recurring_progress">%d de %d meses</string>
+    <string name="edit_recurring">Editar Recurrencia</string>
+    <string name="delete_recurring_confirm_title">Eliminar recurrencia</string>
+    <string name="delete_recurring_confirm_description">Las transacciones futuras serán eliminadas. Las pasadas se mantienen.</string>
+    <string name="no_recurring">Sin transacciones recurrentes</string>
+    <string name="error_recurring_save_failed">Error al guardar. Inténtalo de nuevo.</string>
+    <string name="error_recurring_delete_failed">Error al eliminar. Inténtalo de nuevo.</string>
 </resources>

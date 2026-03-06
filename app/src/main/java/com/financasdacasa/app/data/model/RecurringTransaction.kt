@@ -31,3 +31,10 @@ data class CreateRecurringTransactionRequest(
     @Json(name = "transaction_date") val transactionDate: String,
     val occurrences: Int,
 )
+
+@JsonClass(generateAdapter = true)
+data class UpdateRecurringTransactionRequest(
+    @Json(name = "category_id") val categoryId: String? = null,
+    val amount: Double? = null,
+    val description: String? = null,
+)

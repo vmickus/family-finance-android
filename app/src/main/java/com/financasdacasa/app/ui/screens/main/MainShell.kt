@@ -21,8 +21,12 @@ import com.financasdacasa.app.ui.components.BottomNavBar
 import com.financasdacasa.app.ui.components.BottomNavTab
 import com.financasdacasa.app.ui.screens.budgets.BudgetsScreen
 import com.financasdacasa.app.ui.screens.categories.CategoriesScreen
+import com.financasdacasa.app.ui.screens.garden.GardenScreen
+import com.financasdacasa.app.ui.screens.garden.GoalDetailScreen
 import com.financasdacasa.app.ui.screens.home.HomeScreen
+import com.financasdacasa.app.ui.screens.more.MoreScreen
 import com.financasdacasa.app.ui.screens.placeholder.PlaceholderScreen
+import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,20 +34,22 @@ fun MainShell() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = currentRoute != "categories"
+    val mainRoutes = BottomNavTab.entries.map { it.route }
+    val showBottomBar = currentRoute in mainRoutes
+    val showTopBar = currentRoute in mainRoutes
 
     Scaffold(
         topBar = {
-            if (currentRoute in BottomNavTab.entries.map { it.route }) {
+            if (showTopBar) {
                 TopAppBar(
                     title = {},
                     actions = {
                         IconButton(onClick = {
-                            navController.navigate("categories") {
+                            navController.navigate("more") {
                                 launchSingleTop = true
                             }
                         }) {
-                            Icon(Lucide.Settings, contentDescription = stringResource(R.string.more))
+                            Icon(Lucide.Settings, contentDescription = stringResource(R.string.more_title))
                         }
                     },
                 )
@@ -67,13 +73,38 @@ fun MainShell() {
                 BudgetsScreen()
             }
             composable(BottomNavTab.GARDEN.route) {
-                PlaceholderScreen(stringResource(R.string.nav_garden))
+                GardenScreen(
+                    onGoalClick = { goalId ->
+                        navController.navigate("garden/$goalId") {
+                            launchSingleTop = true
+                        }
+                    },
+                )
             }
             composable(BottomNavTab.DASHBOARD.route) {
                 PlaceholderScreen(stringResource(R.string.nav_dashboard))
             }
+            composable("garden/{goalId}") {
+                GoalDetailScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable("more") {
+                MoreScreen(
+                    onBack = { navController.popBackStack() },
+                    onCategories = {
+                        navController.navigate("categories") { launchSingleTop = true }
+                    },
+                    onRecurring = {
+                        navController.navigate("recurring") { launchSingleTop = true }
+                    },
+                )
+            }
             composable("categories") {
                 CategoriesScreen(onBack = { navController.popBackStack() })
+            }
+            composable("recurring") {
+                RecurringScreen(onBack = { navController.popBackStack() })
             }
         }
     }

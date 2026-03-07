@@ -24,6 +24,7 @@ import com.financasdacasa.app.ui.screens.categories.CategoriesScreen
 import com.financasdacasa.app.ui.screens.garden.GardenScreen
 import com.financasdacasa.app.ui.screens.garden.GoalDetailScreen
 import com.financasdacasa.app.ui.screens.home.HomeScreen
+import com.financasdacasa.app.ui.screens.members.MembersScreen
 import com.financasdacasa.app.ui.screens.more.MoreScreen
 import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
@@ -92,6 +93,9 @@ fun MainShell() {
             composable("more") {
                 MoreScreen(
                     onBack = { navController.popBackStack() },
+                    onMembers = {
+                        navController.navigate("members") { launchSingleTop = true }
+                    },
                     onCategories = {
                         navController.navigate("categories") { launchSingleTop = true }
                     },
@@ -105,6 +109,14 @@ fun MainShell() {
             }
             composable("recurring") {
                 RecurringScreen(onBack = { navController.popBackStack() })
+            }
+            composable("members") {
+                MembersScreen(
+                    onBack = { navController.popBackStack() },
+                    onNavigateToHouseSelection = {
+                        navController.popBackStack(BottomNavTab.HOME.route, inclusive = true)
+                    },
+                )
             }
         }
     }

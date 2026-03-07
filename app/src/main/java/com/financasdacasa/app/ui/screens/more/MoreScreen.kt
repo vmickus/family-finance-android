@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.composables.icons.lucide.Grid2x2
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Repeat
+import com.composables.icons.lucide.Users
 import com.composables.icons.lucide.ArrowLeft
 import com.financasdacasa.app.R
 
@@ -18,6 +19,7 @@ import com.financasdacasa.app.R
 @Composable
 fun MoreScreen(
     onBack: () -> Unit,
+    onMembers: () -> Unit,
     onCategories: () -> Unit,
     onRecurring: () -> Unit,
 ) {
@@ -40,6 +42,19 @@ fun MoreScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
+            Surface(
+                modifier = Modifier.fillMaxWidth().clickable { onMembers() },
+                shape = MaterialTheme.shapes.medium,
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Icon(Lucide.Users, contentDescription = null)
+                    Text(stringResource(R.string.nav_members), style = MaterialTheme.typography.bodyLarge)
+                }
+            }
             Surface(
                 modifier = Modifier.fillMaxWidth().clickable { onCategories() },
                 shape = MaterialTheme.shapes.medium,

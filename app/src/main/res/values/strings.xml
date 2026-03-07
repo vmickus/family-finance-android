@@ -184,4 +184,22 @@
     <string name="no_recurring">No recurring transactions</string>
     <string name="error_recurring_save_failed">Failed to save. Try again.</string>
     <string name="error_recurring_delete_failed">Failed to delete. Try again.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_free_to_spend">Free to spend</string>
+    <string name="dashboard_income_label">Income</string>
+    <string name="dashboard_expenses_label">Expenses</string>
+    <string name="dashboard_by_category">By category</string>
+    <string name="dashboard_cash_flow">Cash Flow</string>
+    <string name="dashboard_vs_average">vs average</string>
+    <string name="dashboard_wealth_title">The Journey</string>
+    <string name="dashboard_wealth_accumulated">Accumulated net worth</string>
+    <string name="dashboard_wealth_growing">Growing!</string>
+    <string name="dashboard_wealth_positive">Positive accumulated net worth</string>
+    <string name="dashboard_wealth_negative">Expenses above income in history</string>
+    <string name="dashboard_most_records">Most records</string>
+    <string name="dashboard_biggest_expense">Biggest expense</string>
+    <string name="dashboard_biggest_income">Biggest income</string>
+    <string name="dashboard_records_count">%d records</string>
+    <string name="dashboard_no_data">No data for this period</string>
 </resources>

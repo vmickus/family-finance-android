@@ -174,4 +174,22 @@
     <string name="no_recurring">Nenhuma transação recorrente</string>
     <string name="error_recurring_save_failed">Erro ao salvar. Tente novamente.</string>
     <string name="error_recurring_delete_failed">Erro ao excluir. Tente novamente.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_free_to_spend">Livre para gastar</string>
+    <string name="dashboard_income_label">Receitas</string>
+    <string name="dashboard_expenses_label">Despesas</string>
+    <string name="dashboard_by_category">Por categoria</string>
+    <string name="dashboard_cash_flow">Fluxo de Caixa</string>
+    <string name="dashboard_vs_average">vs media</string>
+    <string name="dashboard_wealth_title">A Jornada</string>
+    <string name="dashboard_wealth_accumulated">Patrimonio liquido acumulado</string>
+    <string name="dashboard_wealth_growing">Crescendo!</string>
+    <string name="dashboard_wealth_positive">Patrimonio liquido acumulado positivo</string>
+    <string name="dashboard_wealth_negative">Despesas acima da receita no historico</string>
+    <string name="dashboard_most_records">Mais registros</string>
+    <string name="dashboard_biggest_expense">Maior gasto</string>
+    <string name="dashboard_biggest_income">Maior recebimento</string>
+    <string name="dashboard_records_count">%d registros</string>
+    <string name="dashboard_no_data">Sem dados para este periodo</string>
 </resources>

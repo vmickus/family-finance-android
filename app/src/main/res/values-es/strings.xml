@@ -174,4 +174,22 @@
     <string name="no_recurring">Sin transacciones recurrentes</string>
     <string name="error_recurring_save_failed">Error al guardar. Inténtalo de nuevo.</string>
     <string name="error_recurring_delete_failed">Error al eliminar. Inténtalo de nuevo.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_free_to_spend">Libre para gastar</string>
+    <string name="dashboard_income_label">Ingresos</string>
+    <string name="dashboard_expenses_label">Gastos</string>
+    <string name="dashboard_by_category">Por categoria</string>
+    <string name="dashboard_cash_flow">Flujo de Caja</string>
+    <string name="dashboard_vs_average">vs promedio</string>
+    <string name="dashboard_wealth_title">El Viaje</string>
+    <string name="dashboard_wealth_accumulated">Patrimonio neto acumulado</string>
+    <string name="dashboard_wealth_growing">Creciendo!</string>
+    <string name="dashboard_wealth_positive">Patrimonio neto acumulado positivo</string>
+    <string name="dashboard_wealth_negative">Gastos por encima de ingresos en el historial</string>
+    <string name="dashboard_most_records">Mas registros</string>
+    <string name="dashboard_biggest_expense">Mayor gasto</string>
+    <string name="dashboard_biggest_income">Mayor ingreso</string>
+    <string name="dashboard_records_count">%d registros</string>
+    <string name="dashboard_no_data">Sin datos para este periodo</string>
 </resources>

@@ -177,7 +177,7 @@
     <string name="recurring_title">Recurring</string>
     <string name="recurring_active">Active</string>
     <string name="recurring_cancelled">Cancelled</string>
-    <string name="recurring_progress">%d of %d months</string>
+    <string name="recurring_progress">%1$d of %2$d months</string>
     <string name="edit_recurring">Edit Recurring</string>
     <string name="delete_recurring_confirm_title">Delete recurring</string>
     <string name="delete_recurring_confirm_description">Future transactions will be removed. Past transactions are kept.</string>

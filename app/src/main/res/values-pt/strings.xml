@@ -167,7 +167,7 @@
     <string name="recurring_title">Recorrentes</string>
     <string name="recurring_active">Ativa</string>
     <string name="recurring_cancelled">Cancelada</string>
-    <string name="recurring_progress">%d de %d meses</string>
+    <string name="recurring_progress">%1$d de %2$d meses</string>
     <string name="edit_recurring">Editar Recorrência</string>
     <string name="delete_recurring_confirm_title">Excluir recorrência</string>
     <string name="delete_recurring_confirm_description">Transações futuras serão removidas. Transações passadas são mantidas.</string>

@@ -50,6 +50,13 @@ android {
     }
 }
 
+// Exclude Moshi codegen from Hilt's annotation processing (already using KSP)
+configurations.configureEach {
+    if (name.contains("AnnotationProcessor", ignoreCase = true)) {
+        exclude(group = "com.squareup.moshi", module = "moshi-kotlin-codegen")
+    }
+}
+
 dependencies {
     // Compose
     val composeBom = platform(libs.compose.bom)

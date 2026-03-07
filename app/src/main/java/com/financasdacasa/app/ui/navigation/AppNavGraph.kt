@@ -9,6 +9,7 @@ import com.financasdacasa.app.ui.screens.auth.LoginScreen
 import com.financasdacasa.app.ui.screens.auth.RegisterScreen
 import com.financasdacasa.app.ui.screens.auth.VerifyEmailScreen
 import com.financasdacasa.app.ui.screens.house.HouseSelectionScreen
+import com.financasdacasa.app.ui.screens.invite.InviteScreen
 import com.financasdacasa.app.ui.screens.main.MainShell
 
 object Routes {
@@ -54,6 +55,82 @@ fun AuthNavGraph(navController: NavHostController = rememberNavController()) {
                     navController.navigate(route) { popUpTo("login") { inclusive = true } }
                 },
             )
+        }
+    }
+}
+
+@Composable
+fun InviteNavGraph(
+    token: String,
+    navController: NavHostController = rememberNavController(),
+) {
+    NavHost(navController = navController, startDestination = "invite/$token") {
+        composable("invite/{token}") {
+            InviteScreen(
+                onNavigateToLogin = { inviteToken ->
+                    navController.navigate("auth-login?inviteToken=$inviteToken") {
+                        popUpTo("invite/$token") { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = { inviteToken ->
+                    navController.navigate("auth-register?inviteToken=$inviteToken") {
+                        popUpTo("invite/$token") { inclusive = true }
+                    }
+                },
+                onNavigateToHome = {
+                    navController.navigate(Routes.HOUSE_SELECTION) {
+                        popUpTo("invite/$token") { inclusive = true }
+                    }
+                },
+            )
+        }
+
+        composable(
+            route = "auth-login?inviteToken={inviteToken}",
+            arguments = listOf(
+                androidx.navigation.navArgument("inviteToken") {
+                    nullable = true
+                    defaultValue = null
+                },
+            ),
+        ) {
+            LoginScreen(
+                onNavigateToRegister = { invToken ->
+                    val route = if (invToken != null) "auth-register?inviteToken=$invToken" else "auth-register"
+                    navController.navigate(route)
+                },
+            )
+        }
+
+        composable(
+            route = "auth-register?inviteToken={inviteToken}",
+            arguments = listOf(
+                androidx.navigation.navArgument("inviteToken") {
+                    nullable = true
+                    defaultValue = null
+                },
+            ),
+        ) {
+            RegisterScreen(
+                onNavigateToLogin = { invToken ->
+                    val route = if (invToken != null) "auth-login?inviteToken=$invToken" else "auth-login"
+                    navController.navigate(route) { popUpTo("auth-login") { inclusive = true } }
+                },
+            )
+        }
+
+        composable(Routes.HOUSE_SELECTION) {
+            HouseSelectionScreen(
+                onHouseSelected = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOUSE_SELECTION) { inclusive = true }
+                    }
+                },
+            )
+        }
+
+        composable(Routes.HOME) {
+            MainShell()
         }
     }
 }

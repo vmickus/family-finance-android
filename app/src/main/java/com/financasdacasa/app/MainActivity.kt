@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.financasdacasa.app.data.local.AuthState
 import com.financasdacasa.app.data.local.SessionManager
 import com.financasdacasa.app.ui.navigation.AuthNavGraph
+import com.financasdacasa.app.ui.navigation.InviteNavGraph
 import com.financasdacasa.app.ui.navigation.MainNavGraph
 import com.financasdacasa.app.ui.screens.auth.VerifyEmailScreen
 import com.financasdacasa.app.ui.theme.FinancasTheme
@@ -30,6 +31,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         sessionManager.initialize()
         enableEdgeToEdge()
+
+        val inviteToken = intent?.data?.let { uri ->
+            if (uri.pathSegments.size >= 2 && uri.pathSegments[0] == "invite") {
+                uri.pathSegments[1]
+            } else null
+        }
+
         setContent {
             FinancasTheme {
                 val authState by sessionManager.authState.collectAsState()
@@ -41,11 +49,17 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     is AuthState.Unauthenticated -> {
-                        AuthNavGraph()
+                        if (inviteToken != null) {
+                            InviteNavGraph(token = inviteToken)
+                        } else {
+                            AuthNavGraph()
+                        }
                     }
                     is AuthState.Authenticated -> {
                         if (!state.user.emailVerified) {
                             VerifyEmailScreen()
+                        } else if (inviteToken != null) {
+                            InviteNavGraph(token = inviteToken)
                         } else {
                             MainNavGraph()
                         }

@@ -25,7 +25,7 @@ import com.financasdacasa.app.ui.screens.garden.GardenScreen
 import com.financasdacasa.app.ui.screens.garden.GoalDetailScreen
 import com.financasdacasa.app.ui.screens.home.HomeScreen
 import com.financasdacasa.app.ui.screens.more.MoreScreen
-import com.financasdacasa.app.ui.screens.placeholder.PlaceholderScreen
+import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +82,7 @@ fun MainShell() {
                 )
             }
             composable(BottomNavTab.DASHBOARD.route) {
-                PlaceholderScreen(stringResource(R.string.nav_dashboard))
+                DashboardScreen()
             }
             composable("garden/{goalId}") {
                 GoalDetailScreen(

@@ -192,4 +192,46 @@
     <string name="dashboard_biggest_income">Maior recebimento</string>
     <string name="dashboard_records_count">%d registros</string>
     <string name="dashboard_no_data">Sem dados para este periodo</string>
+
+    <!-- Members -->
+    <string name="nav_members">Membros</string>
+    <string name="members_title">Membros</string>
+    <string name="members_owner">Dono</string>
+    <string name="members_member">Membro</string>
+    <string name="members_house_name">Nome da casa</string>
+    <string name="members_house_renamed">Nome da casa atualizado</string>
+    <string name="members_label">Membros</string>
+    <string name="members_invite_section">Convidar pessoas</string>
+    <string name="members_invite_description">Envie este link para que outra pessoa entre na sua casa depois de criar ou acessar uma conta.</string>
+    <string name="members_generate_invite">Gerar link de convite</string>
+    <string name="members_remove">Remover membro</string>
+    <string name="members_remove_confirm_title">Remover %s?</string>
+    <string name="members_remove_confirm_description">Este membro sera removido da casa.</string>
+    <string name="members_removed">Membro removido</string>
+    <string name="members_leave">Sair da casa</string>
+    <string name="members_leave_confirm_title">Sair da casa?</string>
+    <string name="members_leave_confirm_description">Voce sera removido desta casa.</string>
+    <string name="members_left">Voce saiu da casa</string>
+    <string name="error_members_load_failed">Erro ao carregar membros. Tente novamente.</string>
+    <string name="error_members_remove_failed">Erro ao remover membro. Tente novamente.</string>
+    <string name="error_members_leave_failed">Erro ao sair da casa. Tente novamente.</string>
+    <string name="error_members_rename_failed">Erro ao renomear casa. Tente novamente.</string>
+    <string name="error_members_invite_failed">Erro ao gerar convite. Tente novamente.</string>
+
+    <!-- Invite -->
+    <string name="invite_title">Convite da casa</string>
+    <string name="invite_invalid">Convite invalido</string>
+    <string name="invite_invalid_description">Este link de convite e invalido ou expirou.</string>
+    <string name="invite_expired_description">Este convite nao e mais valido, mas voce pode acessar sua conta normalmente.</string>
+    <string name="invite_valid_description">Voce foi convidado para entrar na casa %s.</string>
+    <string name="invite_valid_description_with_owner">Voce foi convidado para entrar na casa %1$s por %2$s.</string>
+    <string name="invite_join">Entrar</string>
+    <string name="invite_already_have_account">Ja tenho uma conta</string>
+    <string name="invite_create_and_join">Criar conta e entrar</string>
+    <string name="invite_joining">Entrando\u2026</string>
+    <string name="invite_joined">Voce entrou na casa!</string>
+    <string name="invite_share_title">Convite da casa</string>
+    <string name="invite_share_text">Use este link para entrar na minha casa no Financas da Casa:</string>
+    <string name="invite_loading">Carregando convite\u2026</string>
+    <string name="error_invite_accept_failed">Erro ao entrar na casa. Tente novamente.</string>
 </resources>

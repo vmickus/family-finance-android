@@ -192,4 +192,46 @@
     <string name="dashboard_biggest_income">Mayor ingreso</string>
     <string name="dashboard_records_count">%d registros</string>
     <string name="dashboard_no_data">Sin datos para este periodo</string>
+
+    <!-- Members -->
+    <string name="nav_members">Miembros</string>
+    <string name="members_title">Miembros</string>
+    <string name="members_owner">Propietario</string>
+    <string name="members_member">Miembro</string>
+    <string name="members_house_name">Nombre del hogar</string>
+    <string name="members_house_renamed">Nombre del hogar actualizado</string>
+    <string name="members_label">Miembros</string>
+    <string name="members_invite_section">Invitar personas</string>
+    <string name="members_invite_description">Envia este enlace para que otra persona se una a tu hogar despues de crear o acceder a una cuenta.</string>
+    <string name="members_generate_invite">Generar enlace de invitacion</string>
+    <string name="members_remove">Eliminar miembro</string>
+    <string name="members_remove_confirm_title">Eliminar a %s?</string>
+    <string name="members_remove_confirm_description">Este miembro sera eliminado del hogar.</string>
+    <string name="members_removed">Miembro eliminado</string>
+    <string name="members_leave">Salir del hogar</string>
+    <string name="members_leave_confirm_title">Salir del hogar?</string>
+    <string name="members_leave_confirm_description">Seras eliminado de este hogar.</string>
+    <string name="members_left">Saliste del hogar</string>
+    <string name="error_members_load_failed">Error al cargar miembros. Intenta de nuevo.</string>
+    <string name="error_members_remove_failed">Error al eliminar miembro. Intenta de nuevo.</string>
+    <string name="error_members_leave_failed">Error al salir del hogar. Intenta de nuevo.</string>
+    <string name="error_members_rename_failed">Error al renombrar hogar. Intenta de nuevo.</string>
+    <string name="error_members_invite_failed">Error al generar invitacion. Intenta de nuevo.</string>
+
+    <!-- Invite -->
+    <string name="invite_title">Invitacion al hogar</string>
+    <string name="invite_invalid">Invitacion invalida</string>
+    <string name="invite_invalid_description">Este enlace de invitacion es invalido o ha expirado.</string>
+    <string name="invite_expired_description">Esta invitacion ya no es valida, pero puedes acceder a tu cuenta normalmente.</string>
+    <string name="invite_valid_description">Fuiste invitado a unirte al hogar %s.</string>
+    <string name="invite_valid_description_with_owner">Fuiste invitado a unirte al hogar %1$s por %2$s.</string>
+    <string name="invite_join">Unirse</string>
+    <string name="invite_already_have_account">Ya tengo una cuenta</string>
+    <string name="invite_create_and_join">Crear cuenta y unirse</string>
+    <string name="invite_joining">Uniendose\u2026</string>
+    <string name="invite_joined">Te uniste al hogar!</string>
+    <string name="invite_share_title">Invitacion al hogar</string>
+    <string name="invite_share_text">Usa este enlace para unirte a mi hogar en Finanzas del Hogar:</string>
+    <string name="invite_loading">Cargando invitacion\u2026</string>
+    <string name="error_invite_accept_failed">Error al unirse al hogar. Intenta de nuevo.</string>
 </resources>

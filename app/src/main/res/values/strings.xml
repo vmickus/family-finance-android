@@ -202,4 +202,46 @@
     <string name="dashboard_biggest_income">Biggest income</string>
     <string name="dashboard_records_count">%d records</string>
     <string name="dashboard_no_data">No data for this period</string>
+
+    <!-- Members -->
+    <string name="nav_members">Members</string>
+    <string name="members_title">Members</string>
+    <string name="members_owner">Owner</string>
+    <string name="members_member">Member</string>
+    <string name="members_house_name">House name</string>
+    <string name="members_house_renamed">House name updated</string>
+    <string name="members_label">Members</string>
+    <string name="members_invite_section">Invite people</string>
+    <string name="members_invite_description">Send this link so another person can join your house after creating or accessing an account.</string>
+    <string name="members_generate_invite">Generate invite link</string>
+    <string name="members_remove">Remove member</string>
+    <string name="members_remove_confirm_title">Remove %s?</string>
+    <string name="members_remove_confirm_description">This member will be removed from the house.</string>
+    <string name="members_removed">Member removed</string>
+    <string name="members_leave">Leave house</string>
+    <string name="members_leave_confirm_title">Leave house?</string>
+    <string name="members_leave_confirm_description">You will be removed from this house.</string>
+    <string name="members_left">You left the house</string>
+    <string name="error_members_load_failed">Failed to load members. Try again.</string>
+    <string name="error_members_remove_failed">Failed to remove member. Try again.</string>
+    <string name="error_members_leave_failed">Failed to leave house. Try again.</string>
+    <string name="error_members_rename_failed">Failed to rename house. Try again.</string>
+    <string name="error_members_invite_failed">Failed to generate invite. Try again.</string>
+
+    <!-- Invite -->
+    <string name="invite_title">House invite</string>
+    <string name="invite_invalid">Invalid invite</string>
+    <string name="invite_invalid_description">This invite link is invalid or expired.</string>
+    <string name="invite_expired_description">This invite is no longer valid, but you can still access your account normally.</string>
+    <string name="invite_valid_description">You were invited to join the house %s.</string>
+    <string name="invite_valid_description_with_owner">You were invited to join the house %1$s by %2$s.</string>
+    <string name="invite_join">Join</string>
+    <string name="invite_already_have_account">I already have an account</string>
+    <string name="invite_create_and_join">Create account and join</string>
+    <string name="invite_joining">Joining\u2026</string>
+    <string name="invite_joined">You joined the house!</string>
+    <string name="invite_share_title">House invite</string>
+    <string name="invite_share_text">Use this link to join my house on Home Finances:</string>
+    <string name="invite_loading">Loading invite\u2026</string>
+    <string name="error_invite_accept_failed">Failed to join house. Try again.</string>
 </resources>

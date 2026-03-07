@@ -28,6 +28,21 @@ data class AnnualReport(
 @JsonClass(generateAdapter = true)
 data class MonthlyReportEntry(
     val month: Int,
-    @Json(name = "total_income") val totalIncome: String,
-    @Json(name = "total_expense") val totalExpense: String,
+    val income: String,
+    val expense: String,
+)
+
+@JsonClass(generateAdapter = true)
+data class YearlySummary(
+    val year: Int,
+    val income: String,
+    val expense: String,
+)
+
+@JsonClass(generateAdapter = true)
+data class MonthlyHistoryEntry(
+    val year: Int,
+    val month: Int,
+    val income: String,
+    val expense: String,
 )

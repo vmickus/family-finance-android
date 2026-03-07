@@ -30,4 +30,10 @@ class TransactionRepository @Inject constructor(
         search: String? = null,
         categoryId: String? = null,
     ): AnnualReport = api.getAnnualReport(houseId, year, type, search, categoryId)
+
+    suspend fun getYearlySummary(houseId: String, toYear: Int): List<YearlySummary> =
+        api.getYearlySummary(houseId, toYear)
+
+    suspend fun getMonthlyHistory(houseId: String, toYear: Int, toMonth: Int): List<MonthlyHistoryEntry> =
+        api.getMonthlyHistory(houseId, toYear = toYear, toMonth = toMonth)
 }

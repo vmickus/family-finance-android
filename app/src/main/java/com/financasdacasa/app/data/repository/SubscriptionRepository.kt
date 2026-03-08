@@ -19,4 +19,11 @@ class SubscriptionRepository @Inject constructor(
             mapOf("purchase_token" to purchaseToken, "product_id" to productId)
         )
     }
+
+    suspend fun cancel() = subscriptionApi.cancel()
+
+    suspend fun checkout(plan: String): String {
+        val response = subscriptionApi.checkout(mapOf("plan" to plan))
+        return response.checkout_url
+    }
 }

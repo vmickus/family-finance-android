@@ -6,6 +6,10 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
+data class CheckoutResponse(
+    val checkout_url: String,
+)
+
 interface SubscriptionApi {
     @GET("subscriptions/status")
     suspend fun getStatus(): SubscriptionStatusResponse
@@ -15,4 +19,10 @@ interface SubscriptionApi {
 
     @POST("subscriptions/google-play")
     suspend fun verifyGooglePlay(@Body body: Map<String, String>): Map<String, String>
+
+    @POST("subscriptions/cancel")
+    suspend fun cancel()
+
+    @POST("subscriptions/checkout")
+    suspend fun checkout(@Body body: Map<String, String>): CheckoutResponse
 }

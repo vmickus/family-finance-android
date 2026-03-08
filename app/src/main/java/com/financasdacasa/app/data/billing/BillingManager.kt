@@ -175,6 +175,71 @@ class BillingManager @Inject constructor(
         }
     }
 
+    fun launchUpgradeFlow(
+        activity: Activity,
+        onResult: (PurchaseResult) -> Unit,
+    ) {
+        val annualProductId = BuildConfig.GP_ANNUAL_PRODUCT_ID
+
+        val productDetails = cachedProductDetails.find { it.productId == annualProductId }
+        if (productDetails == null) {
+            onResult(PurchaseResult.Error("Product not found. Try again."))
+            return
+        }
+
+        val offerToken = productDetails.subscriptionOfferDetails?.firstOrNull()?.offerToken
+        if (offerToken == null) {
+            onResult(PurchaseResult.Error("No offer available"))
+            return
+        }
+
+        // Query existing subscription to get old purchase token
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
+
+        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+            if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                onResult(PurchaseResult.Error("Failed to query existing subscription"))
+                return@queryPurchasesAsync
+            }
+
+            val existingPurchase = purchases.firstOrNull { purchase ->
+                purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+            }
+
+            if (existingPurchase == null) {
+                onResult(PurchaseResult.Error("No active subscription found"))
+                return@queryPurchasesAsync
+            }
+
+            purchaseCallback = onResult
+
+            val productDetailsParams = BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(productDetails)
+                .setOfferToken(offerToken)
+                .build()
+
+            val updateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder()
+                .setOldPurchaseToken(existingPurchase.purchaseToken)
+                .setSubscriptionReplacementMode(
+                    BillingFlowParams.SubscriptionUpdateParams.ReplacementMode.WITH_TIME_PRORATION
+                )
+                .build()
+
+            val billingFlowParams = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(listOf(productDetailsParams))
+                .setSubscriptionUpdateParams(updateParams)
+                .build()
+
+            val result = billingClient.launchBillingFlow(activity, billingFlowParams)
+            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                purchaseCallback = null
+                onResult(PurchaseResult.Error("Failed to launch upgrade: ${result.debugMessage}"))
+            }
+        }
+    }
+
     fun launchPurchaseFlow(
         activity: Activity,
         plan: String,

@@ -244,6 +244,17 @@
     <string name="subscription_history">Payment history</string>
     <string name="subscription_managed_google_play">Managed by Google Play</string>
     <string name="subscription_managed_google_play_description">Your subscription is managed through Google Play. Use the Play Store to manage or cancel.</string>
+    <string name="subscription_manage_play_store">Manage on Play Store</string>
+    <string name="subscription_managed_mercadopago">Managed by Mercado Pago</string>
+    <string name="subscription_managed_mercadopago_description">Your subscription is managed through Mercado Pago.</string>
+    <string name="subscription_cancel">Cancel subscription</string>
+    <string name="subscription_cancel_confirm_title">Cancel subscription?</string>
+    <string name="subscription_cancel_confirm_description">Your subscription will be cancelled, but you\'ll keep access until the end of the current period.</string>
+    <string name="subscription_cancelled_success">Subscription cancelled</string>
+    <string name="subscription_upgrade_annual">Upgrade to Annual</string>
+    <string name="subscription_upgrade_description">Save 16% with the annual plan</string>
+    <string name="error_subscription_cancel_failed">Failed to cancel subscription. Try again.</string>
+    <string name="error_subscription_upgrade_failed">Failed to upgrade subscription. Try again.</string>
     <string name="subscription_event_trial_started">Trial started</string>
     <string name="subscription_event_payment_received">Payment received</string>
     <string name="subscription_event_cancelled">Subscription cancelled</string>

@@ -22,6 +22,11 @@ sealed interface PurchaseResult {
     data object AlreadyOwned : PurchaseResult
 }
 
+data class PendingPurchase(
+    val purchaseToken: String,
+    val productId: String,
+)
+
 data class ProductInfo(
     val productId: String,
     val formattedPrice: String,
@@ -140,6 +145,31 @@ class BillingManager @Inject constructor(
                 } else {
                     Log.e(TAG, "queryProducts failed: ${billingResult.debugMessage}")
                     cont.resume(emptyMap())
+                }
+            }
+        }
+    }
+
+    suspend fun queryPendingPurchases(): List<PendingPurchase> {
+        if (!ensureConnected()) return emptyList()
+
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
+
+        return suspendCancellableCoroutine { cont ->
+            billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    val pending = purchases
+                        .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
+                        .mapNotNull { purchase ->
+                            val productId = purchase.products.firstOrNull() ?: return@mapNotNull null
+                            PendingPurchase(purchase.purchaseToken, productId)
+                        }
+                    cont.resume(pending)
+                } else {
+                    Log.e(TAG, "queryPendingPurchases failed: ${billingResult.debugMessage}")
+                    cont.resume(emptyList())
                 }
             }
         }

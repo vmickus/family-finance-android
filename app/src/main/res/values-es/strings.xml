@@ -218,6 +218,35 @@
     <string name="error_members_rename_failed">Error al renombrar hogar. Intenta de nuevo.</string>
     <string name="error_members_invite_failed">Error al generar invitacion. Intenta de nuevo.</string>
 
+    <!-- Subscription -->
+    <string name="subscription_title">Suscripcion</string>
+    <string name="subscription_current_plan">Plan actual</string>
+    <string name="subscription_status_trialing">Periodo de prueba</string>
+    <string name="subscription_status_active">Activa</string>
+    <string name="subscription_status_past_due">Pago pendiente</string>
+    <string name="subscription_status_cancelled">Cancelada</string>
+    <string name="subscription_status_expired">Expirada</string>
+    <string name="subscription_plan_trial">Prueba gratuita</string>
+    <string name="subscription_plan_monthly">Plan mensual</string>
+    <string name="subscription_plan_annual">Plan anual</string>
+    <string name="subscription_trial_ends">%d dias restantes</string>
+    <string name="subscription_period_end">Valido hasta %s</string>
+    <string name="subscription_history">Historial de pagos</string>
+    <string name="subscription_managed_google_play">Gestionado por Google Play</string>
+    <string name="subscription_managed_google_play_description">Tu suscripcion es gestionada por Google Play. Usa la Play Store para gestionar o cancelar.</string>
+    <string name="subscription_event_trial_started">Prueba iniciada</string>
+    <string name="subscription_event_payment_received">Pago recibido</string>
+    <string name="subscription_event_cancelled">Suscripcion cancelada</string>
+    <string name="subscription_event_admin_granted">Otorgada por admin</string>
+    <string name="subscription_event_plan_changed">Plan cambiado</string>
+    <string name="subscription_event_manual_payment">Pago manual</string>
+    <string name="subscription_event_activated">Suscripcion activada</string>
+    <string name="subscription_event_expired">Suscripcion expirada</string>
+    <string name="subscription_event_payment_approved">Pago aprobado</string>
+    <string name="subscription_event_google_play_verified">Google Play verificado</string>
+    <string name="subscription_retry">Reintentar</string>
+    <string name="error_subscription_load_failed">Error al cargar suscripcion. Intenta de nuevo.</string>
+
     <!-- Invite -->
     <string name="invite_title">Invitacion al hogar</string>
     <string name="invite_invalid">Invitacion invalida</string>

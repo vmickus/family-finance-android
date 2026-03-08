@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.CreditCard
 import com.composables.icons.lucide.Grid2x2
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Repeat
@@ -22,6 +23,7 @@ fun MoreScreen(
     onMembers: () -> Unit,
     onCategories: () -> Unit,
     onRecurring: () -> Unit,
+    onSubscription: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -79,6 +81,19 @@ fun MoreScreen(
                 ) {
                     Icon(Lucide.Repeat, contentDescription = null)
                     Text(stringResource(R.string.recurring_title), style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+            Surface(
+                modifier = Modifier.fillMaxWidth().clickable { onSubscription() },
+                shape = MaterialTheme.shapes.medium,
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Icon(Lucide.CreditCard, contentDescription = null)
+                    Text(stringResource(R.string.subscription_title), style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }

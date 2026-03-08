@@ -28,6 +28,7 @@ import com.financasdacasa.app.ui.screens.members.MembersScreen
 import com.financasdacasa.app.ui.screens.more.MoreScreen
 import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
+import com.financasdacasa.app.ui.screens.subscription.SubscriptionScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,6 +103,9 @@ fun MainShell() {
                     onRecurring = {
                         navController.navigate("recurring") { launchSingleTop = true }
                     },
+                    onSubscription = {
+                        navController.navigate("subscription") { launchSingleTop = true }
+                    },
                 )
             }
             composable("categories") {
@@ -109,6 +113,9 @@ fun MainShell() {
             }
             composable("recurring") {
                 RecurringScreen(onBack = { navController.popBackStack() })
+            }
+            composable("subscription") {
+                SubscriptionScreen(onBack = { navController.popBackStack() })
             }
             composable("members") {
                 MembersScreen(

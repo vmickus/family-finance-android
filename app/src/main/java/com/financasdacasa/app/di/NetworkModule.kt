@@ -7,6 +7,7 @@ import com.financasdacasa.app.data.api.CategoryApi
 import com.financasdacasa.app.data.api.GoalApi
 import com.financasdacasa.app.data.api.HouseApi
 import com.financasdacasa.app.data.api.RecurringTransactionApi
+import com.financasdacasa.app.data.api.SubscriptionApi
 import com.financasdacasa.app.data.api.TransactionApi
 import com.financasdacasa.app.data.interceptor.AuthInterceptor
 import com.financasdacasa.app.data.interceptor.ResponseInterceptor
@@ -92,4 +93,9 @@ object NetworkModule {
     @Singleton
     fun provideGoalApi(retrofit: Retrofit): GoalApi =
         retrofit.create(GoalApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSubscriptionApi(retrofit: Retrofit): SubscriptionApi =
+        retrofit.create(SubscriptionApi::class.java)
 }

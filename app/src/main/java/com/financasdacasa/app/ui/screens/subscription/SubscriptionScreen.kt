@@ -1,13 +1,18 @@
 package com.financasdacasa.app.ui.screens.subscription
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,6 +35,39 @@ fun SubscriptionScreen(
     viewModel: SubscriptionViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = SnackbarHostState()
+    val cancelledMessage = stringResource(R.string.subscription_cancelled_success)
+    val cancelErrorMessage = stringResource(R.string.error_subscription_cancel_failed)
+    val upgradeErrorMessage = stringResource(R.string.error_subscription_upgrade_failed)
+
+    LaunchedEffect(uiState.cancelSuccess) {
+        if (uiState.cancelSuccess) {
+            snackbarHostState.showSnackbar(cancelledMessage)
+            viewModel.clearCancelSuccess()
+        }
+    }
+
+    LaunchedEffect(uiState.cancelError) {
+        if (uiState.cancelError != null) {
+            snackbarHostState.showSnackbar(cancelErrorMessage)
+            viewModel.clearCancelError()
+        }
+    }
+
+    LaunchedEffect(uiState.upgradeError) {
+        if (uiState.upgradeError != null) {
+            snackbarHostState.showSnackbar(upgradeErrorMessage)
+            viewModel.clearUpgradeError()
+        }
+    }
+
+    LaunchedEffect(uiState.upgradeCheckoutUrl) {
+        uiState.upgradeCheckoutUrl?.let { url ->
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            viewModel.clearUpgradeCheckoutUrl()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -42,6 +80,7 @@ fun SubscriptionScreen(
                 },
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         when {
             uiState.isLoading -> {
@@ -73,6 +112,26 @@ fun SubscriptionScreen(
                 SubscriptionContent(
                     status = uiState.status!!,
                     history = uiState.history,
+                    cancelDialogVisible = uiState.cancelDialogVisible,
+                    isCancelling = uiState.isCancelling,
+                    isUpgrading = uiState.isUpgrading,
+                    onManagePlayStore = {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/account/subscriptions"),
+                            )
+                        )
+                    },
+                    onShowCancelDialog = { viewModel.showCancelDialog() },
+                    onDismissCancelDialog = { viewModel.dismissCancelDialog() },
+                    onConfirmCancel = { viewModel.cancel() },
+                    onUpgradeGooglePlay = {
+                        (context as? Activity)?.let { activity ->
+                            viewModel.upgradeViaGooglePlay(activity)
+                        }
+                    },
+                    onUpgradeMercadoPago = { viewModel.upgradeViaMercadoPago() },
                     modifier = Modifier.padding(padding),
                 )
             }
@@ -84,6 +143,15 @@ fun SubscriptionScreen(
 private fun SubscriptionContent(
     status: SubscriptionStatusResponse,
     history: List<PaymentEvent>,
+    cancelDialogVisible: Boolean,
+    isCancelling: Boolean,
+    isUpgrading: Boolean,
+    onManagePlayStore: () -> Unit,
+    onShowCancelDialog: () -> Unit,
+    onDismissCancelDialog: () -> Unit,
+    onConfirmCancel: () -> Unit,
+    onUpgradeGooglePlay: () -> Unit,
+    onUpgradeMercadoPago: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -96,7 +164,23 @@ private fun SubscriptionContent(
         StatusCard(status)
 
         if (status.provider == "google_play") {
-            GooglePlayManagedCard()
+            GooglePlayManagedCard(onManagePlayStore)
+        }
+
+        if (status.provider == "mercadopago") {
+            MercadoPagoManagedCard(
+                isCancelling = isCancelling,
+                onCancel = onShowCancelDialog,
+            )
+        }
+
+        if (status.plan == "monthly" && status.status == "active") {
+            UpgradeCard(
+                provider = status.provider,
+                isUpgrading = isUpgrading,
+                onUpgradeGooglePlay = onUpgradeGooglePlay,
+                onUpgradeMercadoPago = onUpgradeMercadoPago,
+            )
         }
 
         if (history.isNotEmpty()) {
@@ -104,6 +188,14 @@ private fun SubscriptionContent(
         }
 
         Spacer(Modifier.height(8.dp))
+    }
+
+    if (cancelDialogVisible) {
+        CancelConfirmDialog(
+            isCancelling = isCancelling,
+            onDismiss = onDismissCancelDialog,
+            onConfirm = onConfirmCancel,
+        )
     }
 }
 
@@ -175,7 +267,7 @@ private fun StatusCard(status: SubscriptionStatusResponse) {
 }
 
 @Composable
-private fun GooglePlayManagedCard() {
+private fun GooglePlayManagedCard(onManagePlayStore: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
@@ -208,8 +300,163 @@ private fun GooglePlayManagedCard() {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Spacer(Modifier.height(16.dp))
+            OutlinedButton(onClick = onManagePlayStore) {
+                Icon(Lucide.ExternalLink, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.subscription_manage_play_store))
+            }
         }
     }
+}
+
+@Composable
+private fun MercadoPagoManagedCard(
+    isCancelling: Boolean,
+    onCancel: () -> Unit,
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Surface(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = MaterialTheme.shapes.extraLarge,
+                modifier = Modifier.size(48.dp),
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Icon(
+                        Lucide.CreditCard,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text(
+                stringResource(R.string.subscription_managed_mercadopago),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.subscription_managed_mercadopago_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(16.dp))
+            OutlinedButton(
+                onClick = onCancel,
+                enabled = !isCancelling,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error,
+                ),
+            ) {
+                if (isCancelling) {
+                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(R.string.subscription_cancel))
+            }
+        }
+    }
+}
+
+@Composable
+private fun UpgradeCard(
+    provider: String?,
+    isUpgrading: Boolean,
+    onUpgradeGooglePlay: () -> Unit,
+    onUpgradeMercadoPago: () -> Unit,
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Surface(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = MaterialTheme.shapes.extraLarge,
+                modifier = Modifier.size(48.dp),
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Icon(
+                        Lucide.TrendingUp,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text(
+                stringResource(R.string.subscription_upgrade_annual),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.subscription_upgrade_description),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    if (provider == "google_play") onUpgradeGooglePlay()
+                    else onUpgradeMercadoPago()
+                },
+                enabled = !isUpgrading,
+            ) {
+                if (isUpgrading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(R.string.subscription_upgrade_annual))
+            }
+        }
+    }
+}
+
+@Composable
+private fun CancelConfirmDialog(
+    isCancelling: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = { if (!isCancelling) onDismiss() },
+        title = { Text(stringResource(R.string.subscription_cancel_confirm_title)) },
+        text = { Text(stringResource(R.string.subscription_cancel_confirm_description)) },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+                enabled = !isCancelling,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error,
+                ),
+            ) {
+                if (isCancelling) {
+                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(R.string.subscription_cancel))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, enabled = !isCancelling) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+    )
 }
 
 @Composable

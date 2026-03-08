@@ -234,6 +234,17 @@
     <string name="subscription_history">Historial de pagos</string>
     <string name="subscription_managed_google_play">Gestionado por Google Play</string>
     <string name="subscription_managed_google_play_description">Tu suscripcion es gestionada por Google Play. Usa la Play Store para gestionar o cancelar.</string>
+    <string name="subscription_manage_play_store">Gestionar en Play Store</string>
+    <string name="subscription_managed_mercadopago">Gestionado por Mercado Pago</string>
+    <string name="subscription_managed_mercadopago_description">Tu suscripcion es gestionada por Mercado Pago.</string>
+    <string name="subscription_cancel">Cancelar suscripcion</string>
+    <string name="subscription_cancel_confirm_title">Cancelar suscripcion?</string>
+    <string name="subscription_cancel_confirm_description">Tu suscripcion sera cancelada, pero mantendras el acceso hasta el final del periodo actual.</string>
+    <string name="subscription_cancelled_success">Suscripcion cancelada</string>
+    <string name="subscription_upgrade_annual">Cambiar a Anual</string>
+    <string name="subscription_upgrade_description">Ahorra 16% con el plan anual</string>
+    <string name="error_subscription_cancel_failed">Error al cancelar suscripcion. Intenta de nuevo.</string>
+    <string name="error_subscription_upgrade_failed">Error al cambiar de plan. Intenta de nuevo.</string>
     <string name="subscription_event_trial_started">Prueba iniciada</string>
     <string name="subscription_event_payment_received">Pago recibido</string>
     <string name="subscription_event_cancelled">Suscripcion cancelada</string>

@@ -109,6 +109,9 @@ dependencies {
     // Drag reorder
     implementation(libs.reorderable)
 
+    // Google Play Billing
+    implementation(libs.billing.ktx)
+
     // Date/Time
     implementation(libs.kotlinx.datetime)
 

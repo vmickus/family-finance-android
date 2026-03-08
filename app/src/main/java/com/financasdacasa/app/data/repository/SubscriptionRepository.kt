@@ -13,4 +13,10 @@ class SubscriptionRepository @Inject constructor(
     suspend fun getStatus(): SubscriptionStatusResponse = subscriptionApi.getStatus()
 
     suspend fun getHistory(): List<PaymentEvent> = subscriptionApi.getHistory()
+
+    suspend fun verifyGooglePlay(purchaseToken: String, productId: String) {
+        subscriptionApi.verifyGooglePlay(
+            mapOf("purchase_token" to purchaseToken, "product_id" to productId)
+        )
+    }
 }

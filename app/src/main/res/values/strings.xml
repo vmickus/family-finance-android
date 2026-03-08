@@ -260,9 +260,12 @@
     <string name="paywall_description">Your trial has ended. Subscribe to continue using all features.</string>
     <string name="paywall_per_month">per month</string>
     <string name="paywall_annual_discount">Save 16%</string>
-    <string name="paywall_annual_total">R$169.90/year</string>
     <string name="paywall_subscribe">Subscribe</string>
     <string name="paywall_check_again">Check again</string>
+    <string name="paywall_annual_total_dynamic">%s/year</string>
+    <string name="paywall_error_verification">Failed to verify purchase. Try again.</string>
+    <string name="paywall_error_already_owned">You already have an active subscription.</string>
+    <string name="paywall_error_purchase">Purchase failed. Try again.</string>
 
     <!-- Invite -->
     <string name="invite_title">House invite</string>

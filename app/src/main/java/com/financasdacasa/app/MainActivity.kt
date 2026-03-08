@@ -61,10 +61,7 @@ class MainActivity : ComponentActivity() {
                         if (!state.user.emailVerified) {
                             VerifyEmailScreen()
                         } else if (subscriptionExpired) {
-                            PaywallScreen(
-                                onSubscribe = { /* Google Play Billing in MICK-3 */ },
-                                onRetry = { sessionManager.clearSubscriptionExpired() },
-                            )
+                            PaywallScreen()
                         } else if (inviteToken != null) {
                             InviteNavGraph(token = inviteToken)
                         } else {

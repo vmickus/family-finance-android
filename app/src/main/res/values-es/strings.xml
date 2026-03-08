@@ -250,9 +250,12 @@
     <string name="paywall_description">Tu periodo de prueba ha terminado. Suscribete para seguir usando todas las funciones.</string>
     <string name="paywall_per_month">por mes</string>
     <string name="paywall_annual_discount">Ahorra 16%</string>
-    <string name="paywall_annual_total">R$169,90/ano</string>
     <string name="paywall_subscribe">Suscribirse</string>
     <string name="paywall_check_again">Verificar de nuevo</string>
+    <string name="paywall_annual_total_dynamic">%s/ano</string>
+    <string name="paywall_error_verification">Error al verificar compra. Intenta de nuevo.</string>
+    <string name="paywall_error_already_owned">Ya tienes una suscripcion activa.</string>
+    <string name="paywall_error_purchase">Compra fallida. Intenta de nuevo.</string>
 
     <!-- Invite -->
     <string name="invite_title">Invitacion al hogar</string>

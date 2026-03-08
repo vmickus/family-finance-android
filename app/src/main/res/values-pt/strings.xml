@@ -246,6 +246,13 @@
     <string name="subscription_event_google_play_verified">Google Play verificado</string>
     <string name="subscription_retry">Tentar novamente</string>
     <string name="error_subscription_load_failed">Erro ao carregar assinatura. Tente novamente.</string>
+    <string name="paywall_title">Assinatura necessaria</string>
+    <string name="paywall_description">Seu periodo de teste terminou. Assine para continuar usando todos os recursos.</string>
+    <string name="paywall_per_month">por mes</string>
+    <string name="paywall_annual_discount">Economize 16%</string>
+    <string name="paywall_annual_total">R$169,90/ano</string>
+    <string name="paywall_subscribe">Assinar</string>
+    <string name="paywall_check_again">Verificar novamente</string>
 
     <!-- Invite -->
     <string name="invite_title">Convite da casa</string>

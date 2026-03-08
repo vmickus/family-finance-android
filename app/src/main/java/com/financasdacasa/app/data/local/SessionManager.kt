@@ -23,6 +23,9 @@ class SessionManager @Inject constructor(
     private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
+    private val _subscriptionExpired = MutableStateFlow(false)
+    val subscriptionExpired: StateFlow<Boolean> = _subscriptionExpired.asStateFlow()
+
     private val userAdapter = moshi.adapter(User::class.java)
 
     fun initialize() {
@@ -46,7 +49,9 @@ class SessionManager @Inject constructor(
                     _authState.value = AuthState.Unauthenticated
                 }
                 AuthEvent.EmailNotVerified -> { /* handled by nav graph checking emailVerified */ }
-                AuthEvent.SubscriptionExpired -> { /* handled in Phase 5 */ }
+                AuthEvent.SubscriptionExpired -> {
+                    _subscriptionExpired.value = true
+                }
             }
         }
     }
@@ -68,8 +73,13 @@ class SessionManager @Inject constructor(
 
     fun getSelectedHouseId(): String? = tokenManager.getHouseId()
 
+    fun clearSubscriptionExpired() {
+        _subscriptionExpired.value = false
+    }
+
     fun logout() {
         tokenManager.clearAll()
+        _subscriptionExpired.value = false
         _authState.value = AuthState.Unauthenticated
     }
 }

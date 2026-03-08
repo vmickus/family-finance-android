@@ -256,6 +256,13 @@
     <string name="subscription_event_google_play_verified">Google Play verified</string>
     <string name="subscription_retry">Retry</string>
     <string name="error_subscription_load_failed">Failed to load subscription. Try again.</string>
+    <string name="paywall_title">Subscription required</string>
+    <string name="paywall_description">Your trial has ended. Subscribe to continue using all features.</string>
+    <string name="paywall_per_month">per month</string>
+    <string name="paywall_annual_discount">Save 16%</string>
+    <string name="paywall_annual_total">R$169.90/year</string>
+    <string name="paywall_subscribe">Subscribe</string>
+    <string name="paywall_check_again">Check again</string>
 
     <!-- Invite -->
     <string name="invite_title">House invite</string>

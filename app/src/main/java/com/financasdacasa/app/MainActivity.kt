@@ -17,6 +17,7 @@ import com.financasdacasa.app.ui.navigation.AuthNavGraph
 import com.financasdacasa.app.ui.navigation.InviteNavGraph
 import com.financasdacasa.app.ui.navigation.MainNavGraph
 import com.financasdacasa.app.ui.screens.auth.VerifyEmailScreen
+import com.financasdacasa.app.ui.screens.subscription.PaywallScreen
 import com.financasdacasa.app.ui.theme.FinancasTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FinancasTheme {
                 val authState by sessionManager.authState.collectAsState()
+                val subscriptionExpired by sessionManager.subscriptionExpired.collectAsState()
 
                 when (val state = authState) {
                     is AuthState.Loading -> {
@@ -58,6 +60,11 @@ class MainActivity : ComponentActivity() {
                     is AuthState.Authenticated -> {
                         if (!state.user.emailVerified) {
                             VerifyEmailScreen()
+                        } else if (subscriptionExpired) {
+                            PaywallScreen(
+                                onSubscribe = { /* Google Play Billing in MICK-3 */ },
+                                onRetry = { sessionManager.clearSubscriptionExpired() },
+                            )
                         } else if (inviteToken != null) {
                             InviteNavGraph(token = inviteToken)
                         } else {

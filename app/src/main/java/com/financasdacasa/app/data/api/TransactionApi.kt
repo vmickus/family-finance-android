@@ -16,6 +16,7 @@ interface TransactionApi {
         @Query("month") month: Int,
         @Query("year") year: Int,
         @Query("search") search: String? = null,
+        @Query("category_id") categoryId: String? = null,
     ): List<Transaction>
 
     @POST("transactions")

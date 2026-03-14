@@ -192,6 +192,8 @@
     <string name="dashboard_biggest_income">Maior recebimento</string>
     <string name="dashboard_records_count">%d registros</string>
     <string name="dashboard_no_data">Sem dados para este periodo</string>
+    <string name="category_total">Total</string>
+    <string name="category_transactions_count">%d transações</string>
 
     <!-- Members -->
     <string name="nav_members">Membros</string>

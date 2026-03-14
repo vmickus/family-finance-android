@@ -202,6 +202,8 @@
     <string name="dashboard_biggest_income">Biggest income</string>
     <string name="dashboard_records_count">%d records</string>
     <string name="dashboard_no_data">No data for this period</string>
+    <string name="category_total">Total</string>
+    <string name="category_transactions_count">%d transactions</string>
 
     <!-- Members -->
     <string name="nav_members">Members</string>

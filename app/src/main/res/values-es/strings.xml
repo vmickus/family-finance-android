@@ -191,6 +191,7 @@
     <string name="dashboard_biggest_expense">Mayor gasto</string>
     <string name="dashboard_biggest_income">Mayor ingreso</string>
     <string name="dashboard_records_count">%d registros</string>
+    <string name="dashboard_view_all">Ver todas</string>
     <string name="dashboard_no_data">Sin datos para este periodo</string>
     <string name="category_total">Total</string>
     <string name="category_transactions_count">%d transacciones</string>

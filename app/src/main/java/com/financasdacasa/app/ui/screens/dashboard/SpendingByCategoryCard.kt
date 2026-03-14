@@ -44,6 +44,7 @@ private fun parseHexColor(hex: String): Color {
 fun SpendingByCategoryCard(
     transactions: List<Transaction>,
     onCategoryClick: ((String) -> Unit)? = null,
+    onViewAll: (() -> Unit)? = null,
 ) {
     var viewType by remember { mutableStateOf("expense") }
 
@@ -135,6 +136,19 @@ fun SpendingByCategoryCard(
                                 } else null,
                             )
                         }
+                    }
+                }
+
+                if (onViewAll != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                        Text(
+                            stringResource(R.string.dashboard_view_all),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable(onClick = onViewAll),
+                        )
                     }
                 }
             }

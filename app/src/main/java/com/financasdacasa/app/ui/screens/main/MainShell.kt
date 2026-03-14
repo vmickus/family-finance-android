@@ -28,6 +28,7 @@ import com.financasdacasa.app.ui.screens.members.MembersScreen
 import com.financasdacasa.app.ui.screens.more.MoreScreen
 import com.financasdacasa.app.ui.screens.dashboard.CategoryTransactionsScreen
 import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
+import com.financasdacasa.app.ui.screens.dashboard.SpendingByCategoryScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
 import com.financasdacasa.app.ui.screens.subscription.SubscriptionScreen
 
@@ -86,6 +87,21 @@ fun MainShell() {
             }
             composable(BottomNavTab.DASHBOARD.route) {
                 DashboardScreen(
+                    onCategoryClick = { categoryId ->
+                        navController.navigate("category-transactions/$categoryId") {
+                            launchSingleTop = true
+                        }
+                    },
+                    onViewAllCategories = {
+                        navController.navigate("spending-by-category") {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+            composable("spending-by-category") {
+                SpendingByCategoryScreen(
+                    onBack = { navController.popBackStack() },
                     onCategoryClick = { categoryId ->
                         navController.navigate("category-transactions/$categoryId") {
                             launchSingleTop = true

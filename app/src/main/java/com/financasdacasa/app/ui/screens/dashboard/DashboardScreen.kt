@@ -25,6 +25,7 @@ import java.util.Locale
 @Composable
 fun DashboardScreen(
     onCategoryClick: ((String) -> Unit)? = null,
+    onViewAllCategories: (() -> Unit)? = null,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -109,7 +110,11 @@ fun DashboardScreen(
 
         // 2. Spending by Category
         if (activeTransactions.isNotEmpty()) {
-            SpendingByCategoryCard(activeTransactions, onCategoryClick = onCategoryClick)
+            SpendingByCategoryCard(
+                activeTransactions,
+                onCategoryClick = onCategoryClick,
+                onViewAll = onViewAllCategories,
+            )
         }
 
         // 3. Cash Flow (monthly mode only)

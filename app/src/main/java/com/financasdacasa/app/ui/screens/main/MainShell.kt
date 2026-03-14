@@ -26,6 +26,7 @@ import com.financasdacasa.app.ui.screens.garden.GoalDetailScreen
 import com.financasdacasa.app.ui.screens.home.HomeScreen
 import com.financasdacasa.app.ui.screens.members.MembersScreen
 import com.financasdacasa.app.ui.screens.more.MoreScreen
+import com.financasdacasa.app.ui.screens.dashboard.CategoryTransactionsScreen
 import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
 import com.financasdacasa.app.ui.screens.subscription.SubscriptionScreen
@@ -84,7 +85,18 @@ fun MainShell() {
                 )
             }
             composable(BottomNavTab.DASHBOARD.route) {
-                DashboardScreen()
+                DashboardScreen(
+                    onCategoryClick = { categoryId ->
+                        navController.navigate("category-transactions/$categoryId") {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+            composable("category-transactions/{categoryId}") {
+                CategoryTransactionsScreen(
+                    onBack = { navController.popBackStack() },
+                )
             }
             composable("garden/{goalId}") {
                 GoalDetailScreen(

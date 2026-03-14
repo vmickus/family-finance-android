@@ -23,7 +23,10 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel = hiltViewModel()) {
+fun DashboardScreen(
+    onCategoryClick: ((String) -> Unit)? = null,
+    viewModel: DashboardViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsState()
 
     Column(
@@ -106,7 +109,7 @@ fun DashboardScreen(viewModel: DashboardViewModel = hiltViewModel()) {
 
         // 2. Spending by Category
         if (activeTransactions.isNotEmpty()) {
-            SpendingByCategoryCard(activeTransactions)
+            SpendingByCategoryCard(activeTransactions, onCategoryClick = onCategoryClick)
         }
 
         // 3. Cash Flow (monthly mode only)

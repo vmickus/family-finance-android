@@ -9,8 +9,8 @@ import javax.inject.Singleton
 class TransactionRepository @Inject constructor(
     private val api: TransactionApi,
 ) {
-    suspend fun list(houseId: String, month: Int, year: Int, search: String? = null): List<Transaction> =
-        api.list(houseId, month, year, search)
+    suspend fun list(houseId: String, month: Int, year: Int, search: String? = null, categoryId: String? = null): List<Transaction> =
+        api.list(houseId, month, year, search, categoryId)
 
     suspend fun create(request: CreateTransactionRequest): Transaction =
         api.create(request)

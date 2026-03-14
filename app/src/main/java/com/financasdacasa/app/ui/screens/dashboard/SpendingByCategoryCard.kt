@@ -2,6 +2,7 @@ package com.financasdacasa.app.ui.screens.dashboard
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +25,7 @@ import com.financasdacasa.app.util.getLucideIcon
 import java.math.BigDecimal
 
 private data class CategoryGroup(
+    val categoryId: String?,
     val name: String,
     val icon: String,
     val color: Color,
@@ -39,7 +41,10 @@ private fun parseHexColor(hex: String): Color {
 }
 
 @Composable
-fun SpendingByCategoryCard(transactions: List<Transaction>) {
+fun SpendingByCategoryCard(
+    transactions: List<Transaction>,
+    onCategoryClick: ((String) -> Unit)? = null,
+) {
     var viewType by remember { mutableStateOf("expense") }
 
     val categories = remember(transactions, viewType) {
@@ -53,6 +58,7 @@ fun SpendingByCategoryCard(transactions: List<Transaction>) {
                 map[name] = existing.copy(total = existing.total + amount)
             } else {
                 map[name] = CategoryGroup(
+                    categoryId = tx.categoryId,
                     name = name,
                     icon = tx.category?.icon ?: "Tag",
                     color = parseHexColor(tx.category?.color ?: "#9CA3AF"),
@@ -120,7 +126,15 @@ fun SpendingByCategoryCard(transactions: List<Transaction>) {
                 ) {
                     DonutChart(categories = categories, modifier = Modifier.size(120.dp))
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        categories.forEach { cat -> CategoryRow(cat, maxTotal) }
+                        categories.forEach { cat ->
+                            CategoryRow(
+                                cat = cat,
+                                maxTotal = maxTotal,
+                                onClick = if (onCategoryClick != null && cat.categoryId != null) {
+                                    { onCategoryClick(cat.categoryId) }
+                                } else null,
+                            )
+                        }
                     }
                 }
             }
@@ -172,9 +186,13 @@ private fun DonutChart(categories: List<CategoryGroup>, modifier: Modifier = Mod
 }
 
 @Composable
-private fun CategoryRow(cat: CategoryGroup, maxTotal: Double) {
+private fun CategoryRow(cat: CategoryGroup, maxTotal: Double, onClick: (() -> Unit)? = null) {
     val icon = getLucideIcon(cat.icon)
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier,
+    ) {
         Box(
             modifier = Modifier.size(28.dp).clip(CircleShape).background(cat.color.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center,

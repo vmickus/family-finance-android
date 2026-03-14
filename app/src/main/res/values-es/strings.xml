@@ -245,7 +245,7 @@
     <string name="subscription_cancel_confirm_description">Tu suscripcion sera cancelada, pero mantendras el acceso hasta el final del periodo actual.</string>
     <string name="subscription_cancelled_success">Suscripcion cancelada</string>
     <string name="subscription_upgrade_annual">Cambiar a Anual</string>
-    <string name="subscription_upgrade_description">Ahorra 16% con el plan anual</string>
+    <string name="subscription_upgrade_description">Ahorra 16%% con el plan anual</string>
     <string name="error_subscription_cancel_failed">Error al cancelar suscripcion. Intenta de nuevo.</string>
     <string name="error_subscription_upgrade_failed">Error al cambiar de plan. Intenta de nuevo.</string>
     <string name="subscription_event_trial_started">Prueba iniciada</string>
@@ -263,7 +263,7 @@
     <string name="paywall_title">Suscripcion requerida</string>
     <string name="paywall_description">Tu periodo de prueba ha terminado. Suscribete para seguir usando todas las funciones.</string>
     <string name="paywall_per_month">por mes</string>
-    <string name="paywall_annual_discount">Ahorra 16%</string>
+    <string name="paywall_annual_discount">Ahorra 16%%</string>
     <string name="paywall_subscribe">Suscribirse</string>
     <string name="paywall_check_again">Verificar de nuevo</string>
     <string name="paywall_annual_total_dynamic">%s/ano</string>

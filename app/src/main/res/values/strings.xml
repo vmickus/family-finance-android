@@ -255,7 +255,7 @@
     <string name="subscription_cancel_confirm_description">Your subscription will be cancelled, but you\'ll keep access until the end of the current period.</string>
     <string name="subscription_cancelled_success">Subscription cancelled</string>
     <string name="subscription_upgrade_annual">Upgrade to Annual</string>
-    <string name="subscription_upgrade_description">Save 16% with the annual plan</string>
+    <string name="subscription_upgrade_description">Save 16%% with the annual plan</string>
     <string name="error_subscription_cancel_failed">Failed to cancel subscription. Try again.</string>
     <string name="error_subscription_upgrade_failed">Failed to upgrade subscription. Try again.</string>
     <string name="subscription_event_trial_started">Trial started</string>
@@ -273,7 +273,7 @@
     <string name="paywall_title">Subscription required</string>
     <string name="paywall_description">Your trial has ended. Subscribe to continue using all features.</string>
     <string name="paywall_per_month">per month</string>
-    <string name="paywall_annual_discount">Save 16%</string>
+    <string name="paywall_annual_discount">Save 16%%</string>
     <string name="paywall_subscribe">Subscribe</string>
     <string name="paywall_check_again">Check again</string>
     <string name="paywall_annual_total_dynamic">%s/year</string>

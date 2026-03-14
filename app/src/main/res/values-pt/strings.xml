@@ -245,7 +245,7 @@
     <string name="subscription_cancel_confirm_description">Sua assinatura sera cancelada, mas voce mantera o acesso ate o fim do periodo atual.</string>
     <string name="subscription_cancelled_success">Assinatura cancelada</string>
     <string name="subscription_upgrade_annual">Mudar para Anual</string>
-    <string name="subscription_upgrade_description">Economize 16% com o plano anual</string>
+    <string name="subscription_upgrade_description">Economize 16%% com o plano anual</string>
     <string name="error_subscription_cancel_failed">Erro ao cancelar assinatura. Tente novamente.</string>
     <string name="error_subscription_upgrade_failed">Erro ao mudar de plano. Tente novamente.</string>
     <string name="subscription_event_trial_started">Teste iniciado</string>
@@ -263,7 +263,7 @@
     <string name="paywall_title">Assinatura necessaria</string>
     <string name="paywall_description">Seu periodo de teste terminou. Assine para continuar usando todos os recursos.</string>
     <string name="paywall_per_month">por mes</string>
-    <string name="paywall_annual_discount">Economize 16%</string>
+    <string name="paywall_annual_discount">Economize 16%%</string>
     <string name="paywall_subscribe">Assinar</string>
     <string name="paywall_check_again">Verificar novamente</string>
     <string name="paywall_annual_total_dynamic">%s/ano</string>

@@ -37,10 +37,23 @@ fun PaywallScreen(
         val message = when (error) {
             "VERIFICATION_FAILED" -> context.getString(R.string.paywall_error_verification)
             "ALREADY_OWNED" -> context.getString(R.string.paywall_error_already_owned)
+            "CHECKOUT_FAILED" -> context.getString(R.string.paywall_error_checkout)
+            "PAYMENT_PENDING" -> context.getString(R.string.paywall_error_payment_pending)
             else -> context.getString(R.string.paywall_error_purchase)
         }
         snackbarHostState.showSnackbar(message)
         viewModel.clearError()
+    }
+
+    // Show WebView when checkout URL is available
+    val checkoutUrl = uiState.checkoutUrl
+    if (checkoutUrl != null) {
+        CheckoutWebView(
+            url = checkoutUrl,
+            onComplete = { viewModel.onCheckoutComplete() },
+            onClose = { viewModel.clearCheckoutUrl() },
+        )
+        return
     }
 
     Scaffold(
@@ -94,67 +107,25 @@ fun PaywallScreen(
 
             if (uiState.isLoading) {
                 CircularProgressIndicator()
-            } else {
-                val monthlyPrice = uiState.monthlyProduct?.formattedPrice ?: ""
-                val annualPrice = uiState.annualProduct?.let { product ->
-                    // Show monthly equivalent: extract currency from formatted price
-                    val monthly = product.priceMicros / 12_000_000.0
-                    val currencySymbol = product.formattedPrice.replace(Regex("[\\d.,\\s]"), "")
-                    "$currencySymbol${String.format("%.2f", monthly)}"
-                } ?: ""
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    PlanCard(
-                        price = monthlyPrice,
-                        period = stringResource(R.string.paywall_per_month),
-                        badge = null,
-                        selected = selectedPlan == "monthly",
-                        onSelect = { selectedPlan = "monthly" },
-                        modifier = Modifier.weight(1f),
-                    )
-                    PlanCard(
-                        price = annualPrice,
-                        period = stringResource(R.string.paywall_per_month),
-                        badge = stringResource(R.string.paywall_annual_discount),
-                        selected = selectedPlan == "annual",
-                        onSelect = { selectedPlan = "annual" },
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-
-                if (selectedPlan == "annual" && uiState.annualProduct != null) {
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        stringResource(R.string.paywall_annual_total_dynamic, uiState.annualProduct!!.formattedPrice),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-
-                Spacer(Modifier.height(24.dp))
-
-                Button(
-                    onClick = {
-                        val activity = context as? Activity ?: return@Button
-                        viewModel.purchase(activity, selectedPlan)
+            } else if (uiState.billingAvailable) {
+                // Google Play Billing available — show GP prices
+                GooglePlayPlanSelection(
+                    uiState = uiState,
+                    selectedPlan = selectedPlan,
+                    onPlanSelect = { selectedPlan = it },
+                    onSubscribe = { plan ->
+                        val activity = context as? Activity ?: return@GooglePlayPlanSelection
+                        viewModel.purchase(activity, plan)
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !uiState.isPurchasing,
-                ) {
-                    if (uiState.isPurchasing) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
-                        Spacer(Modifier.width(8.dp))
-                    }
-                    Text(stringResource(R.string.paywall_subscribe))
-                }
+                )
+            } else {
+                // Fallback — show Mercado Pago prices
+                MercadoPagoPlanSelection(
+                    selectedPlan = selectedPlan,
+                    onPlanSelect = { selectedPlan = it },
+                    isPurchasing = uiState.isPurchasing,
+                    onSubscribe = { plan -> viewModel.purchaseViaMercadoPago(plan) },
+                )
             }
 
             Spacer(Modifier.height(8.dp))
@@ -165,6 +136,129 @@ fun PaywallScreen(
 
             Spacer(Modifier.weight(1f))
         }
+    }
+}
+
+@Composable
+private fun GooglePlayPlanSelection(
+    uiState: PaywallUiState,
+    selectedPlan: String,
+    onPlanSelect: (String) -> Unit,
+    onSubscribe: (String) -> Unit,
+) {
+    val monthlyPrice = uiState.monthlyProduct?.formattedPrice ?: ""
+    val annualPrice = uiState.annualProduct?.let { product ->
+        val monthly = product.priceMicros / 12_000_000.0
+        val currencySymbol = product.formattedPrice.replace(Regex("[\\d.,\\s]"), "")
+        "$currencySymbol${String.format("%.2f", monthly)}"
+    } ?: ""
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        PlanCard(
+            price = monthlyPrice,
+            period = stringResource(R.string.paywall_per_month),
+            badge = null,
+            selected = selectedPlan == "monthly",
+            onSelect = { onPlanSelect("monthly") },
+            modifier = Modifier.weight(1f),
+        )
+        PlanCard(
+            price = annualPrice,
+            period = stringResource(R.string.paywall_per_month),
+            badge = stringResource(R.string.paywall_annual_discount),
+            selected = selectedPlan == "annual",
+            onSelect = { onPlanSelect("annual") },
+            modifier = Modifier.weight(1f),
+        )
+    }
+
+    if (selectedPlan == "annual" && uiState.annualProduct != null) {
+        Spacer(Modifier.height(4.dp))
+        Text(
+            stringResource(R.string.paywall_annual_total_dynamic, uiState.annualProduct!!.formattedPrice),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+    }
+
+    Spacer(Modifier.height(24.dp))
+
+    SubscribeButton(
+        isPurchasing = uiState.isPurchasing,
+        onClick = { onSubscribe(selectedPlan) },
+    )
+}
+
+@Composable
+private fun MercadoPagoPlanSelection(
+    selectedPlan: String,
+    onPlanSelect: (String) -> Unit,
+    isPurchasing: Boolean,
+    onSubscribe: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        PlanCard(
+            price = stringResource(R.string.paywall_mp_monthly_price),
+            period = stringResource(R.string.paywall_per_month),
+            badge = null,
+            selected = selectedPlan == "monthly",
+            onSelect = { onPlanSelect("monthly") },
+            modifier = Modifier.weight(1f),
+        )
+        PlanCard(
+            price = stringResource(R.string.paywall_mp_annual_price),
+            period = stringResource(R.string.paywall_per_month),
+            badge = stringResource(R.string.paywall_annual_discount),
+            selected = selectedPlan == "annual",
+            onSelect = { onPlanSelect("annual") },
+            modifier = Modifier.weight(1f),
+        )
+    }
+
+    if (selectedPlan == "annual") {
+        Spacer(Modifier.height(4.dp))
+        Text(
+            stringResource(R.string.paywall_mp_annual_total),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+    }
+
+    Spacer(Modifier.height(24.dp))
+
+    SubscribeButton(
+        isPurchasing = isPurchasing,
+        onClick = { onSubscribe(selectedPlan) },
+    )
+}
+
+@Composable
+private fun SubscribeButton(
+    isPurchasing: Boolean,
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !isPurchasing,
+    ) {
+        if (isPurchasing) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
+            Spacer(Modifier.width(8.dp))
+        }
+        Text(stringResource(R.string.paywall_subscribe))
     }
 }
 

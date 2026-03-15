@@ -24,6 +24,6 @@ class SubscriptionRepository @Inject constructor(
 
     suspend fun checkout(plan: String): String {
         val response = subscriptionApi.checkout(mapOf("plan" to plan))
-        return response.checkout_url
+        return response.checkoutUrl
     }
 }

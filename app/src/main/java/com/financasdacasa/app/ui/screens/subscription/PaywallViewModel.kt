@@ -27,6 +27,7 @@ data class PaywallUiState(
     val isPurchasing: Boolean = false,
     val error: String? = null,
     val purchaseSuccess: Boolean = false,
+    val checkoutUrl: String? = null,
 )
 
 @HiltViewModel
@@ -126,6 +127,46 @@ class PaywallViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun purchaseViaMercadoPago(plan: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isPurchasing = true, error = null) }
+            try {
+                val checkoutUrl = subscriptionRepository.checkout(plan)
+                _uiState.update {
+                    it.copy(isPurchasing = false, checkoutUrl = checkoutUrl)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to get checkout URL", e)
+                _uiState.update {
+                    it.copy(isPurchasing = false, error = "CHECKOUT_FAILED")
+                }
+            }
+        }
+    }
+
+    fun onCheckoutComplete() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(checkoutUrl = null, isPurchasing = true) }
+            try {
+                val status = subscriptionRepository.getStatus()
+                if (status.isAccessible) {
+                    sessionManager.clearSubscriptionExpired()
+                    _uiState.update { it.copy(isPurchasing = false, purchaseSuccess = true) }
+                } else {
+                    // Payment may still be processing — let user retry
+                    _uiState.update { it.copy(isPurchasing = false, error = "PAYMENT_PENDING") }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to verify subscription after checkout", e)
+                _uiState.update { it.copy(isPurchasing = false, error = "VERIFICATION_FAILED") }
+            }
+        }
+    }
+
+    fun clearCheckoutUrl() {
+        _uiState.update { it.copy(checkoutUrl = null) }
     }
 
     fun retry() {

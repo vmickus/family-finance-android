@@ -13,7 +13,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="name">Name</string>
-    <string name="password_requirements">Min 8 characters, at least 1 letter and 1 number</string>
+    <string name="password_requirements">Min 8 characters, with 1 uppercase, 1 lowercase, and 1 number</string>
     <string name="no_account_register">Don\'t have an account? Sign up</string>
     <string name="have_account_login">Already have an account? Log in</string>
     <string name="logout">Log out</string>
@@ -93,7 +93,7 @@
     <string name="error_name_too_short">Name must be at least 2 characters</string>
     <string name="error_email_required">Email is required</string>
     <string name="error_password_too_short">Password must be at least 8 characters</string>
-    <string name="error_password_weak">Password must contain at least 1 letter and 1 number</string>
+    <string name="error_password_weak">Password must contain 1 uppercase, 1 lowercase, and 1 number</string>
     <string name="error_password_mismatch">Passwords don\'t match</string>
     <string name="error_email_exists">An account with this email already exists</string>
     <string name="error_not_verified_yet">Email not verified yet. Check your inbox.</string>
@@ -313,4 +313,7 @@
     <string name="invite_share_text">Use this link to join my house on Home Finances:</string>
     <string name="invite_loading">Loading invite\u2026</string>
     <string name="error_invite_accept_failed">Failed to join house. Try again.</string>
+
+    <!-- Offline -->
+    <string name="offline_banner">You are offline. Showing cached data.</string>
 </resources>

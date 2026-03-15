@@ -22,6 +22,7 @@ vico = "2.0.1"
 lucide = "1.1.0"
 reorderable = "2.4.3"
 billing = "7.1.1"
+room = "2.6.1"
 
 [libraries]
 # Compose
@@ -76,6 +77,11 @@ reorderable = { group = "sh.calvin.reorderable", name = "reorderable", version.r
 
 # Google Play Billing
 billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+
+# Room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 # Date/Time
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }

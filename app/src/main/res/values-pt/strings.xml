@@ -12,7 +12,7 @@
     <string name="password">Senha</string>
     <string name="confirm_password">Confirmar senha</string>
     <string name="name">Nome</string>
-    <string name="password_requirements">Mín. 8 caracteres, pelo menos 1 letra e 1 número</string>
+    <string name="password_requirements">Mín. 8 caracteres, com 1 maiúscula, 1 minúscula e 1 número</string>
     <string name="no_account_register">Não tem conta? Cadastre-se</string>
     <string name="have_account_login">Já tem conta? Entre</string>
     <string name="logout">Sair</string>
@@ -83,7 +83,7 @@
     <string name="error_name_too_short">O nome deve ter pelo menos 2 caracteres</string>
     <string name="error_email_required">E-mail é obrigatório</string>
     <string name="error_password_too_short">A senha deve ter pelo menos 8 caracteres</string>
-    <string name="error_password_weak">A senha deve conter pelo menos 1 letra e 1 número</string>
+    <string name="error_password_weak">A senha deve conter 1 maiúscula, 1 minúscula e 1 número</string>
     <string name="error_password_mismatch">As senhas não coincidem</string>
     <string name="error_email_exists">Já existe uma conta com este e-mail</string>
     <string name="error_not_verified_yet">E-mail ainda não verificado. Confira sua caixa de entrada.</string>
@@ -298,4 +298,7 @@
     <string name="invite_share_text">Use este link para entrar na minha casa no Financas da Casa:</string>
     <string name="invite_loading">Carregando convite\u2026</string>
     <string name="error_invite_accept_failed">Erro ao entrar na casa. Tente novamente.</string>
+
+    <!-- Offline -->
+    <string name="offline_banner">Você está offline. Exibindo dados salvos.</string>
 </resources>

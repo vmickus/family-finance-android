@@ -50,6 +50,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 // Exclude Moshi codegen from Hilt's annotation processing (already using KSP)
 configurations.configureEach {
     if (name.contains("AnnotationProcessor", ignoreCase = true)) {
@@ -111,6 +115,11 @@ dependencies {
 
     // Google Play Billing
     implementation(libs.billing.ktx)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // Date/Time
     implementation(libs.kotlinx.datetime)

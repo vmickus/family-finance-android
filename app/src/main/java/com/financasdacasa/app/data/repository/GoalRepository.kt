@@ -1,6 +1,10 @@
 package com.financasdacasa.app.data.repository
 
 import com.financasdacasa.app.data.api.GoalApi
+import com.financasdacasa.app.data.local.dao.GoalAllocationDao
+import com.financasdacasa.app.data.local.dao.GoalDao
+import com.financasdacasa.app.data.local.mapper.toDomain
+import com.financasdacasa.app.data.local.mapper.toEntity
 import com.financasdacasa.app.data.model.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -8,8 +12,20 @@ import javax.inject.Singleton
 @Singleton
 class GoalRepository @Inject constructor(
     private val api: GoalApi,
+    private val goalDao: GoalDao,
+    private val goalAllocationDao: GoalAllocationDao,
 ) {
-    suspend fun list(houseId: String): List<Goal> = api.list(houseId)
+    suspend fun list(houseId: String): List<Goal> {
+        return try {
+            val fresh = api.list(houseId)
+            goalDao.replaceByHouse(houseId, fresh.map { it.toEntity() })
+            fresh
+        } catch (e: Exception) {
+            val cached = goalDao.getByHouse(houseId)
+            if (cached.isNotEmpty()) cached.map { it.toDomain() }
+            else throw e
+        }
+    }
 
     suspend fun create(request: CreateGoalRequest): Goal = api.create(request)
 
@@ -23,8 +39,17 @@ class GoalRepository @Inject constructor(
     suspend fun listMonthlyAllocations(houseId: String, month: Int, year: Int): List<GroupedAllocation> =
         api.listMonthlyAllocations(houseId, month, year)
 
-    suspend fun listGoalAllocations(goalId: String): List<GoalAllocation> =
-        api.listGoalAllocations(goalId)
+    suspend fun listGoalAllocations(goalId: String): List<GoalAllocation> {
+        return try {
+            val fresh = api.listGoalAllocations(goalId)
+            goalAllocationDao.replaceByGoal(goalId, fresh.map { it.toEntity() })
+            fresh
+        } catch (e: Exception) {
+            val cached = goalAllocationDao.getByGoal(goalId)
+            if (cached.isNotEmpty()) cached.map { it.toDomain() }
+            else throw e
+        }
+    }
 
     suspend fun deleteAllocation(id: String) = api.deleteAllocation(id)
 }

@@ -46,7 +46,7 @@ class RegisterViewModel @Inject constructor(
             s.name.length < 2 -> { _uiState.value = s.copy(error = "NAME_TOO_SHORT"); return }
             s.email.isBlank() -> { _uiState.value = s.copy(error = "EMAIL_REQUIRED"); return }
             s.password.length < 8 -> { _uiState.value = s.copy(error = "PASSWORD_TOO_SHORT"); return }
-            !s.password.any { it.isLetter() } || !s.password.any { it.isDigit() } -> {
+            !s.password.any { it.isUpperCase() } || !s.password.any { it.isLowerCase() } || !s.password.any { it.isDigit() } -> {
                 _uiState.value = s.copy(error = "PASSWORD_WEAK"); return
             }
             s.password != s.confirmPassword -> { _uiState.value = s.copy(error = "PASSWORD_MISMATCH"); return }

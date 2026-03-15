@@ -2,7 +2,9 @@ package com.financasdacasa.app.data.repository
 
 import com.financasdacasa.app.data.api.AuthApi
 import com.financasdacasa.app.data.model.AuthResponse
+import com.financasdacasa.app.data.model.AvatarUploadResponse
 import com.financasdacasa.app.data.model.User
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,5 +41,13 @@ class AuthRepository @Inject constructor(
 
     suspend fun getMe(): User {
         return authApi.getMe()
+    }
+
+    suspend fun uploadAvatar(part: MultipartBody.Part): AvatarUploadResponse {
+        return authApi.uploadAvatar(part)
+    }
+
+    suspend fun deleteAvatar() {
+        authApi.deleteAvatar()
     }
 }

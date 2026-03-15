@@ -1,7 +1,16 @@
 package com.financasdacasa.app
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
-class FinancasApp : Application()
+class FinancasApp : Application(), SingletonImageLoader.Factory {
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
+    override fun newImageLoader(context: android.content.Context): ImageLoader = imageLoader
+}

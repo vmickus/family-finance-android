@@ -280,6 +280,11 @@
     <string name="paywall_error_verification">Failed to verify purchase. Try again.</string>
     <string name="paywall_error_already_owned">You already have an active subscription.</string>
     <string name="paywall_error_purchase">Purchase failed. Try again.</string>
+    <string name="paywall_error_checkout">Failed to start checkout. Try again.</string>
+    <string name="paywall_error_payment_pending">Payment is still processing. Check again in a moment.</string>
+    <string name="paywall_mp_monthly_price">R$ 14,90</string>
+    <string name="paywall_mp_annual_price">R$ 12,50</string>
+    <string name="paywall_mp_annual_total">R$ 150,00/year</string>
 
     <!-- Invite -->
     <string name="invite_title">House invite</string>

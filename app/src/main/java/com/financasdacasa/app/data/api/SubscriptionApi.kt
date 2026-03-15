@@ -2,12 +2,15 @@ package com.financasdacasa.app.data.api
 
 import com.financasdacasa.app.data.model.PaymentEvent
 import com.financasdacasa.app.data.model.SubscriptionStatusResponse
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
+@JsonClass(generateAdapter = true)
 data class CheckoutResponse(
-    val checkout_url: String,
+    @Json(name = "checkout_url") val checkoutUrl: String,
 )
 
 interface SubscriptionApi {

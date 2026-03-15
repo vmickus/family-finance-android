@@ -3,9 +3,12 @@ package com.financasdacasa.app.data.local
 import com.financasdacasa.app.data.interceptor.AuthEvent
 import com.financasdacasa.app.data.model.User
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,6 +22,7 @@ sealed interface AuthState {
 class SessionManager @Inject constructor(
     private val tokenManager: TokenManager,
     private val moshi: Moshi,
+    private val database: FinancasDatabase,
 ) {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
@@ -46,6 +50,7 @@ class SessionManager @Inject constructor(
             when (event) {
                 AuthEvent.TokenExpired -> {
                     tokenManager.clearAll()
+                    CoroutineScope(Dispatchers.IO).launch { database.clearAllCaches() }
                     _authState.value = AuthState.Unauthenticated
                 }
                 AuthEvent.EmailNotVerified -> { /* handled by nav graph checking emailVerified */ }
@@ -79,6 +84,7 @@ class SessionManager @Inject constructor(
 
     fun logout() {
         tokenManager.clearAll()
+        CoroutineScope(Dispatchers.IO).launch { database.clearAllCaches() }
         _subscriptionExpired.value = false
         _authState.value = AuthState.Unauthenticated
     }

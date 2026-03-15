@@ -12,7 +12,7 @@
     <string name="password">Contraseña</string>
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="name">Nombre</string>
-    <string name="password_requirements">Mín. 8 caracteres, al menos 1 letra y 1 número</string>
+    <string name="password_requirements">Mín. 8 caracteres, con 1 mayúscula, 1 minúscula y 1 número</string>
     <string name="no_account_register">¿No tienes cuenta? Regístrate</string>
     <string name="have_account_login">¿Ya tienes cuenta? Inicia sesión</string>
     <string name="logout">Cerrar sesión</string>
@@ -83,7 +83,7 @@
     <string name="error_name_too_short">El nombre debe tener al menos 2 caracteres</string>
     <string name="error_email_required">El correo es obligatorio</string>
     <string name="error_password_too_short">La contraseña debe tener al menos 8 caracteres</string>
-    <string name="error_password_weak">La contraseña debe contener al menos 1 letra y 1 número</string>
+    <string name="error_password_weak">La contraseña debe contener 1 mayúscula, 1 minúscula y 1 número</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
     <string name="error_email_exists">Ya existe una cuenta con este correo</string>
     <string name="error_not_verified_yet">Correo aún no verificado. Revisa tu bandeja de entrada.</string>
@@ -298,4 +298,7 @@
     <string name="invite_share_text">Usa este enlace para unirte a mi hogar en Finanzas del Hogar:</string>
     <string name="invite_loading">Cargando invitacion\u2026</string>
     <string name="error_invite_accept_failed">Error al unirse al hogar. Intenta de nuevo.</string>
+
+    <!-- Offline -->
+    <string name="offline_banner">Estás sin conexión. Mostrando datos guardados.</string>
 </resources>

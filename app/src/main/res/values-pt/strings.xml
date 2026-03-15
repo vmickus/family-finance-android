@@ -271,6 +271,17 @@
     <string name="paywall_error_already_owned">Voce ja possui uma assinatura ativa.</string>
     <string name="paywall_error_purchase">Compra falhou. Tente novamente.</string>
 
+    <!-- Avatar -->
+    <string name="avatar_choose_source">Escolher foto</string>
+    <string name="avatar_camera">Tirar foto</string>
+    <string name="avatar_gallery">Escolher da galeria</string>
+    <string name="avatar_updated">Foto de perfil atualizada</string>
+    <string name="avatar_deleted">Foto de perfil removida</string>
+    <string name="avatar_delete_title">Remover foto</string>
+    <string name="avatar_delete_description">Sua foto de perfil sera removida.</string>
+    <string name="error_avatar_upload_failed">Erro ao enviar foto. Tente novamente.</string>
+    <string name="error_avatar_delete_failed">Erro ao remover foto. Tente novamente.</string>
+
     <!-- Invite -->
     <string name="invite_title">Convite da casa</string>
     <string name="invite_invalid">Convite invalido</string>

@@ -286,6 +286,17 @@
     <string name="paywall_mp_annual_price">R$ 12,50</string>
     <string name="paywall_mp_annual_total">R$ 150,00/year</string>
 
+    <!-- Avatar -->
+    <string name="avatar_choose_source">Choose photo</string>
+    <string name="avatar_camera">Take photo</string>
+    <string name="avatar_gallery">Choose from gallery</string>
+    <string name="avatar_updated">Profile photo updated</string>
+    <string name="avatar_deleted">Profile photo removed</string>
+    <string name="avatar_delete_title">Remove photo</string>
+    <string name="avatar_delete_description">Your profile photo will be removed.</string>
+    <string name="error_avatar_upload_failed">Failed to upload photo. Try again.</string>
+    <string name="error_avatar_delete_failed">Failed to remove photo. Try again.</string>
+
     <!-- Invite -->
     <string name="invite_title">House invite</string>
     <string name="invite_invalid">Invalid invite</string>

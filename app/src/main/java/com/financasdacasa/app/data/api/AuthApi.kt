@@ -1,10 +1,15 @@
 package com.financasdacasa.app.data.api
 
 import com.financasdacasa.app.data.model.AuthResponse
+import com.financasdacasa.app.data.model.AvatarUploadResponse
 import com.financasdacasa.app.data.model.User
+import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface AuthApi {
     @POST("auth/register")
@@ -24,4 +29,11 @@ interface AuthApi {
 
     @GET("users/me")
     suspend fun getMe(): User
+
+    @Multipart
+    @POST("users/me/avatar")
+    suspend fun uploadAvatar(@Part avatar: MultipartBody.Part): AvatarUploadResponse
+
+    @DELETE("users/me/avatar")
+    suspend fun deleteAvatar()
 }

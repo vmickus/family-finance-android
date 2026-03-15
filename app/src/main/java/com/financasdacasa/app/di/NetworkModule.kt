@@ -20,6 +20,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import android.content.Context
+import coil3.ImageLoader
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module
@@ -98,4 +102,15 @@ object NetworkModule {
     @Singleton
     fun provideSubscriptionApi(retrofit: Retrofit): SubscriptionApi =
         retrofit.create(SubscriptionApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideImageLoader(
+        @ApplicationContext context: Context,
+        okHttpClient: OkHttpClient,
+    ): ImageLoader = ImageLoader.Builder(context)
+        .components {
+            add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
+        }
+        .build()
 }

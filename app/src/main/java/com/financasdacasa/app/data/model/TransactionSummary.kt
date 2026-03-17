@@ -8,6 +8,7 @@ data class TransactionSummary(
     @Json(name = "total_income") val totalIncome: String,
     @Json(name = "total_expense") val totalExpense: String,
     val balance: String,
+    @Json(name = "total_allocations") val totalAllocations: String = "0",
     val month: Int,
     val year: Int,
 )

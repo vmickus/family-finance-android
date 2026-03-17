@@ -192,6 +192,8 @@
     <string name="dashboard_free_to_spend">Free to spend</string>
     <string name="dashboard_income_label">Income</string>
     <string name="dashboard_expenses_label">Expenses</string>
+    <string name="dashboard_invested_label">Invested</string>
+    <string name="summary_invested">Invested</string>
     <string name="dashboard_by_category">By category</string>
     <string name="dashboard_cash_flow">Cash Flow</string>
     <string name="dashboard_vs_average">vs average</string>

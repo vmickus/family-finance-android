@@ -1,5 +1,6 @@
 package com.financasdacasa.app.ui.screens.garden
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.composables.icons.lucide.*
 import com.financasdacasa.app.R
+import com.financasdacasa.app.data.model.GoalAllocation
 import com.financasdacasa.app.util.formatCurrency
 import com.financasdacasa.app.util.formatTransactionDate
 import com.financasdacasa.app.util.getPlantDrawable
@@ -172,41 +174,29 @@ fun GoalDetailScreen(
                     }
                 } else {
                     items(state.allocations, key = { it.id }) { alloc ->
-                        Card(modifier = Modifier.fillMaxWidth()) {
-                            Row(
-                                modifier = Modifier.padding(12.dp).fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Column {
-                                    Text(
-                                        formatCurrency(BigDecimal(alloc.amount)),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                    )
-                                    Text(
-                                        formatTransactionDate(alloc.allocationDate, context),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                    if (alloc.user != null) {
-                                        Text(
-                                            alloc.user.name,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                    }
-                                }
-                                IconButton(onClick = { viewModel.deleteAllocation(alloc.id) }) {
-                                    Icon(Lucide.Trash2, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp))
-                                }
-                            }
-                        }
+                        AllocationHistoryCard(
+                            alloc = alloc,
+                            context = context,
+                            onEdit = { viewModel.showEditAllocation(alloc) },
+                            onDelete = { viewModel.deleteAllocation(alloc.id) },
+                        )
                     }
                 }
 
                 item { Spacer(Modifier.height(80.dp)) }
             }
         }
+    }
+
+    // Edit allocation dialog
+    if (state.editingAllocation != null) {
+        EditAllocationDialog(
+            description = state.editDescription,
+            isSaving = state.isEditSaving,
+            onDescriptionChange = viewModel::onEditDescriptionChange,
+            onSave = viewModel::saveEditAllocation,
+            onDismiss = viewModel::dismissEditAllocation,
+        )
     }
 
     // Delete confirmation
@@ -227,4 +217,85 @@ fun GoalDetailScreen(
             },
         )
     }
+}
+
+@Composable
+private fun AllocationHistoryCard(
+    alloc: GoalAllocation,
+    context: android.content.Context,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable { onEdit() },
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp).fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    formatCurrency(BigDecimal(alloc.amount)),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                if (!alloc.description.isNullOrBlank()) {
+                    Text(
+                        alloc.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Text(
+                    formatTransactionDate(alloc.allocationDate, context),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (alloc.user != null) {
+                    Text(
+                        alloc.user.name,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            IconButton(onClick = onDelete) {
+                Icon(Lucide.Trash2, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun EditAllocationDialog(
+    description: String,
+    isSaving: Boolean,
+    onDescriptionChange: (String) -> Unit,
+    onSave: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.edit_allocation)) },
+        text = {
+            OutlinedTextField(
+                value = description,
+                onValueChange = onDescriptionChange,
+                label = { Text(stringResource(R.string.allocation_description)) },
+                placeholder = { Text(stringResource(R.string.allocation_description_hint)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onSave, enabled = !isSaving) {
+                Text(stringResource(R.string.save))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+    )
 }

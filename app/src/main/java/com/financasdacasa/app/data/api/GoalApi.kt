@@ -29,6 +29,9 @@ interface GoalApi {
     @GET("goals/{id}/allocations")
     suspend fun listGoalAllocations(@Path("id") goalId: String): List<GoalAllocation>
 
+    @PUT("goals/allocations/{id}")
+    suspend fun updateAllocation(@Path("id") id: String, @Body body: UpdateAllocationRequest): GoalAllocation
+
     @DELETE("goals/allocations/{id}")
     suspend fun deleteAllocation(@Path("id") id: String)
 }

@@ -16,7 +16,7 @@ import com.financasdacasa.app.data.local.entity.*
         CachedBudgetLimit::class,
         CachedRecurringTransaction::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class FinancasDatabase : RoomDatabase() {

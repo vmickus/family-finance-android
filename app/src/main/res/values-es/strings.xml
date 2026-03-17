@@ -158,6 +158,9 @@
     <string name="error_allocation_failed">Error al guardar asignación. Inténtalo de nuevo.</string>
     <string name="error_exceeds_balance">El total excede el saldo libre</string>
     <string name="error_exceeds_target">El monto excede el objetivo restante</string>
+    <string name="allocation_description">Descripción</string>
+    <string name="allocation_description_hint">¿Para qué es este riego?</string>
+    <string name="edit_allocation">Editar asignación</string>
     <string name="watered_successfully">¡Jardín regado!</string>
     <string name="gardeners">Jardineros</string>
     <string name="contributions">%d contribuciones</string>

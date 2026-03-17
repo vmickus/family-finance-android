@@ -26,6 +26,7 @@ data class GoalAllocation(
     @Json(name = "house_id") val houseId: String,
     @Json(name = "user_id") val userId: String,
     val amount: String,
+    val description: String? = null,
     @Json(name = "allocation_date") val allocationDate: String,
     @Json(name = "created_at") val createdAt: String,
     val user: User? = null,
@@ -39,6 +40,7 @@ data class AllocationItem(
     @Json(name = "plant_type") val plantType: String,
     val color: String,
     val amount: String,
+    val description: String? = null,
 )
 
 @JsonClass(generateAdapter = true)
@@ -86,4 +88,12 @@ data class CreateAllocationRequest(
 data class AllocationItemRequest(
     @Json(name = "goal_id") val goalId: String,
     val amount: Double,
+    val description: String? = null,
+)
+
+@JsonClass(generateAdapter = true)
+data class UpdateAllocationRequest(
+    @Json(name = "goal_id") val goalId: String? = null,
+    val amount: Double? = null,
+    val description: String? = null,
 )

@@ -51,5 +51,8 @@ class GoalRepository @Inject constructor(
         }
     }
 
+    suspend fun updateAllocation(id: String, request: UpdateAllocationRequest): GoalAllocation =
+        api.updateAllocation(id, request)
+
     suspend fun deleteAllocation(id: String) = api.deleteAllocation(id)
 }

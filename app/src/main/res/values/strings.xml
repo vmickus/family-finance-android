@@ -168,6 +168,9 @@
     <string name="error_allocation_failed">Failed to save allocation. Try again.</string>
     <string name="error_exceeds_balance">Total exceeds free balance</string>
     <string name="error_exceeds_target">Amount exceeds remaining target</string>
+    <string name="allocation_description">Description</string>
+    <string name="allocation_description_hint">What is this watering for?</string>
+    <string name="edit_allocation">Edit allocation</string>
     <string name="watered_successfully">Garden watered!</string>
     <string name="gardeners">Gardeners</string>
     <string name="contributions">%d contributions</string>

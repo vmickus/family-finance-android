@@ -53,4 +53,12 @@ class HouseRepository @Inject constructor(
     suspend fun getInviteDetails(token: String): InviteDetails {
         return houseApi.getInviteDetails(token)
     }
+
+    suspend fun transferOwnership(houseId: String, newOwnerId: String) {
+        houseApi.transferOwnership(houseId, mapOf("new_owner_id" to newOwnerId))
+    }
+
+    suspend fun deleteHouse(houseId: String) {
+        houseApi.deleteHouse(houseId)
+    }
 }

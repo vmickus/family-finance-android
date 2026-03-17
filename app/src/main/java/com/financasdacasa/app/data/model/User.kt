@@ -11,4 +11,5 @@ data class User(
     @Json(name = "avatar_url") val avatarUrl: String?,
     @Json(name = "email_verified") val emailVerified: Boolean,
     @Json(name = "is_admin") val isAdmin: Boolean?,
+    @Json(name = "auth_provider") val authProvider: String? = null,
 )

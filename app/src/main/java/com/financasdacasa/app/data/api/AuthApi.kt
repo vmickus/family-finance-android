@@ -2,6 +2,7 @@ package com.financasdacasa.app.data.api
 
 import com.financasdacasa.app.data.model.AuthResponse
 import com.financasdacasa.app.data.model.AvatarUploadResponse
+import com.financasdacasa.app.data.model.DeactivationCheckResponse
 import com.financasdacasa.app.data.model.User
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -36,4 +37,13 @@ interface AuthApi {
 
     @DELETE("users/me/avatar")
     suspend fun deleteAvatar()
+
+    @POST("users/me/export")
+    suspend fun requestExport()
+
+    @GET("users/me/deactivation-check")
+    suspend fun deactivationCheck(): DeactivationCheckResponse
+
+    @POST("users/me/deactivate")
+    suspend fun deactivate(@Body body: Map<String, String>)
 }

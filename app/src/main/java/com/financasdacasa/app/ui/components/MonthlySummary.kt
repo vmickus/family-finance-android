@@ -20,6 +20,7 @@ private val incomeColor = Color(0xFF10B981)
 private val expenseColor = Color(0xFFF43F5E)
 private val balancePositiveColor = Color(0xFF0284C7)
 private val balanceNegativeColor = Color(0xFFD97706)
+private val tealColor = Color(0xFF0D9488)
 
 @Composable
 fun MonthlySummary(
@@ -27,45 +28,73 @@ fun MonthlySummary(
     activeFilter: String?,
     onFilterChange: (String?) -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        SummaryCard(
-            label = stringResource(R.string.income),
-            value = formatCurrency(summary.totalIncome),
-            icon = Lucide.TrendingUp,
-            color = incomeColor,
-            isSelected = activeFilter == "income",
-            isFaded = activeFilter != null && activeFilter != "income",
-            onClick = { onFilterChange(if (activeFilter == "income") null else "income") },
-            modifier = Modifier.weight(1f),
-        )
-        SummaryCard(
-            label = stringResource(R.string.expense),
-            value = formatCurrency(summary.totalExpense),
-            icon = Lucide.TrendingDown,
-            color = expenseColor,
-            isSelected = activeFilter == "expense",
-            isFaded = activeFilter != null && activeFilter != "expense",
-            onClick = { onFilterChange(if (activeFilter == "expense") null else "expense") },
-            modifier = Modifier.weight(1f),
-        )
-        val balance = try {
-            BigDecimal(summary.balance)
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            SummaryCard(
+                label = stringResource(R.string.income),
+                value = formatCurrency(summary.totalIncome),
+                icon = Lucide.TrendingUp,
+                color = incomeColor,
+                isSelected = activeFilter == "income",
+                isFaded = activeFilter != null && activeFilter != "income",
+                onClick = { onFilterChange(if (activeFilter == "income") null else "income") },
+                modifier = Modifier.weight(1f),
+            )
+            SummaryCard(
+                label = stringResource(R.string.expense),
+                value = formatCurrency(summary.totalExpense),
+                icon = Lucide.TrendingDown,
+                color = expenseColor,
+                isSelected = activeFilter == "expense",
+                isFaded = activeFilter != null && activeFilter != "expense",
+                onClick = { onFilterChange(if (activeFilter == "expense") null else "expense") },
+                modifier = Modifier.weight(1f),
+            )
+            val balance = try {
+                BigDecimal(summary.balance)
+            } catch (_: Exception) {
+                BigDecimal.ZERO
+            }
+            SummaryCard(
+                label = stringResource(R.string.balance),
+                value = formatCurrency(summary.balance),
+                icon = Lucide.Wallet,
+                color = if (balance >= BigDecimal.ZERO) balancePositiveColor else balanceNegativeColor,
+                isSelected = false,
+                isFaded = activeFilter != null,
+                onClick = {},
+                modifier = Modifier.weight(1f),
+            )
+        }
+
+        val allocations = try {
+            BigDecimal(summary.totalAllocations)
         } catch (_: Exception) {
             BigDecimal.ZERO
         }
-        SummaryCard(
-            label = stringResource(R.string.balance),
-            value = formatCurrency(summary.balance),
-            icon = Lucide.Wallet,
-            color = if (balance >= BigDecimal.ZERO) balancePositiveColor else balanceNegativeColor,
-            isSelected = false,
-            isFaded = activeFilter != null,
-            onClick = {},
-            modifier = Modifier.weight(1f),
-        )
+        if (allocations > BigDecimal.ZERO) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Lucide.Sprout,
+                    contentDescription = null,
+                    tint = tealColor,
+                    modifier = Modifier.size(14.dp),
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    "${stringResource(R.string.summary_invested)}: ${formatCurrency(allocations)}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = tealColor,
+                )
+            }
+        }
     }
 }
 

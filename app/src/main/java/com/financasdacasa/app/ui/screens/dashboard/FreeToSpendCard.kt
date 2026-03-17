@@ -25,9 +25,11 @@ private val emeraldColor = Color(0xFF10B981)
 fun FreeToSpendCard(summary: TransactionSummary) {
     val income = try { BigDecimal(summary.totalIncome) } catch (_: Exception) { BigDecimal.ZERO }
     val expense = try { BigDecimal(summary.totalExpense) } catch (_: Exception) { BigDecimal.ZERO }
-    val freeToSpend = income.subtract(expense)
+    val allocations = try { BigDecimal(summary.totalAllocations) } catch (_: Exception) { BigDecimal.ZERO }
+    val freeToSpend = income.subtract(expense).subtract(allocations)
+    val usedTotal = expense.add(allocations)
     val spentPercent = if (income > BigDecimal.ZERO) {
-        expense.multiply(BigDecimal(100)).divide(income, 0, RoundingMode.HALF_UP).toInt()
+        usedTotal.multiply(BigDecimal(100)).divide(income, 0, RoundingMode.HALF_UP).toInt()
     } else 0
 
     val color = when {
@@ -81,8 +83,15 @@ fun FreeToSpendCard(summary: TransactionSummary) {
 
             Spacer(Modifier.height(6.dp))
 
+            val breakdown = buildString {
+                append("${stringResource(R.string.dashboard_income_label)}: ${formatCurrency(income)}")
+                append(" · ${stringResource(R.string.dashboard_expenses_label)}: ${formatCurrency(expense)}")
+                if (allocations > BigDecimal.ZERO) {
+                    append(" · ${stringResource(R.string.dashboard_invested_label)}: ${formatCurrency(allocations)}")
+                }
+            }
             Text(
-                "${stringResource(R.string.dashboard_income_label)}: ${formatCurrency(income)} · ${stringResource(R.string.dashboard_expenses_label)}: ${formatCurrency(expense)}",
+                breakdown,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

@@ -182,6 +182,8 @@
     <string name="dashboard_free_to_spend">Libre para gastar</string>
     <string name="dashboard_income_label">Ingresos</string>
     <string name="dashboard_expenses_label">Gastos</string>
+    <string name="dashboard_invested_label">Invertido</string>
+    <string name="summary_invested">Invertido</string>
     <string name="dashboard_by_category">Por categoria</string>
     <string name="dashboard_cash_flow">Flujo de Caja</string>
     <string name="dashboard_vs_average">vs promedio</string>

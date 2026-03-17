@@ -13,4 +13,5 @@ data class CachedTransactionSummary(
     val totalIncome: String,
     val totalExpense: String,
     val balance: String,
+    val totalAllocations: String = "0",
 )

@@ -58,12 +58,14 @@ fun TransactionSummary.toEntity(houseId: String): CachedTransactionSummary = Cac
     totalIncome = totalIncome,
     totalExpense = totalExpense,
     balance = balance,
+    totalAllocations = totalAllocations,
 )
 
 fun CachedTransactionSummary.toDomain(): TransactionSummary = TransactionSummary(
     totalIncome = totalIncome,
     totalExpense = totalExpense,
     balance = balance,
+    totalAllocations = totalAllocations,
     month = month,
     year = year,
 )

@@ -91,6 +91,7 @@ fun DashboardScreen(
                     totalIncome = totalIncome.toBigDecimal().toPlainString(),
                     totalExpense = totalExpense.toBigDecimal().toPlainString(),
                     balance = (totalIncome - totalExpense).toBigDecimal().toPlainString(),
+                    totalAllocations = "0",
                     month = 0,
                     year = state.year,
                 )

@@ -287,9 +287,9 @@
     <string name="paywall_error_purchase">Purchase failed. Try again.</string>
     <string name="paywall_error_checkout">Failed to start checkout. Try again.</string>
     <string name="paywall_error_payment_pending">Payment is still processing. Check again in a moment.</string>
-    <string name="paywall_mp_monthly_price">R$ 14,90</string>
-    <string name="paywall_mp_annual_price">R$ 12,50</string>
-    <string name="paywall_mp_annual_total">R$ 150,00/year</string>
+    <string name="paywall_mp_monthly_price" translatable="false">R$ 14,90</string>
+    <string name="paywall_mp_annual_price" translatable="false">R$ 12,50</string>
+    <string name="paywall_mp_annual_total" translatable="false">R$ 150,00/year</string>
 
     <!-- Avatar -->
     <string name="avatar_choose_source">Choose photo</string>

@@ -275,6 +275,8 @@
     <string name="paywall_error_verification">Falha ao verificar compra. Tente novamente.</string>
     <string name="paywall_error_already_owned">Voce ja possui uma assinatura ativa.</string>
     <string name="paywall_error_purchase">Compra falhou. Tente novamente.</string>
+    <string name="paywall_error_checkout">Erro ao iniciar checkout. Tente novamente.</string>
+    <string name="paywall_error_payment_pending">Pagamento ainda em processamento. Verifique novamente em instantes.</string>
 
     <!-- Avatar -->
     <string name="avatar_choose_source">Escolher foto</string>

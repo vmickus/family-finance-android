@@ -55,6 +55,18 @@ data class GroupedAllocation(
     @Json(name = "created_at") val createdAt: String,
 )
 
+data class FlatAllocationItem(
+    val id: String,
+    val goalId: String,
+    val goalName: String,
+    val plantType: String,
+    val color: String,
+    val amount: String,
+    val description: String?,
+    val allocationDate: String,
+    val userName: String?,
+)
+
 @JsonClass(generateAdapter = true)
 data class CreateGoalRequest(
     @Json(name = "house_id") val houseId: String,

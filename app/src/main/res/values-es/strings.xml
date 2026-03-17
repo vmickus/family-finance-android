@@ -306,6 +306,21 @@
     <string name="invite_loading">Cargando invitacion\u2026</string>
     <string name="error_invite_accept_failed">Error al unirse al hogar. Intenta de nuevo.</string>
 
+    <!-- Privacy & Data -->
+    <string name="privacy_title">Privacidad y datos</string>
+    <string name="privacy_rights_title">Tus derechos (LGPD Art. 18)</string>
+    <string name="privacy_rights_description">Tienes derecho a acceder, corregir y solicitar la eliminación de tus datos personales.</string>
+    <string name="privacy_export_title">Exportar mis datos</string>
+    <string name="privacy_export_description">Enviaremos un archivo con todos tus datos a %s. Plazo: hasta 24h.</string>
+    <string name="privacy_export_button">Solicitar</string>
+    <string name="privacy_export_success">¡Exportación solicitada! Revisa tu correo en hasta 24 horas.</string>
+    <string name="privacy_export_error">Error al solicitar exportación. Intenta de nuevo.</string>
+    <string name="privacy_danger_zone">Zona peligrosa</string>
+    <string name="privacy_deactivate_title">Desactivar mi cuenta</string>
+    <string name="privacy_deactivate_description">Tu cuenta será desactivada inmediatamente. Tendrás 30 días para reactivarla.</string>
+    <string name="privacy_deactivate_button">Desactivar cuenta</string>
+    <string name="privacy_menu_button">Privacidad y datos</string>
+
     <!-- Offline -->
     <string name="offline_banner">Estás sin conexión. Mostrando datos guardados.</string>
 </resources>

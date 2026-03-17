@@ -81,7 +81,13 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
             modifier = Modifier.padding(padding),
         ) {
             composable(BottomNavTab.HOME.route) {
-                HomeScreen()
+                HomeScreen(
+                    onGoalClick = { goalId ->
+                        navController.navigate("garden/$goalId") {
+                            launchSingleTop = true
+                        }
+                    },
+                )
             }
             composable(BottomNavTab.BUDGETS.route) {
                 BudgetsScreen()

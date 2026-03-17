@@ -22,6 +22,7 @@ import com.financasdacasa.app.util.getMonthName
 
 @Composable
 fun HomeScreen(
+    onGoalClick: ((String) -> Unit)? = null,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -44,7 +45,7 @@ fun HomeScreen(
                     CircularProgressIndicator()
                 }
             } else if (uiState.viewMode == ViewMode.MONTHLY) {
-                MonthlyContent(uiState, viewModel, onDelete = { deletingTransaction = it })
+                MonthlyContent(uiState, viewModel, onDelete = { deletingTransaction = it }, onGoalClick = onGoalClick)
             } else {
                 AnnualContent(uiState, viewModel, onDelete = { deletingTransaction = it })
             }
@@ -123,6 +124,7 @@ private fun MonthlyContent(
     uiState: HomeUiState,
     viewModel: HomeViewModel,
     onDelete: (Transaction) -> Unit,
+    onGoalClick: ((String) -> Unit)? = null,
 ) {
     Column(Modifier.padding(horizontal = 16.dp)) {
         // Chart
@@ -158,12 +160,14 @@ private fun MonthlyContent(
 
         Spacer(Modifier.height(8.dp))
 
-        // Transaction list
+        // Transaction + allocation list
         TransactionList(
             transactions = uiState.transactions,
+            allocations = uiState.allocations,
             typeFilter = uiState.typeFilter,
             onEdit = { viewModel.showEditForm(it) },
             onDelete = onDelete,
+            onGoalClick = onGoalClick,
             modifier = Modifier.weight(1f),
         )
     }

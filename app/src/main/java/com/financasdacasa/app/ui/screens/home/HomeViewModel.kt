@@ -4,17 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.financasdacasa.app.data.local.SessionManager
 import com.financasdacasa.app.data.model.AnnualReport
+import com.financasdacasa.app.data.model.FlatAllocationItem
 import com.financasdacasa.app.data.model.Transaction
 import com.financasdacasa.app.data.model.TransactionSummary
+import com.financasdacasa.app.data.repository.GoalRepository
 import com.financasdacasa.app.data.repository.RecurringTransactionRepository
 import com.financasdacasa.app.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -26,6 +30,7 @@ data class HomeUiState(
     val searchInput: String = "",
     val searchFilter: String = "",
     val transactions: List<Transaction> = emptyList(),
+    val allocations: List<FlatAllocationItem> = emptyList(),
     val summary: TransactionSummary? = null,
     val annualReport: AnnualReport? = null,
     val isLoading: Boolean = true,
@@ -40,6 +45,7 @@ enum class ViewMode { MONTHLY, ANNUAL }
 class HomeViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val recurringRepository: RecurringTransactionRepository,
+    private val goalRepository: GoalRepository,
     private val sessionManager: SessionManager,
 ) : ViewModel() {
 
@@ -60,12 +66,46 @@ class HomeViewModel @Inject constructor(
             _uiState.value = s.copy(isLoading = true, error = null)
             try {
                 if (s.viewMode == ViewMode.MONTHLY) {
-                    val transactions = transactionRepository.list(
-                        id, s.month, s.year, s.searchFilter.ifBlank { null },
-                    )
-                    val summary = transactionRepository.getSummary(id, s.month, s.year)
+                    val txDeferred = async {
+                        transactionRepository.list(id, s.month, s.year, s.searchFilter.ifBlank { null })
+                    }
+                    val summaryDeferred = async { transactionRepository.getSummary(id, s.month, s.year) }
+                    val allocDeferred = async { goalRepository.listMonthlyAllocations(id, s.month, s.year) }
+
+                    val transactions = txDeferred.await()
+                    val summary = summaryDeferred.await()
+                    val grouped = allocDeferred.await()
+
+                    val flat = grouped.flatMap { group ->
+                        group.items.map { item ->
+                            FlatAllocationItem(
+                                id = item.id,
+                                goalId = item.goalId,
+                                goalName = item.goalName,
+                                plantType = item.plantType,
+                                color = item.color,
+                                amount = item.amount,
+                                description = item.description,
+                                allocationDate = group.allocationDate,
+                                userName = group.user?.name,
+                            )
+                        }
+                    }
+
+                    val searchQuery = s.searchFilter.trim()
+                    val filteredAllocations = if (searchQuery.isBlank()) {
+                        flat
+                    } else {
+                        val normalized = removeAccents(searchQuery.lowercase())
+                        flat.filter { alloc ->
+                            removeAccents(alloc.goalName.lowercase()).contains(normalized) ||
+                                (alloc.description != null && removeAccents(alloc.description.lowercase()).contains(normalized))
+                        }
+                    }
+
                     _uiState.value = _uiState.value.copy(
                         transactions = transactions,
+                        allocations = filteredAllocations,
                         summary = summary,
                         isLoading = false,
                     )
@@ -75,6 +115,7 @@ class HomeViewModel @Inject constructor(
                     )
                     _uiState.value = _uiState.value.copy(
                         annualReport = report,
+                        allocations = emptyList(),
                         isLoading = false,
                     )
                 }
@@ -184,5 +225,11 @@ class HomeViewModel @Inject constructor(
                 loadData()
             } catch (_: Exception) { }
         }
+    }
+
+    companion object {
+        private fun removeAccents(input: String): String =
+            Normalizer.normalize(input, Normalizer.Form.NFD)
+                .replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
     }
 }

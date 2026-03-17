@@ -306,6 +306,21 @@
     <string name="invite_loading">Carregando convite\u2026</string>
     <string name="error_invite_accept_failed">Erro ao entrar na casa. Tente novamente.</string>
 
+    <!-- Privacy & Data -->
+    <string name="privacy_title">Privacidade e dados</string>
+    <string name="privacy_rights_title">Seus direitos (LGPD Art. 18)</string>
+    <string name="privacy_rights_description">Você tem direito de acessar, corrigir e solicitar a exclusão dos seus dados pessoais.</string>
+    <string name="privacy_export_title">Exportar meus dados</string>
+    <string name="privacy_export_description">Enviaremos um arquivo com todos os seus dados para %s. Prazo: até 24h.</string>
+    <string name="privacy_export_button">Solicitar</string>
+    <string name="privacy_export_success">Exportação solicitada! Verifique seu e-mail em até 24 horas.</string>
+    <string name="privacy_export_error">Erro ao solicitar exportação. Tente novamente.</string>
+    <string name="privacy_danger_zone">Zona perigosa</string>
+    <string name="privacy_deactivate_title">Desativar minha conta</string>
+    <string name="privacy_deactivate_description">Sua conta será desativada imediatamente. Você terá 30 dias para reativá-la.</string>
+    <string name="privacy_deactivate_button">Desativar conta</string>
+    <string name="privacy_menu_button">Privacidade e dados</string>
+
     <!-- Offline -->
     <string name="offline_banner">Você está offline. Exibindo dados salvos.</string>
 </resources>

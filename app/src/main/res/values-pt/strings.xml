@@ -158,6 +158,9 @@
     <string name="error_allocation_failed">Erro ao salvar alocação. Tente novamente.</string>
     <string name="error_exceeds_balance">Total excede o saldo livre</string>
     <string name="error_exceeds_target">Valor excede o alvo restante</string>
+    <string name="allocation_description">Descrição</string>
+    <string name="allocation_description_hint">Para que é esta rega?</string>
+    <string name="edit_allocation">Editar alocação</string>
     <string name="watered_successfully">Jardim regado!</string>
     <string name="gardeners">Jardineiros</string>
     <string name="contributions">%d contribuições</string>

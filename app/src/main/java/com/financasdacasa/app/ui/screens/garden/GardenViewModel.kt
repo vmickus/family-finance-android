@@ -36,6 +36,7 @@ data class GardenUiState(
     // Water
     val showWaterSheet: Boolean = false,
     val waterAmounts: Map<String, String> = emptyMap(),
+    val waterDescription: String = "",
     val waterError: String? = null,
     val isWatering: Boolean = false,
     // Delete
@@ -237,11 +238,16 @@ class GardenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             showWaterSheet = true,
             waterAmounts = amounts,
+            waterDescription = "",
             waterError = null,
         )
     }
 
     fun dismissWaterSheet() { _uiState.value = _uiState.value.copy(showWaterSheet = false) }
+
+    fun onWaterDescriptionChange(value: String) {
+        _uiState.value = _uiState.value.copy(waterDescription = value.take(200))
+    }
 
     fun onWaterAmountChange(goalId: String, digits: String) {
         val amounts = _uiState.value.waterAmounts.toMutableMap()
@@ -252,9 +258,10 @@ class GardenViewModel @Inject constructor(
     fun submitWater() {
         val id = houseId ?: return
         val s = _uiState.value
+        val desc = s.waterDescription.trim().ifEmpty { null }
         val allocations = s.waterAmounts.mapNotNull { (goalId, digits) ->
             val cents = digits.toLongOrNull() ?: 0L
-            if (cents > 0) AllocationItemRequest(goalId, cents / 100.0) else null
+            if (cents > 0) AllocationItemRequest(goalId, cents / 100.0, desc) else null
         }
         if (allocations.isEmpty()) return
 

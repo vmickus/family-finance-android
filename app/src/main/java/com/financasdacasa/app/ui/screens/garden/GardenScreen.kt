@@ -165,6 +165,7 @@ fun GardenScreen(
             activeGoals = viewModel.activeGoals,
             freeBalance = viewModel.freeBalance,
             onAmountChange = viewModel::onWaterAmountChange,
+            onDescriptionChange = viewModel::onWaterDescriptionChange,
             onSubmit = viewModel::submitWater,
             onDismiss = viewModel::dismissWaterSheet,
         )
@@ -425,6 +426,7 @@ private fun WaterGardenSheet(
     activeGoals: List<Goal>,
     freeBalance: Double,
     onAmountChange: (String, String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
     onSubmit: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -476,6 +478,16 @@ private fun WaterGardenSheet(
                     )
                 }
             }
+
+            // Description
+            OutlinedTextField(
+                value = state.waterDescription,
+                onValueChange = onDescriptionChange,
+                label = { Text(stringResource(R.string.allocation_description)) },
+                placeholder = { Text(stringResource(R.string.allocation_description_hint)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             // Total
             val total = state.waterAmounts.values.sumOf { (it.toLongOrNull() ?: 0L) / 100.0 }

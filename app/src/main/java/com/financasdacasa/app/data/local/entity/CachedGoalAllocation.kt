@@ -10,6 +10,7 @@ data class CachedGoalAllocation(
     val houseId: String,
     val userId: String,
     val amount: String,
+    val description: String?,
     val allocationDate: String,
     val createdAt: String,
     // Denormalized user

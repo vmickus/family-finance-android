@@ -22,6 +22,10 @@ data class GoalDetailUiState(
     val isLoading: Boolean = true,
     val error: String? = null,
     val showDeleteConfirm: Boolean = false,
+    // Edit allocation
+    val editingAllocation: GoalAllocation? = null,
+    val editDescription: String = "",
+    val isEditSaving: Boolean = false,
 )
 
 @HiltViewModel
@@ -89,6 +93,38 @@ class GoalDetailViewModel @Inject constructor(
                 loadData()
             } catch (_: Exception) {
                 _uiState.value = _uiState.value.copy(error = "DELETE_FAILED")
+            }
+        }
+    }
+
+    // --- Edit allocation ---
+
+    fun showEditAllocation(alloc: GoalAllocation) {
+        _uiState.value = _uiState.value.copy(
+            editingAllocation = alloc,
+            editDescription = alloc.description ?: "",
+        )
+    }
+
+    fun dismissEditAllocation() {
+        _uiState.value = _uiState.value.copy(editingAllocation = null)
+    }
+
+    fun onEditDescriptionChange(value: String) {
+        _uiState.value = _uiState.value.copy(editDescription = value.take(200))
+    }
+
+    fun saveEditAllocation() {
+        val alloc = _uiState.value.editingAllocation ?: return
+        val desc = _uiState.value.editDescription.trim().ifEmpty { null }
+        _uiState.value = _uiState.value.copy(isEditSaving = true)
+        viewModelScope.launch {
+            try {
+                goalRepository.updateAllocation(alloc.id, UpdateAllocationRequest(description = desc))
+                _uiState.value = _uiState.value.copy(editingAllocation = null, isEditSaving = false)
+                loadData()
+            } catch (_: Exception) {
+                _uiState.value = _uiState.value.copy(isEditSaving = false, error = "SAVE_FAILED")
             }
         }
     }

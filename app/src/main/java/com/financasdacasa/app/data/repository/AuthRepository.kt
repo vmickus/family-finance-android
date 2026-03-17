@@ -3,6 +3,7 @@ package com.financasdacasa.app.data.repository
 import com.financasdacasa.app.data.api.AuthApi
 import com.financasdacasa.app.data.model.AuthResponse
 import com.financasdacasa.app.data.model.AvatarUploadResponse
+import com.financasdacasa.app.data.model.DeactivationCheckResponse
 import com.financasdacasa.app.data.model.User
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -49,5 +50,20 @@ class AuthRepository @Inject constructor(
 
     suspend fun deleteAvatar() {
         authApi.deleteAvatar()
+    }
+
+    suspend fun requestExport() {
+        authApi.requestExport()
+    }
+
+    suspend fun deactivationCheck(): DeactivationCheckResponse {
+        return authApi.deactivationCheck()
+    }
+
+    suspend fun deactivateAccount(password: String?) {
+        val body = buildMap {
+            if (password != null) put("password", password)
+        }
+        authApi.deactivate(body)
     }
 }

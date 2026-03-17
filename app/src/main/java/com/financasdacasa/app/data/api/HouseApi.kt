@@ -44,4 +44,13 @@ interface HouseApi {
 
     @GET("invites/{token}")
     suspend fun getInviteDetails(@Path("token") token: String): InviteDetails
+
+    @POST("houses/{houseId}/transfer-ownership")
+    suspend fun transferOwnership(
+        @Path("houseId") houseId: String,
+        @Body body: Map<String, String>,
+    )
+
+    @DELETE("houses/{houseId}")
+    suspend fun deleteHouse(@Path("houseId") houseId: String)
 }

@@ -22,12 +22,12 @@ import com.financasdacasa.app.R
 @Composable
 fun PrivacyDataScreen(
     onBack: () -> Unit,
-    onDeactivate: () -> Unit,
     viewModel: PrivacyDataViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val userEmail by viewModel.userEmail.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    var showDeactivate by remember { mutableStateOf(false) }
 
     val exportSuccessMsg = stringResource(R.string.privacy_export_success)
     val exportErrorMsg = stringResource(R.string.privacy_export_error)
@@ -176,7 +176,7 @@ fun PrivacyDataScreen(
                         Spacer(Modifier.height(12.dp))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             Button(
-                                onClick = onDeactivate,
+                                onClick = { showDeactivate = true },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error,
                                     contentColor = MaterialTheme.colorScheme.onError,
@@ -190,4 +190,9 @@ fun PrivacyDataScreen(
             }
         }
     }
+
+    DeactivateAccountDialog(
+        open = showDeactivate,
+        onDismiss = { showDeactivate = false },
+    )
 }

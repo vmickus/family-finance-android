@@ -33,6 +33,7 @@ import com.financasdacasa.app.ui.screens.more.MoreScreen
 import com.financasdacasa.app.ui.screens.dashboard.CategoryTransactionsScreen
 import com.financasdacasa.app.ui.screens.dashboard.DashboardScreen
 import com.financasdacasa.app.ui.screens.dashboard.SpendingByCategoryScreen
+import com.financasdacasa.app.ui.screens.privacy.PrivacyDataScreen
 import com.financasdacasa.app.ui.screens.recurring.RecurringScreen
 import com.financasdacasa.app.ui.screens.subscription.SubscriptionScreen
 
@@ -150,6 +151,9 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
                     onSubscription = {
                         navController.navigate("subscription") { launchSingleTop = true }
                     },
+                    onPrivacy = {
+                        navController.navigate("privacy-data") { launchSingleTop = true }
+                    },
                 )
             }
             composable("categories") {
@@ -160,6 +164,11 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
             }
             composable("subscription") {
                 SubscriptionScreen(onBack = { navController.popBackStack() })
+            }
+            composable("privacy-data") {
+                PrivacyDataScreen(
+                    onBack = { navController.popBackStack() },
+                )
             }
             composable("members") {
                 MembersScreen(

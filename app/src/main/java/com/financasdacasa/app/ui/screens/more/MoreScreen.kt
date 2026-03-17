@@ -35,6 +35,7 @@ fun MoreScreen(
     onCategories: () -> Unit,
     onRecurring: () -> Unit,
     onSubscription: () -> Unit,
+    onPrivacy: () -> Unit,
     viewModel: MoreViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -149,6 +150,7 @@ fun MoreScreen(
             MenuItem(icon = Lucide.Grid2x2, label = stringResource(R.string.categories), onClick = onCategories)
             MenuItem(icon = Lucide.Repeat, label = stringResource(R.string.recurring_title), onClick = onRecurring)
             MenuItem(icon = Lucide.CreditCard, label = stringResource(R.string.subscription_title), onClick = onSubscription)
+            MenuItem(icon = Lucide.Shield, label = stringResource(R.string.privacy_menu_button), onClick = onPrivacy)
         }
     }
 

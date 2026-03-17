@@ -306,6 +306,41 @@
     <string name="invite_loading">Cargando invitacion\u2026</string>
     <string name="error_invite_accept_failed">Error al unirse al hogar. Intenta de nuevo.</string>
 
+    <!-- Privacy & Data -->
+    <string name="privacy_title">Privacidad y datos</string>
+    <string name="privacy_rights_title">Tus derechos (LGPD Art. 18)</string>
+    <string name="privacy_rights_description">Tienes derecho a acceder, corregir y solicitar la eliminación de tus datos personales.</string>
+    <string name="privacy_export_title">Exportar mis datos</string>
+    <string name="privacy_export_description">Enviaremos un archivo con todos tus datos a %s. Plazo: hasta 24h.</string>
+    <string name="privacy_export_button">Solicitar</string>
+    <string name="privacy_export_success">¡Exportación solicitada! Revisa tu correo en hasta 24 horas.</string>
+    <string name="privacy_export_error">Error al solicitar exportación. Intenta de nuevo.</string>
+    <string name="privacy_danger_zone">Zona peligrosa</string>
+    <string name="privacy_deactivate_title">Desactivar mi cuenta</string>
+    <string name="privacy_deactivate_description">Tu cuenta será desactivada inmediatamente. Tendrás 30 días para reactivarla.</string>
+    <string name="privacy_deactivate_button">Desactivar cuenta</string>
+    <string name="privacy_menu_button">Privacidad y datos</string>
+
+    <!-- Deactivation -->
+    <string name="deactivation_title">Desactivar cuenta</string>
+    <string name="deactivation_warning_description">Revisa lo siguiente antes de desactivar tu cuenta.</string>
+    <string name="deactivation_warning1">Tu cuenta será desactivada inmediatamente y se cerrará tu sesión.</string>
+    <string name="deactivation_warning2">Tendrás 30 días para reactivarla iniciando sesión nuevamente.</string>
+    <string name="deactivation_warning3">Después de 30 días, tus datos personales serán anonimizados permanentemente.</string>
+    <string name="deactivation_houses_description">Eres propietario de los siguientes hogares. Transfiere la propiedad o elimínalos antes de continuar.</string>
+    <string name="deactivation_transfer_to">Transferir propiedad a</string>
+    <string name="deactivation_select_member">Seleccionar miembro</string>
+    <string name="deactivation_transfer">Transferir</string>
+    <string name="deactivation_no_members">Este hogar no tiene otros miembros.</string>
+    <string name="deactivation_delete_house">Eliminar hogar</string>
+    <string name="deactivation_confirm_description">Este es el paso final. Esta acción no se puede deshacer fácilmente.</string>
+    <string name="deactivation_enter_password">Ingresa tu contraseña para confirmar</string>
+    <string name="deactivation_button">Desactivar cuenta</string>
+    <string name="deactivation_continue">Continuar</string>
+    <string name="deactivation_error">Error al desactivar cuenta. Intenta de nuevo.</string>
+    <string name="deactivation_transfer_success">Propiedad transferida</string>
+    <string name="deactivation_delete_success">Hogar eliminado</string>
+
     <!-- Offline -->
     <string name="offline_banner">Estás sin conexión. Mostrando datos guardados.</string>
 </resources>

@@ -319,6 +319,41 @@
     <string name="invite_loading">Loading invite\u2026</string>
     <string name="error_invite_accept_failed">Failed to join house. Try again.</string>
 
+    <!-- Privacy & Data -->
+    <string name="privacy_title">Privacy &amp; Data</string>
+    <string name="privacy_rights_title">Your rights (LGPD Art. 18)</string>
+    <string name="privacy_rights_description">You have the right to access, correct, and request the deletion of your personal data.</string>
+    <string name="privacy_export_title">Export my data</string>
+    <string name="privacy_export_description">We will send a file with all your data to %s. Delivery within 24 hours.</string>
+    <string name="privacy_export_button">Request</string>
+    <string name="privacy_export_success">Export requested! Check your email within 24 hours.</string>
+    <string name="privacy_export_error">Failed to request export. Try again.</string>
+    <string name="privacy_danger_zone">Danger zone</string>
+    <string name="privacy_deactivate_title">Deactivate my account</string>
+    <string name="privacy_deactivate_description">Your account will be deactivated immediately. You will have 30 days to reactivate it.</string>
+    <string name="privacy_deactivate_button">Deactivate account</string>
+    <string name="privacy_menu_button">Privacy &amp; Data</string>
+
+    <!-- Deactivation -->
+    <string name="deactivation_title">Deactivate account</string>
+    <string name="deactivation_warning_description">Please review the following before deactivating your account.</string>
+    <string name="deactivation_warning1">Your account will be deactivated immediately and you will be logged out.</string>
+    <string name="deactivation_warning2">You will have 30 days to reactivate it by logging in again.</string>
+    <string name="deactivation_warning3">After 30 days, your personal data will be permanently anonymized.</string>
+    <string name="deactivation_houses_description">You are the owner of the following houses. Transfer ownership or delete them before proceeding.</string>
+    <string name="deactivation_transfer_to">Transfer ownership to</string>
+    <string name="deactivation_select_member">Select a member</string>
+    <string name="deactivation_transfer">Transfer</string>
+    <string name="deactivation_no_members">This house has no other members.</string>
+    <string name="deactivation_delete_house">Delete house</string>
+    <string name="deactivation_confirm_description">This is the final step. This action cannot be easily undone.</string>
+    <string name="deactivation_enter_password">Enter your password to confirm</string>
+    <string name="deactivation_button">Deactivate account</string>
+    <string name="deactivation_continue">Continue</string>
+    <string name="deactivation_error">Failed to deactivate account. Try again.</string>
+    <string name="deactivation_transfer_success">Ownership transferred</string>
+    <string name="deactivation_delete_success">House deleted</string>
+
     <!-- Offline -->
     <string name="offline_banner">You are offline. Showing cached data.</string>
 </resources>

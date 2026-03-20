@@ -1,20 +1,29 @@
 package com.financasdacasa.app.ui.components
 
 import android.app.DatePickerDialog
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.composables.icons.lucide.CalendarDays
+import com.composables.icons.lucide.Lucide
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.Transaction
 import com.financasdacasa.app.ui.screens.home.TransactionFormViewModel
@@ -55,63 +64,131 @@ fun TransactionFormSheet(
 
             Spacer(Modifier.height(16.dp))
 
-            // Type toggle
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = state.type == "expense",
-                    onClick = { viewModel.onTypeChange("expense") },
-                    label = { Text(stringResource(R.string.expense)) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFFF43F5E).copy(alpha = 0.15f),
-                    ),
-                    modifier = Modifier.weight(1f),
-                )
-                FilterChip(
-                    selected = state.type == "income",
-                    onClick = { viewModel.onTypeChange("income") },
-                    label = { Text(stringResource(R.string.income)) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFF10B981).copy(alpha = 0.15f),
-                    ),
-                    modifier = Modifier.weight(1f),
-                )
+            // Type toggle — segmented control matching web
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(4.dp),
+            ) {
+                val expenseSelected = state.type == "expense"
+                val incomeSelected = state.type == "income"
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (expenseSelected) Color(0xFFF43F5E) else Color.Transparent)
+                        .clickable { viewModel.onTypeChange("expense") }
+                        .padding(vertical = 10.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        stringResource(R.string.expense),
+                        color = if (expenseSelected) Color.White
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (incomeSelected) Color(0xFF10B981) else Color.Transparent)
+                        .clickable { viewModel.onTypeChange("income") }
+                        .padding(vertical = 10.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        stringResource(R.string.income),
+                        color = if (incomeSelected) Color.White
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
             }
 
             Spacer(Modifier.height(16.dp))
 
-            // Amount
-            OutlinedTextField(
-                value = if (state.amountDigits.isNotBlank()) {
-                    formatAmountFromDigits(state.amountDigits)
-                } else {
-                    ""
-                },
-                onValueChange = { viewModel.onAmountChange(it) },
-                label = { Text(stringResource(R.string.amount)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
+            // Amount + Date side by side
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            // Date picker
-            val parsedDate = remember(state.date) { LocalDate.parse(state.date) }
-            OutlinedButton(
-                onClick = {
-                    DatePickerDialog(
-                        context,
-                        { _, y, m, d ->
-                            viewModel.onDateChange(LocalDate.of(y, m + 1, d).toString())
-                        },
-                        parsedDate.year,
-                        parsedDate.monthValue - 1,
-                        parsedDate.dayOfMonth,
-                    ).show()
-                },
-                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(formatTransactionDate(state.date, context))
+                // Amount — calculator-style input
+                val formattedAmount = formatAmountFromDigits(state.amountDigits)
+                var amountFieldValue by remember(formattedAmount) {
+                    mutableStateOf(
+                        TextFieldValue(
+                            text = formattedAmount,
+                            selection = TextRange(formattedAmount.length),
+                        ),
+                    )
+                }
+                OutlinedTextField(
+                    value = amountFieldValue,
+                    onValueChange = { newValue ->
+                        viewModel.onAmountChange(newValue.text)
+                    },
+                    label = { Text(stringResource(R.string.amount)) },
+                    placeholder = { Text("R$ 0,00") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    modifier = Modifier
+                        .weight(1f)
+                        .onFocusChanged { focusState ->
+                            if (focusState.isFocused) {
+                                amountFieldValue = amountFieldValue.copy(
+                                    selection = TextRange(amountFieldValue.text.length),
+                                )
+                            }
+                        },
+                )
+
+                // Date picker
+                val parsedDate = remember(state.date) { LocalDate.parse(state.date) }
+                val dateLabel = formatTransactionDate(state.date, context)
+                Box(modifier = Modifier.weight(1f)) {
+                    OutlinedTextField(
+                        value = dateLabel,
+                        onValueChange = {},
+                        label = { Text(stringResource(R.string.date_label)) },
+                        enabled = false,
+                        singleLine = true,
+                        trailingIcon = {
+                            Icon(
+                                Lucide.CalendarDays,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                            disabledBorderColor = MaterialTheme.colorScheme.outline,
+                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable {
+                                DatePickerDialog(
+                                    context,
+                                    { _, y, m, d ->
+                                        viewModel.onDateChange(
+                                            LocalDate.of(y, m + 1, d).toString(),
+                                        )
+                                    },
+                                    parsedDate.year,
+                                    parsedDate.monthValue - 1,
+                                    parsedDate.dayOfMonth,
+                                ).show()
+                            },
+                    )
+                }
             }
 
             Spacer(Modifier.height(12.dp))

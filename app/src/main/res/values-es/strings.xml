@@ -45,6 +45,7 @@
     <string name="new_transaction">Nueva Transacción</string>
     <string name="edit_transaction">Editar Transacción</string>
     <string name="amount">Monto</string>
+    <string name="date_label">Fecha</string>
     <string name="description">Descripción</string>
     <string name="select_category">Seleccionar categoría</string>
     <string name="recurring">Recurrente</string>

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.financasdacasa.app.R
@@ -182,13 +183,9 @@ private fun MonthlyContent(
 
                 Spacer(Modifier.height(12.dp))
 
-                OutlinedTextField(
+                CompactSearchField(
                     value = uiState.searchInput,
                     onValueChange = { viewModel.onSearchChange(it) },
-                    placeholder = { Text(stringResource(R.string.search_transactions)) },
-                    leadingIcon = { Icon(Icons.Default.Search, null) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -254,13 +251,9 @@ private fun AnnualContent(
             Column {
                 Spacer(Modifier.height(12.dp))
 
-                OutlinedTextField(
+                CompactSearchField(
                     value = uiState.searchInput,
                     onValueChange = { viewModel.onSearchChange(it) },
-                    placeholder = { Text(stringResource(R.string.search_transactions)) },
-                    leadingIcon = { Icon(Icons.Default.Search, null) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(Modifier.height(8.dp))

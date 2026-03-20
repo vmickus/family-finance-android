@@ -122,6 +122,8 @@
 
     <!-- More menu -->
     <string name="more_title">Mais</string>
+    <string name="theme_light_mode">Modo claro</string>
+    <string name="theme_dark_mode">Modo escuro</string>
 
     <!-- Garden -->
     <string name="garden_title">Jardim</string>

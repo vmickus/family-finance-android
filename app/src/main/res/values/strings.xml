@@ -132,6 +132,8 @@
 
     <!-- More menu -->
     <string name="more_title">More</string>
+    <string name="theme_light_mode">Light mode</string>
+    <string name="theme_dark_mode">Dark mode</string>
 
     <!-- Garden -->
     <string name="garden_title">Garden</string>

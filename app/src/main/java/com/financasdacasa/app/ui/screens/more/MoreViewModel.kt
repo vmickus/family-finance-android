@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.financasdacasa.app.data.local.AuthState
 import com.financasdacasa.app.data.local.SessionManager
+import com.financasdacasa.app.data.local.ThemeMode
+import com.financasdacasa.app.data.local.ThemePreferences
 import com.financasdacasa.app.data.model.User
 import com.financasdacasa.app.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +40,7 @@ class MoreViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val authRepository: AuthRepository,
     private val sessionManager: SessionManager,
+    private val themePreferences: ThemePreferences,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MoreUiState())
@@ -46,6 +49,12 @@ class MoreViewModel @Inject constructor(
     val currentUser: StateFlow<User?> = sessionManager.authState
         .map { (it as? AuthState.Authenticated)?.user }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val themeMode: StateFlow<ThemeMode> = themePreferences.themeMode
+
+    fun setThemeMode(mode: ThemeMode) {
+        themePreferences.setThemeMode(mode)
+    }
 
     fun getCameraFileUri(): Uri {
         val dir = File(appContext.cacheDir, "camera_photos").apply { mkdirs() }

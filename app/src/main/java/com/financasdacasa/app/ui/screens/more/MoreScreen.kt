@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -25,6 +26,8 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.composables.icons.lucide.*
 import com.financasdacasa.app.R
+import com.financasdacasa.app.data.local.ThemeMode
+import com.financasdacasa.app.util.resolveServerUrl
 import com.financasdacasa.app.ui.components.ImageCropDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +43,12 @@ fun MoreScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val user by viewModel.currentUser.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
+    val isDarkTheme = when (themeMode) {
+        ThemeMode.DARK -> true
+        ThemeMode.LIGHT -> false
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -135,7 +144,7 @@ fun MoreScreen(
                 ProfileHeader(
                     name = u.name,
                     email = u.email,
-                    avatarUrl = u.avatarUrl,
+                    avatarUrl = resolveServerUrl(u.avatarUrl),
                     isUploading = uiState.isUploading || uiState.isDeleting,
                     onAvatarClick = { showSourcePicker = true },
                     onDeleteAvatar = if (u.avatarUrl != null) {
@@ -150,7 +159,17 @@ fun MoreScreen(
             MenuItem(icon = Lucide.Grid2x2, label = stringResource(R.string.categories), onClick = onCategories)
             MenuItem(icon = Lucide.Repeat, label = stringResource(R.string.recurring_title), onClick = onRecurring)
             MenuItem(icon = Lucide.CreditCard, label = stringResource(R.string.subscription_title), onClick = onSubscription)
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
             MenuItem(icon = Lucide.Shield, label = stringResource(R.string.privacy_menu_button), onClick = onPrivacy)
+            MenuItem(
+                icon = if (isDarkTheme) Lucide.Sun else Lucide.Moon,
+                label = if (isDarkTheme) stringResource(R.string.theme_light_mode) else stringResource(R.string.theme_dark_mode),
+                onClick = {
+                    viewModel.setThemeMode(if (isDarkTheme) ThemeMode.LIGHT else ThemeMode.DARK)
+                },
+            )
         }
     }
 

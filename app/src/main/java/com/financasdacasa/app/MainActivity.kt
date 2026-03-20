@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -13,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.financasdacasa.app.data.local.AuthState
 import com.financasdacasa.app.data.local.SessionManager
+import com.financasdacasa.app.data.local.ThemeMode
+import com.financasdacasa.app.data.local.ThemePreferences
 import com.financasdacasa.app.ui.navigation.AuthNavGraph
 import com.financasdacasa.app.ui.navigation.InviteNavGraph
 import com.financasdacasa.app.ui.navigation.MainNavGraph
@@ -28,6 +31,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var sessionManager: SessionManager
 
+    @Inject
+    lateinit var themePreferences: ThemePreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sessionManager.initialize()
@@ -40,7 +46,13 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            FinancasTheme {
+            val themeMode by themePreferences.themeMode.collectAsState()
+            val darkTheme = when (themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+            FinancasTheme(darkTheme = darkTheme) {
                 val authState by sessionManager.authState.collectAsState()
                 val subscriptionExpired by sessionManager.subscriptionExpired.collectAsState()
 

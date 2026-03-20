@@ -27,6 +27,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.composables.icons.lucide.*
 import com.financasdacasa.app.R
+import com.financasdacasa.app.util.resolveServerUrl
 import com.financasdacasa.app.data.model.HouseMember
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -319,7 +320,7 @@ private fun MembersListSection(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         // Avatar
-                        val avatarUrl = member.user?.avatarUrl
+                        val avatarUrl = resolveServerUrl(member.user?.avatarUrl)
                         if (avatarUrl != null) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)

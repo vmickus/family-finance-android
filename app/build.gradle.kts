@@ -104,6 +104,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
 
+    // EXIF
+    implementation(libs.exifinterface)
+
     // Charts
     implementation(libs.vico.compose.m3)
 

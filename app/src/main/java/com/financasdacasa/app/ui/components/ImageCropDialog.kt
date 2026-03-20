@@ -2,7 +2,9 @@ package com.financasdacasa.app.ui.components
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
+import androidx.exifinterface.media.ExifInterface
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
@@ -11,11 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,7 +48,24 @@ private fun decodeSampledBitmap(
     }
 
     val decodeOpts = BitmapFactory.Options().apply { inSampleSize = sampleSize }
-    return context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, decodeOpts) }
+    val raw = context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, decodeOpts) }
+        ?: return null
+
+    // Apply EXIF rotation
+    val rotation = context.contentResolver.openInputStream(uri)?.use { stream ->
+        val exif = ExifInterface(stream)
+        when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+            ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+            ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+            else -> 0f
+        }
+    } ?: 0f
+
+    if (rotation == 0f) return raw
+
+    val matrix = Matrix().apply { postRotate(rotation) }
+    return Bitmap.createBitmap(raw, 0, 0, raw.width, raw.height, matrix, true)
 }
 
 @Composable
@@ -112,11 +131,11 @@ fun ImageCropDialog(
                     val canvasH = constraints.maxHeight.toFloat()
                     val circleRadius = min(canvasW, canvasH) * 0.4f
 
+                    // Layer 1: the image
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val bw = bitmap.width.toFloat()
                         val bh = bitmap.height.toFloat()
 
-                        // Fit image to canvas
                         val fitScale = min(canvasW / bw, canvasH / bh)
                         val totalScale = fitScale * scale
 
@@ -125,47 +144,36 @@ fun ImageCropDialog(
                         val imgX = ((canvasW - imgW) / 2f + offset.x).roundToInt()
                         val imgY = ((canvasH - imgH) / 2f + offset.y).roundToInt()
 
-                        // Draw image
                         drawImage(
                             image = imageBitmap,
                             dstOffset = IntOffset(imgX, imgY),
                             dstSize = IntSize(imgW, imgH),
                         )
+                    }
 
-                        // Draw overlay with circular cutout
-                        drawOverlayWithHole(canvasW, canvasH, circleRadius)
+                    // Layer 2: overlay with circular cutout (using Path, no BlendMode)
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        val center = Offset(canvasW / 2f, canvasH / 2f)
+                        val overlayPath = Path().apply {
+                            addRect(Rect(0f, 0f, canvasW, canvasH))
+                            addOval(Rect(center.x - circleRadius, center.y - circleRadius, center.x + circleRadius, center.y + circleRadius))
+                        }
+                        // fillType EvenOdd makes the oval a hole in the rect
+                        overlayPath.fillType = androidx.compose.ui.graphics.PathFillType.EvenOdd
+                        drawPath(overlayPath, Color.Black.copy(alpha = 0.6f))
+
+                        // Circle border
+                        drawCircle(
+                            color = Color.White.copy(alpha = 0.7f),
+                            radius = circleRadius,
+                            center = center,
+                            style = Stroke(width = 2f),
+                        )
                     }
                 }
             }
         }
     }
-}
-
-private fun DrawScope.drawOverlayWithHole(
-    canvasW: Float,
-    canvasH: Float,
-    circleRadius: Float,
-) {
-    val center = Offset(canvasW / 2f, canvasH / 2f)
-    // Semi-transparent overlay
-    drawRect(
-        color = Color.Black.copy(alpha = 0.6f),
-        size = Size(canvasW, canvasH),
-    )
-    // Punch hole
-    drawCircle(
-        color = Color.Transparent,
-        radius = circleRadius,
-        center = center,
-        blendMode = BlendMode.Clear,
-    )
-    // Circle border
-    drawCircle(
-        color = Color.White.copy(alpha = 0.7f),
-        radius = circleRadius,
-        center = center,
-        style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2f),
-    )
 }
 
 private fun cropCircular(

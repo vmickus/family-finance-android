@@ -1,25 +1,48 @@
 package com.financasdacasa.app.ui.screens.main
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Settings
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.financasdacasa.app.R
+import com.financasdacasa.app.util.resolveServerUrl
 import com.financasdacasa.app.ui.components.BottomNavBar
 import com.financasdacasa.app.ui.components.BottomNavTab
 import com.financasdacasa.app.ui.components.OfflineBanner
@@ -39,7 +62,10 @@ import com.financasdacasa.app.ui.screens.subscription.SubscriptionScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
+fun MainShell(
+    onNavigateToHouseSelection: () -> Unit = {},
+    viewModel: MainShellViewModel = hiltViewModel(),
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -47,6 +73,8 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
     val showBottomBar = currentRoute in mainRoutes
     val showTopBar = currentRoute in mainRoutes
     val isOffline by viewModel.isOffline.collectAsState()
+    val user by viewModel.currentUser.collectAsState()
+    val houseName by viewModel.houseName.collectAsState()
 
     Scaffold(
         topBar = {
@@ -55,15 +83,74 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
                     if (isOffline) {
                         OfflineBanner()
                     }
-                    TopAppBar(
-                        title = {},
+                    CenterAlignedTopAppBar(
+                        navigationIcon = {
+                            Image(
+                                painter = painterResource(R.mipmap.ic_launcher_foreground),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(start = 4.dp)
+                                    .size(40.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                            )
+                        },
+                        title = {
+                            Text(
+                                text = houseName ?: "",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.clickable(onClick = onNavigateToHouseSelection),
+                            )
+                        },
                         actions = {
-                            IconButton(onClick = {
-                                navController.navigate("more") {
-                                    launchSingleTop = true
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .border(
+                                        width = 1.5.dp,
+                                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                                        shape = CircleShape,
+                                    )
+                                    .clickable {
+                                        navController.navigate("more") {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val avatarUrl = resolveServerUrl(user?.avatarUrl)
+                                if (avatarUrl != null) {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(avatarUrl)
+                                            .crossfade(true)
+                                            .build(),
+                                        contentDescription = stringResource(R.string.more_title),
+                                        modifier = Modifier
+                                            .size(36.dp)
+                                            .clip(CircleShape),
+                                        contentScale = ContentScale.Crop,
+                                    )
+                                } else {
+                                    val initial = (user?.name?.firstOrNull() ?: '?').uppercaseChar()
+                                    Box(
+                                        modifier = Modifier
+                                            .size(36.dp)
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.colorScheme.primary),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Text(
+                                            initial.toString(),
+                                            color = MaterialTheme.colorScheme.onPrimary,
+                                            fontSize = 14.sp,
+                                        )
+                                    }
                                 }
-                            }) {
-                                Icon(Lucide.Settings, contentDescription = stringResource(R.string.more_title))
                             }
                         },
                     )
@@ -173,9 +260,7 @@ fun MainShell(viewModel: MainShellViewModel = hiltViewModel()) {
             composable("members") {
                 MembersScreen(
                     onBack = { navController.popBackStack() },
-                    onNavigateToHouseSelection = {
-                        navController.popBackStack(BottomNavTab.HOME.route, inclusive = true)
-                    },
+                    onNavigateToHouseSelection = onNavigateToHouseSelection,
                 )
             }
         }

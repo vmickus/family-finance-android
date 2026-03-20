@@ -207,6 +207,40 @@ private fun MonthlyContent(
 }
 
 @Composable
+private fun CompactSearchField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = {
+            Text(
+                stringResource(R.string.search_transactions),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+            )
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(12.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        ),
+        textStyle = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+    )
+}
+
+@Composable
 private fun AnnualContent(
     uiState: HomeUiState,
     viewModel: HomeViewModel,

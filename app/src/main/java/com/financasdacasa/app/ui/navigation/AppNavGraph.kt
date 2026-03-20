@@ -2,12 +2,13 @@ package com.financasdacasa.app.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.financasdacasa.app.ui.screens.auth.LoginScreen
 import com.financasdacasa.app.ui.screens.auth.RegisterScreen
-import com.financasdacasa.app.ui.screens.auth.VerifyEmailScreen
 import com.financasdacasa.app.ui.screens.house.HouseSelectionScreen
 import com.financasdacasa.app.ui.screens.invite.InviteScreen
 import com.financasdacasa.app.ui.screens.main.MainShell
@@ -16,9 +17,16 @@ object Routes {
     const val LOGIN = "login?inviteToken={inviteToken}"
     const val REGISTER = "register?inviteToken={inviteToken}"
     const val VERIFY_EMAIL = "verify-email"
-    const val HOUSE_SELECTION = "house-selection"
+    const val HOUSE_SELECTION = "house-selection?skipAutoSelect={skipAutoSelect}"
     const val HOME = "home"
 }
+
+private val houseSelectionArgs = listOf(
+    navArgument("skipAutoSelect") {
+        type = NavType.BoolType
+        defaultValue = false
+    },
+)
 
 @Composable
 fun AuthNavGraph(navController: NavHostController = rememberNavController()) {
@@ -26,7 +34,7 @@ fun AuthNavGraph(navController: NavHostController = rememberNavController()) {
         composable(
             route = Routes.LOGIN,
             arguments = listOf(
-                androidx.navigation.navArgument("inviteToken") {
+                navArgument("inviteToken") {
                     nullable = true
                     defaultValue = null
                 },
@@ -43,7 +51,7 @@ fun AuthNavGraph(navController: NavHostController = rememberNavController()) {
         composable(
             route = Routes.REGISTER,
             arguments = listOf(
-                androidx.navigation.navArgument("inviteToken") {
+                navArgument("inviteToken") {
                     nullable = true
                     defaultValue = null
                 },
@@ -78,7 +86,7 @@ fun InviteNavGraph(
                     }
                 },
                 onNavigateToHome = {
-                    navController.navigate(Routes.HOUSE_SELECTION) {
+                    navController.navigate("house-selection") {
                         popUpTo("invite/$token") { inclusive = true }
                     }
                 },
@@ -88,7 +96,7 @@ fun InviteNavGraph(
         composable(
             route = "auth-login?inviteToken={inviteToken}",
             arguments = listOf(
-                androidx.navigation.navArgument("inviteToken") {
+                navArgument("inviteToken") {
                     nullable = true
                     defaultValue = null
                 },
@@ -105,7 +113,7 @@ fun InviteNavGraph(
         composable(
             route = "auth-register?inviteToken={inviteToken}",
             arguments = listOf(
-                androidx.navigation.navArgument("inviteToken") {
+                navArgument("inviteToken") {
                     nullable = true
                     defaultValue = null
                 },
@@ -119,7 +127,10 @@ fun InviteNavGraph(
             )
         }
 
-        composable(Routes.HOUSE_SELECTION) {
+        composable(
+            route = Routes.HOUSE_SELECTION,
+            arguments = houseSelectionArgs,
+        ) {
             HouseSelectionScreen(
                 onHouseSelected = {
                     navController.navigate(Routes.HOME) {
@@ -130,15 +141,24 @@ fun InviteNavGraph(
         }
 
         composable(Routes.HOME) {
-            MainShell()
+            MainShell(
+                onNavigateToHouseSelection = {
+                    navController.navigate("house-selection?skipAutoSelect=true") {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                },
+            )
         }
     }
 }
 
 @Composable
 fun MainNavGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = Routes.HOUSE_SELECTION) {
-        composable(Routes.HOUSE_SELECTION) {
+    NavHost(navController = navController, startDestination = "house-selection") {
+        composable(
+            route = Routes.HOUSE_SELECTION,
+            arguments = houseSelectionArgs,
+        ) {
             HouseSelectionScreen(
                 onHouseSelected = {
                     navController.navigate(Routes.HOME) {
@@ -149,7 +169,13 @@ fun MainNavGraph(navController: NavHostController = rememberNavController()) {
         }
 
         composable(Routes.HOME) {
-            MainShell()
+            MainShell(
+                onNavigateToHouseSelection = {
+                    navController.navigate("house-selection?skipAutoSelect=true") {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                },
+            )
         }
     }
 }

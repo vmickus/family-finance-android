@@ -1,13 +1,17 @@
 package com.financasdacasa.app.ui.screens.house
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.financasdacasa.app.data.local.SessionManager
 import com.financasdacasa.app.data.model.House
 import com.financasdacasa.app.data.repository.HouseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,10 +29,16 @@ data class HouseSelectionUiState(
 class HouseSelectionViewModel @Inject constructor(
     private val houseRepository: HouseRepository,
     private val sessionManager: SessionManager,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    private val skipAutoSelect: Boolean = savedStateHandle.get<Boolean>("skipAutoSelect") ?: false
 
     private val _uiState = MutableStateFlow(HouseSelectionUiState())
     val uiState: StateFlow<HouseSelectionUiState> = _uiState.asStateFlow()
+
+    private val _autoSelectedHouse = MutableSharedFlow<House>(extraBufferCapacity = 1)
+    val autoSelectedHouse: SharedFlow<House> = _autoSelectedHouse.asSharedFlow()
 
     init {
         loadHouses()
@@ -40,6 +50,22 @@ class HouseSelectionViewModel @Inject constructor(
             try {
                 val houses = houseRepository.list()
                 _uiState.value = _uiState.value.copy(houses = houses, isLoading = false)
+
+                if (skipAutoSelect) return@launch
+
+                val savedId = sessionManager.getSelectedHouseId()
+                if (savedId != null) {
+                    val match = houses.find { it.id == savedId }
+                    if (match != null) {
+                        selectHouse(match)
+                        _autoSelectedHouse.tryEmit(match)
+                        return@launch
+                    }
+                }
+                if (houses.size == 1) {
+                    selectHouse(houses.first())
+                    _autoSelectedHouse.tryEmit(houses.first())
+                }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = "LOAD_FAILED")
             }

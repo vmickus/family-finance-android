@@ -1,7 +1,10 @@
 package com.financasdacasa.app.ui.screens.home
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -11,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,26 +33,24 @@ fun HomeScreen(
     var deletingTransaction by remember { mutableStateOf<Transaction?>(null) }
 
     Box(Modifier.fillMaxSize()) {
-        Column(Modifier.fillMaxSize()) {
-            // Period header
-            PeriodHeader(
-                month = uiState.month,
-                year = uiState.year,
-                viewMode = uiState.viewMode,
-                onPrevious = { if (uiState.viewMode == ViewMode.MONTHLY) viewModel.previousMonth() else viewModel.previousYear() },
-                onNext = { if (uiState.viewMode == ViewMode.MONTHLY) viewModel.nextMonth() else viewModel.nextYear() },
-                onToggleMode = { viewModel.toggleViewMode() },
-            )
-
-            if (uiState.isLoading) {
+        if (uiState.isLoading) {
+            Column(Modifier.fillMaxSize()) {
+                PeriodHeader(
+                    month = uiState.month,
+                    year = uiState.year,
+                    viewMode = uiState.viewMode,
+                    onPrevious = { if (uiState.viewMode == ViewMode.MONTHLY) viewModel.previousMonth() else viewModel.previousYear() },
+                    onNext = { if (uiState.viewMode == ViewMode.MONTHLY) viewModel.nextMonth() else viewModel.nextYear() },
+                    onToggleMode = { viewModel.toggleViewMode() },
+                )
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            } else if (uiState.viewMode == ViewMode.MONTHLY) {
-                MonthlyContent(uiState, viewModel, onDelete = { deletingTransaction = it }, onGoalClick = onGoalClick)
-            } else {
-                AnnualContent(uiState, viewModel, onDelete = { deletingTransaction = it })
             }
+        } else if (uiState.viewMode == ViewMode.MONTHLY) {
+            MonthlyContent(uiState, viewModel, onDelete = { deletingTransaction = it }, onGoalClick = onGoalClick)
+        } else {
+            AnnualContent(uiState, viewModel, onDelete = { deletingTransaction = it })
         }
 
         // FAB
@@ -126,49 +128,83 @@ private fun MonthlyContent(
     onDelete: (Transaction) -> Unit,
     onGoalClick: ((String) -> Unit)? = null,
 ) {
-    Column(Modifier.padding(horizontal = 16.dp)) {
-        // Chart
-        MonthlyChart(
-            transactions = uiState.transactions,
-            month = uiState.month,
-            year = uiState.year,
-            typeFilter = uiState.typeFilter,
-        )
+    val context = LocalContext.current
+    val filtered = if (uiState.typeFilter != null) {
+        uiState.transactions.filter { it.type == uiState.typeFilter }
+    } else {
+        uiState.transactions
+    }
+    val groups = remember(filtered, uiState.allocations) {
+        groupTimelineByDate(filtered, uiState.allocations, context)
+    }
+    val scheduledGroups = remember(groups) { groups.filter { it.isScheduled } }
+    val regularGroups = remember(groups) { groups.filter { !it.isScheduled } }
 
-        Spacer(Modifier.height(12.dp))
+    val scheduledCollapsed = remember { mutableStateOf(true) }
+    val highlightAlpha = remember { Animatable(0f) }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-        // Summary
-        uiState.summary?.let { summary ->
-            MonthlySummary(
-                summary = summary,
-                activeFilter = uiState.typeFilter,
-                onFilterChange = { viewModel.onTypeFilterChange(it) },
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        item(key = "monthly-period") {
+            PeriodHeader(
+                month = uiState.month,
+                year = uiState.year,
+                viewMode = uiState.viewMode,
+                onPrevious = { viewModel.previousMonth() },
+                onNext = { viewModel.nextMonth() },
+                onToggleMode = { viewModel.toggleViewMode() },
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        item(key = "monthly-header") {
+            Column {
+                MonthlyChart(
+                    transactions = uiState.transactions,
+                    month = uiState.month,
+                    year = uiState.year,
+                    typeFilter = uiState.typeFilter,
+                )
 
-        // Search
-        OutlinedTextField(
-            value = uiState.searchInput,
-            onValueChange = { viewModel.onSearchChange(it) },
-            placeholder = { Text(stringResource(R.string.search_transactions)) },
-            leadingIcon = { Icon(Icons.Default.Search, null) },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
+                Spacer(Modifier.height(12.dp))
 
-        Spacer(Modifier.height(8.dp))
+                uiState.summary?.let { summary ->
+                    MonthlySummary(
+                        summary = summary,
+                        activeFilter = uiState.typeFilter,
+                        onFilterChange = { viewModel.onTypeFilterChange(it) },
+                    )
+                }
 
-        // Transaction + allocation list
-        TransactionList(
-            transactions = uiState.transactions,
-            allocations = uiState.allocations,
-            typeFilter = uiState.typeFilter,
+                Spacer(Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = uiState.searchInput,
+                    onValueChange = { viewModel.onSearchChange(it) },
+                    placeholder = { Text(stringResource(R.string.search_transactions)) },
+                    leadingIcon = { Icon(Icons.Default.Search, null) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        transactionListItems(
+            scheduledGroups = scheduledGroups,
+            regularGroups = regularGroups,
             onEdit = { viewModel.showEditForm(it) },
             onDelete = onDelete,
             onGoalClick = onGoalClick,
-            modifier = Modifier.weight(1f),
+            scheduledCollapsed = scheduledCollapsed,
+            highlightAlpha = highlightAlpha,
+            listState = listState,
+            coroutineScope = coroutineScope,
         )
     }
 }
@@ -179,29 +215,67 @@ private fun AnnualContent(
     viewModel: HomeViewModel,
     onDelete: (Transaction) -> Unit,
 ) {
-    Column(Modifier.padding(horizontal = 16.dp)) {
-        uiState.annualReport?.let { report ->
-            Spacer(Modifier.height(12.dp))
+    val context = LocalContext.current
+    val report = uiState.annualReport ?: return
 
-            // Search
-            OutlinedTextField(
-                value = uiState.searchInput,
-                onValueChange = { viewModel.onSearchChange(it) },
-                placeholder = { Text(stringResource(R.string.search_transactions)) },
-                leadingIcon = { Icon(Icons.Default.Search, null) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-            )
+    val filtered = if (uiState.typeFilter != null) {
+        report.transactions.filter { it.type == uiState.typeFilter }
+    } else {
+        report.transactions
+    }
+    val groups = remember(filtered) {
+        groupTimelineByDate(filtered, emptyList(), context)
+    }
+    val scheduledGroups = remember(groups) { groups.filter { it.isScheduled } }
+    val regularGroups = remember(groups) { groups.filter { !it.isScheduled } }
 
-            Spacer(Modifier.height(8.dp))
+    val scheduledCollapsed = remember { mutableStateOf(true) }
+    val highlightAlpha = remember { Animatable(0f) }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-            TransactionList(
-                transactions = report.transactions,
-                typeFilter = uiState.typeFilter,
-                onEdit = { viewModel.showEditForm(it) },
-                onDelete = onDelete,
-                modifier = Modifier.weight(1f),
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        item(key = "annual-period") {
+            PeriodHeader(
+                month = uiState.month,
+                year = uiState.year,
+                viewMode = uiState.viewMode,
+                onPrevious = { viewModel.previousYear() },
+                onNext = { viewModel.nextYear() },
+                onToggleMode = { viewModel.toggleViewMode() },
             )
         }
+
+        item(key = "annual-header") {
+            Column {
+                Spacer(Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = uiState.searchInput,
+                    onValueChange = { viewModel.onSearchChange(it) },
+                    placeholder = { Text(stringResource(R.string.search_transactions)) },
+                    leadingIcon = { Icon(Icons.Default.Search, null) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        transactionListItems(
+            scheduledGroups = scheduledGroups,
+            regularGroups = regularGroups,
+            onEdit = { viewModel.showEditForm(it) },
+            onDelete = onDelete,
+            scheduledCollapsed = scheduledCollapsed,
+            highlightAlpha = highlightAlpha,
+            listState = listState,
+            coroutineScope = coroutineScope,
+        )
     }
 }

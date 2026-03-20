@@ -10,6 +10,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -40,6 +42,7 @@ import com.financasdacasa.app.util.formatCurrency
 import com.financasdacasa.app.util.formatTransactionDate
 import com.financasdacasa.app.util.getLucideIcon
 import com.financasdacasa.app.util.getPlantDrawable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -133,173 +136,211 @@ fun TransactionList(
     val scheduledGroups = remember(groups) { groups.filter { it.isScheduled } }
     val regularGroups = remember(groups) { groups.filter { !it.isScheduled } }
 
-    var scheduledCollapsed by remember { mutableStateOf(true) }
+    val scheduledCollapsed = remember { mutableStateOf(true) }
     val highlightAlpha = remember { Animatable(0f) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val primary = MaterialTheme.colorScheme.primary
-
-    val chevronRotation by animateFloatAsState(
-        targetValue = if (scheduledCollapsed) 0f else 180f,
-        animationSpec = tween(durationMillis = 300),
-        label = "chevronRotation",
-    )
-
-    val scheduledTxCount = remember(scheduledGroups) {
-        scheduledGroups.sumOf { g -> g.entries.filterIsInstance<TransactionEntry>().size }
-    }
-    val scheduledTotal = remember(scheduledGroups) {
-        scheduledGroups.fold(BigDecimal.ZERO) { acc, g -> acc + g.dailyTotal }
-    }
 
     LazyColumn(state = listState, modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        if (scheduledGroups.isNotEmpty()) {
-            item(key = "scheduled-toggle") {
-                val isExpanded = !scheduledCollapsed
-                val buttonContainer = if (isExpanded) {
-                    primary.copy(alpha = 0.1f)
-                } else {
-                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                }
-                val buttonBorder = if (isExpanded) {
-                    primary.copy(alpha = 0.3f)
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                }
-                val buttonContentAlpha = if (isExpanded) 1f else 0.7f
+        transactionListItems(
+            scheduledGroups = scheduledGroups,
+            regularGroups = regularGroups,
+            onEdit = onEdit,
+            onDelete = onDelete,
+            onGoalClick = onGoalClick,
+            scheduledCollapsed = scheduledCollapsed,
+            highlightAlpha = highlightAlpha,
+            listState = listState,
+            coroutineScope = coroutineScope,
+        )
+    }
+}
 
-                Surface(
+fun LazyListScope.transactionListItems(
+    scheduledGroups: List<DateGroup>,
+    regularGroups: List<DateGroup>,
+    onEdit: (Transaction) -> Unit,
+    onDelete: (Transaction) -> Unit,
+    onGoalClick: ((String) -> Unit)? = null,
+    scheduledCollapsed: MutableState<Boolean>,
+    highlightAlpha: Animatable<Float, *>,
+    listState: LazyListState,
+    coroutineScope: CoroutineScope,
+) {
+    if (scheduledGroups.isEmpty() && regularGroups.isEmpty()) {
+        item(key = "empty") {
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(32.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    stringResource(R.string.no_transactions),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        return
+    }
+
+    val scheduledTxCount = scheduledGroups.sumOf { g ->
+        g.entries.filterIsInstance<TransactionEntry>().size
+    }
+    val scheduledTotal = scheduledGroups.fold(BigDecimal.ZERO) { acc, g -> acc + g.dailyTotal }
+
+    if (scheduledGroups.isNotEmpty()) {
+        item(key = "scheduled-toggle") {
+            val chevronRotation by animateFloatAsState(
+                targetValue = if (scheduledCollapsed.value) 0f else 180f,
+                animationSpec = tween(durationMillis = 300),
+                label = "chevronRotation",
+            )
+            val primary = MaterialTheme.colorScheme.primary
+            val isExpanded = !scheduledCollapsed.value
+            val buttonContainer = if (isExpanded) {
+                primary.copy(alpha = 0.1f)
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            }
+            val buttonBorder = if (isExpanded) {
+                primary.copy(alpha = 0.3f)
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+            }
+            val buttonContentAlpha = if (isExpanded) 1f else 0.7f
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val expanding = scheduledCollapsed.value
+                        scheduledCollapsed.value = !scheduledCollapsed.value
+                        if (expanding) {
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(0)
+                            }
+                            coroutineScope.launch {
+                                highlightAlpha.snapTo(0.12f)
+                                highlightAlpha.animateTo(0f, animationSpec = tween(800))
+                            }
+                        }
+                    },
+                shape = RoundedCornerShape(12.dp),
+                color = buttonContainer,
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    buttonBorder,
+                ),
+            ) {
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            val expanding = scheduledCollapsed
-                            scheduledCollapsed = !scheduledCollapsed
-                            if (expanding) {
-                                coroutineScope.launch {
-                                    listState.animateScrollToItem(0)
-                                }
-                                coroutineScope.launch {
-                                    highlightAlpha.snapTo(0.12f)
-                                    highlightAlpha.animateTo(0f, animationSpec = tween(800))
-                                }
-                            }
-                        },
-                    shape = RoundedCornerShape(12.dp),
-                    color = buttonContainer,
-                    border = androidx.compose.foundation.BorderStroke(
-                        1.dp,
-                        buttonBorder,
-                    ),
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(
+                            Lucide.CalendarClock,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            stringResource(R.string.scheduled_summary, scheduledTxCount),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
+                        )
+                    }
+                    Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.weight(1f),
-                        ) {
-                            Icon(
-                                Lucide.CalendarClock,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                stringResource(R.string.scheduled_summary, scheduledTxCount),
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
-                            )
+                        val totalColor = if (scheduledTotal >= BigDecimal.ZERO) {
+                            Color(0xFF10B981)
+                        } else {
+                            Color(0xFFF43F5E)
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            val totalColor = if (scheduledTotal >= BigDecimal.ZERO) {
-                                Color(0xFF10B981)
-                            } else {
-                                Color(0xFFF43F5E)
-                            }
-                            Text(
-                                formatCurrency(scheduledTotal.abs()),
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Medium,
-                                color = totalColor.copy(alpha = buttonContentAlpha),
-                            )
-                            Spacer(Modifier.width(4.dp))
-                            Icon(
-                                Icons.Default.KeyboardArrowDown,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .rotate(chevronRotation),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
-                            )
-                        }
+                        Text(
+                            formatCurrency(scheduledTotal.abs()),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = totalColor.copy(alpha = buttonContentAlpha),
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Icon(
+                            Icons.Default.KeyboardArrowDown,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(16.dp)
+                                .rotate(chevronRotation),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = buttonContentAlpha),
+                        )
                     }
                 }
             }
+        }
 
-            item(key = "scheduled-section") {
-                AnimatedVisibility(
-                    visible = !scheduledCollapsed,
-                    enter = expandVertically(animationSpec = tween(300)),
-                    exit = shrinkVertically(animationSpec = tween(300)),
+        item(key = "scheduled-section") {
+            val primary = MaterialTheme.colorScheme.primary
+            AnimatedVisibility(
+                visible = !scheduledCollapsed.value,
+                enter = expandVertically(animationSpec = tween(300)),
+                exit = shrinkVertically(animationSpec = tween(300)),
+            ) {
+                Column(
+                    modifier = Modifier.padding(bottom = 12.dp, end = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.padding(bottom = 12.dp, end = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        scheduledGroups.forEach { group ->
-                            DateHeader(group)
-                            group.entries.forEach { entry ->
-                                when (entry) {
-                                    is TransactionEntry -> TransactionRow(
-                                        tx = entry.transaction,
-                                        onEdit = { onEdit(entry.transaction) },
-                                        onDelete = { onDelete(entry.transaction) },
-                                        highlightAlpha = highlightAlpha.value,
-                                        highlightColor = primary,
-                                    )
-                                    is AllocationEntry -> AllocationTimelineCard(
-                                        alloc = entry.allocation,
-                                        onClick = { onGoalClick?.invoke(entry.allocation.goalId) },
-                                        highlightAlpha = highlightAlpha.value,
-                                        highlightColor = primary,
-                                    )
-                                }
+                    scheduledGroups.forEach { group ->
+                        DateHeader(group)
+                        group.entries.forEach { entry ->
+                            when (entry) {
+                                is TransactionEntry -> TransactionRow(
+                                    tx = entry.transaction,
+                                    onEdit = { onEdit(entry.transaction) },
+                                    onDelete = { onDelete(entry.transaction) },
+                                    highlightAlpha = highlightAlpha.value,
+                                    highlightColor = primary,
+                                )
+                                is AllocationEntry -> AllocationTimelineCard(
+                                    alloc = entry.allocation,
+                                    onClick = { onGoalClick?.invoke(entry.allocation.goalId) },
+                                    highlightAlpha = highlightAlpha.value,
+                                    highlightColor = primary,
+                                )
                             }
                         }
                     }
                 }
             }
         }
+    }
 
-        regularGroups.forEach { group ->
-            item(key = "header-${group.date}") {
-                DateHeader(group)
+    regularGroups.forEach { group ->
+        item(key = "header-${group.date}") {
+            DateHeader(group)
+        }
+        items(group.entries, key = { entry ->
+            when (entry) {
+                is TransactionEntry -> "tx-${entry.transaction.id}"
+                is AllocationEntry -> "alloc-${entry.allocation.id}"
             }
-            items(group.entries, key = { entry ->
-                when (entry) {
-                    is TransactionEntry -> "tx-${entry.transaction.id}"
-                    is AllocationEntry -> "alloc-${entry.allocation.id}"
-                }
-            }) { entry ->
-                when (entry) {
-                    is TransactionEntry -> TransactionRow(
-                        tx = entry.transaction,
-                        onEdit = { onEdit(entry.transaction) },
-                        onDelete = { onDelete(entry.transaction) },
-                    )
-                    is AllocationEntry -> AllocationTimelineCard(
-                        alloc = entry.allocation,
-                        onClick = { onGoalClick?.invoke(entry.allocation.goalId) },
-                    )
-                }
+        }) { entry ->
+            when (entry) {
+                is TransactionEntry -> TransactionRow(
+                    tx = entry.transaction,
+                    onEdit = { onEdit(entry.transaction) },
+                    onDelete = { onDelete(entry.transaction) },
+                )
+                is AllocationEntry -> AllocationTimelineCard(
+                    alloc = entry.allocation,
+                    onClick = { onGoalClick?.invoke(entry.allocation.goalId) },
+                )
             }
         }
     }

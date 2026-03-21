@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
-        // Default API URL for development (override in local.properties or CI)
+        // Default API URL for emulator; overridden per build type below
         buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/api\"")
         buildConfigField("String", "GP_MONTHLY_PRODUCT_ID", "\"financas_monthly\"")
         buildConfigField("String", "GP_ANNUAL_PRODUCT_ID", "\"financas_annual\"")
@@ -25,6 +25,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Use local network IP for physical devices
+            buildConfigField("String", "API_BASE_URL", "\"http://192.168.15.138:8080/api\"")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true

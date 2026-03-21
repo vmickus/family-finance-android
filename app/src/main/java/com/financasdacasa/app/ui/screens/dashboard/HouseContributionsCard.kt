@@ -62,7 +62,7 @@ fun HouseContributionsCard(transactions: List<Transaction>, members: List<HouseM
                 icon = Lucide.TrendingUp,
                 title = stringResource(R.string.dashboard_biggest_income),
                 entries = biggestIncomes,
-                iconColor = Color(0xFF10B981),
+                iconColor = Color(0xFF059669),
                 formatValue = { formatCurrency(BigDecimal.valueOf(it)) },
             )
         }

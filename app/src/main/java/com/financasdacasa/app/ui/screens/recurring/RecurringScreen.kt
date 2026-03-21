@@ -183,11 +183,11 @@ private fun RecurringCard(
                     Text(
                         formatCurrency(BigDecimal(item.amount)),
                         style = MaterialTheme.typography.titleSmall,
-                        color = if (item.type == "expense") Color(0xFFF43F5E) else Color(0xFF10B981),
+                        color = if (item.type == "expense") Color(0xFFF43F5E) else Color(0xFF059669),
                     )
                     Surface(
                         shape = RoundedCornerShape(4.dp),
-                        color = if (item.isActive) Color(0xFF10B981).copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant,
+                        color = if (item.isActive) Color(0xFF059669).copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant,
                     ) {
                         Text(
                             stringResource(if (item.isActive) R.string.recurring_active else R.string.recurring_cancelled),

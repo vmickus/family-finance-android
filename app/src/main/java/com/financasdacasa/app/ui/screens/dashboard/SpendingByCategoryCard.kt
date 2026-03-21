@@ -102,7 +102,7 @@ fun SpendingByCategoryCard(
                     ToggleChip(
                         label = stringResource(R.string.income),
                         selected = viewType == "income",
-                        selectedColor = Color(0xFF10B981),
+                        selectedColor = Color(0xFF059669),
                         onClick = { viewType = "income" },
                     )
                 }

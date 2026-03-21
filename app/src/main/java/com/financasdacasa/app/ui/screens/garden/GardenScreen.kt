@@ -227,12 +227,12 @@ private fun GoalCard(goal: Goal, onClick: () -> Unit) {
                     if (goal.status == "completed") {
                         Surface(
                             shape = RoundedCornerShape(4.dp),
-                            color = Color(0xFF10B981).copy(alpha = 0.15f),
+                            color = Color(0xFF059669).copy(alpha = 0.15f),
                         ) {
                             Text(
                                 stringResource(R.string.goal_completed),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = Color(0xFF10B981),
+                                color = Color(0xFF059669),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                             )
                         }

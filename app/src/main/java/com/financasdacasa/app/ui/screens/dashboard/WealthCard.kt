@@ -50,7 +50,7 @@ fun WealthCard(
 
     val totalWealth = chartData.last().accumulated
     val isPositive = totalWealth >= 0
-    val color = if (isPositive) Color(0xFF10B981) else Color(0xFFF43F5E)
+    val color = if (isPositive) Color(0xFF059669) else Color(0xFFF43F5E)
     val colorInt = if (isPositive) 0xFF10B981.toInt() else 0xFFF43F5E.toInt()
     val areaColorInt = if (isPositive) 0x3310B981 else 0x33F43F5E
 

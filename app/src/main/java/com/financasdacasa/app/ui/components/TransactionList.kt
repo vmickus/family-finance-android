@@ -262,7 +262,7 @@ fun LazyListScope.transactionListItems(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         val totalColor = if (scheduledTotal >= BigDecimal.ZERO) {
-                            Color(0xFF10B981)
+                            Color(0xFF059669)
                         } else {
                             Color(0xFFF43F5E)
                         }
@@ -389,7 +389,7 @@ private fun DateHeader(group: DateGroup) {
             }
         }
         val totalColor = if (group.dailyTotal >= BigDecimal.ZERO) {
-            Color(0xFF10B981)
+            Color(0xFF059669)
         } else {
             Color(0xFFF43F5E)
         }
@@ -415,7 +415,7 @@ private fun TransactionRow(
         Color(0xFF6366F1)
     }
     val icon = getLucideIcon(tx.category?.icon ?: "Tag")
-    val amountColor = if (tx.type == "income") Color(0xFF10B981) else Color(0xFFF43F5E)
+    val amountColor = if (tx.type == "income") Color(0xFF059669) else Color(0xFFF43F5E)
     val prefix = if (tx.type == "income") "+ " else "- "
 
     Card(

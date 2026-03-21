@@ -19,7 +19,7 @@ import java.math.RoundingMode
 
 private val roseColor = Color(0xFFF43F5E)
 private val amberColor = Color(0xFFD97706)
-private val emeraldColor = Color(0xFF10B981)
+private val emeraldColor = Color(0xFF059669)
 
 @Composable
 fun FreeToSpendCard(summary: TransactionSummary) {

@@ -134,7 +134,7 @@ fun CashFlowCard(
 
                 if (trendPercent != 0) {
                     Spacer(Modifier.height(8.dp))
-                    val trendColor = if (trendPercent > 0) Color(0xFFF43F5E) else Color(0xFF10B981)
+                    val trendColor = if (trendPercent > 0) Color(0xFFF43F5E) else Color(0xFF059669)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         Icon(
                             if (trendPercent > 0) Lucide.TrendingUp else Lucide.TrendingDown,

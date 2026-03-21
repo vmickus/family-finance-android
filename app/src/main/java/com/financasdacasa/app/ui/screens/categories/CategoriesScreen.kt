@@ -109,7 +109,7 @@ fun CategoriesScreen(
                     onClick = { viewModel.onTypeChange("income") },
                     label = { Text(stringResource(R.string.categories_income)) },
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFF10B981).copy(alpha = 0.15f),
+                        selectedContainerColor = Color(0xFF059669).copy(alpha = 0.15f),
                     ),
                     modifier = Modifier.weight(1f),
                 )

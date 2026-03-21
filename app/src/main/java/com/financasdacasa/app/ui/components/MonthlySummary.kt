@@ -20,7 +20,7 @@ import com.financasdacasa.app.data.model.TransactionSummary
 import com.financasdacasa.app.util.formatCurrency
 import java.math.BigDecimal
 
-private val incomeColor = Color(0xFF10B981)
+private val incomeColor = Color(0xFF059669)
 private val expenseColor = Color(0xFFF43F5E)
 private val balancePositiveColor = Color(0xFF0284C7)
 private val balanceNegativeColor = Color(0xFFD97706)
@@ -142,6 +142,7 @@ private fun SummaryCard(
                 value,
                 style = MaterialTheme.typography.titleSmall.copy(fontSize = 13.sp),
                 fontWeight = FontWeight.Bold,
+                color = color,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

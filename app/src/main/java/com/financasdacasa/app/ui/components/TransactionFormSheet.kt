@@ -100,7 +100,7 @@ fun TransactionFormSheet(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(6.dp))
-                        .background(if (incomeSelected) Color(0xFF10B981) else Color.Transparent)
+                        .background(if (incomeSelected) Color(0xFF059669) else Color.Transparent)
                         .clickable { viewModel.onTypeChange("income") }
                         .padding(vertical = 10.dp),
                     contentAlignment = Alignment.Center,

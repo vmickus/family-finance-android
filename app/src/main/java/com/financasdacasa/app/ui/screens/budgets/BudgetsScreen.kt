@@ -28,6 +28,7 @@ import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Target
+import com.composables.icons.lucide.Trash2
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.BudgetLimit
 import com.financasdacasa.app.util.formatAmountFromDigits
@@ -137,8 +138,11 @@ fun BudgetsScreen(
                 }
             } else {
                 // Summary header
-                Card(
+                OutlinedCard(
                     modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.outlinedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -176,7 +180,7 @@ fun BudgetsScreen(
                                 totalRatio > 0.8 -> Color(0xFFF59E0B)
                                 else -> MaterialTheme.colorScheme.primary
                             },
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
                         )
                     }
                 }
@@ -260,32 +264,50 @@ private fun BudgetCard(
     }
     val icon = getLucideIcon(category?.icon ?: "Tag")
 
-    Card(
-        modifier = modifier.clickable { onDelete() },
-        colors = CardDefaults.cardColors(
+    OutlinedCard(
+        modifier = modifier,
+        colors = CardDefaults.outlinedCardColors(
             containerColor = if (exceeded) {
-                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+                MaterialTheme.colorScheme.error.copy(alpha = 0.05f)
             } else {
                 MaterialTheme.colorScheme.surface
             },
         ),
-        border = if (exceeded) {
-            CardDefaults.outlinedCardBorder().copy(
-                brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),
-            )
-        } else null,
+        border = CardDefaults.outlinedCardBorder().copy(
+            brush = androidx.compose.ui.graphics.SolidColor(
+                if (exceeded) {
+                    MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
+                } else {
+                    MaterialTheme.colorScheme.outlineVariant
+                },
+            ),
+        ),
     ) {
         Column(
             modifier = Modifier.padding(12.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // Delete icon
+            Box(modifier = Modifier.fillMaxWidth()) {
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier.align(Alignment.TopEnd).size(28.dp),
+                ) {
+                    Icon(
+                        Lucide.Trash2,
+                        contentDescription = stringResource(R.string.delete),
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    )
+                }
+            }
             // Gauge ring
             Box(
                 modifier = Modifier.size(100.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 val arcColor = if (exceeded) MaterialTheme.colorScheme.error else color
-                val trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                val trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
 
                 androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
                     val strokeWidth = 10.dp.toPx()

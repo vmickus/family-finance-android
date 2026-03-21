@@ -82,8 +82,8 @@ fun CashFlowCard(
                 CartesianChartHost(
                     chart = rememberCartesianChart(
                         rememberColumnCartesianLayer(),
-                        startAxis = VerticalAxis.rememberStart(),
-                        bottomAxis = HorizontalAxis.rememberBottom(),
+                        startAxis = VerticalAxis.rememberStart(guideline = null),
+                        bottomAxis = HorizontalAxis.rememberBottom(guideline = null),
                     ),
                     modelProducer = modelProducer,
                     modifier = Modifier.fillMaxWidth().height(160.dp),

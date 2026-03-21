@@ -76,8 +76,8 @@ fun WealthCard(
             CartesianChartHost(
                 chart = rememberCartesianChart(
                     rememberLineCartesianLayer(),
-                    startAxis = VerticalAxis.rememberStart(),
-                    bottomAxis = HorizontalAxis.rememberBottom(),
+                    startAxis = VerticalAxis.rememberStart(guideline = null),
+                    bottomAxis = HorizontalAxis.rememberBottom(guideline = null),
                 ),
                 modelProducer = modelProducer,
                 modifier = Modifier.fillMaxWidth().height(172.dp),

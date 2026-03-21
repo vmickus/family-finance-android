@@ -41,7 +41,7 @@
     <string name="scheduled">Programado</string>
     <string name="scheduled_summary">%d transacciones programadas</string>
     <string name="chart_no_data">Sin datos para este período</string>
-    <string name="search_transactions">Buscar transacciones\u2026</string>
+    <string name="search_transactions">Buscar por categoría, descripción o monto\u2026</string>
     <string name="new_transaction">Nueva Transacción</string>
     <string name="edit_transaction">Editar Transacción</string>
     <string name="amount">Monto</string>

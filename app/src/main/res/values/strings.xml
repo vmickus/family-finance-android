@@ -47,7 +47,7 @@
     <string name="scheduled">Scheduled</string>
     <string name="scheduled_summary">%d scheduled transactions</string>
     <string name="chart_no_data">No data for this period</string>
-    <string name="search_transactions">Search transactions\u2026</string>
+    <string name="search_transactions">Search by category, description or amount\u2026</string>
     <string name="new_transaction">New Transaction</string>
     <string name="edit_transaction">Edit Transaction</string>
     <string name="amount">Amount</string>

@@ -147,6 +147,11 @@ fun InviteNavGraph(
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 },
+                onNeedsHouseSelection = {
+                    navController.navigate("house-selection") {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                },
             )
         }
     }
@@ -154,7 +159,7 @@ fun InviteNavGraph(
 
 @Composable
 fun MainNavGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = "house-selection") {
+    NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(
             route = Routes.HOUSE_SELECTION,
             arguments = houseSelectionArgs,
@@ -172,6 +177,11 @@ fun MainNavGraph(navController: NavHostController = rememberNavController()) {
             MainShell(
                 onNavigateToHouseSelection = {
                     navController.navigate("house-selection?skipAutoSelect=true") {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                },
+                onNeedsHouseSelection = {
+                    navController.navigate("house-selection") {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 },

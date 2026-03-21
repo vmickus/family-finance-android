@@ -11,9 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.composables.icons.lucide.*
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.TransactionSummary
@@ -138,14 +141,22 @@ private fun SummaryCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
+            val maxFontSize = 13f
+            val minFontSize = 8f
+            var fontSizeSp by remember(value) { mutableFloatStateOf(maxFontSize) }
             Text(
                 value,
-                style = MaterialTheme.typography.titleSmall.copy(fontSize = 13.sp),
+                style = MaterialTheme.typography.titleSmall.copy(fontSize = fontSizeSp.sp),
                 fontWeight = FontWeight.Bold,
                 color = color,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                softWrap = false,
+                onTextLayout = { result ->
+                    if (result.hasVisualOverflow && fontSizeSp > minFontSize) {
+                        fontSizeSp = (fontSizeSp - 0.5f).coerceAtLeast(minFontSize)
+                    }
+                },
             )
         }
     }

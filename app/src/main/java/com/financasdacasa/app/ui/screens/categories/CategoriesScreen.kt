@@ -73,7 +73,11 @@ fun CategoriesScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.showCreateForm() }) {
+            FloatingActionButton(
+                onClick = { viewModel.showCreateForm() },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) {
                 Icon(Lucide.Plus, contentDescription = stringResource(R.string.new_category))
             }
         },

@@ -47,7 +47,11 @@ fun HouseSelectionScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.showCreateDialog() }) {
+            FloatingActionButton(
+                onClick = { viewModel.showCreateDialog() },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.create_house))
             }
         },

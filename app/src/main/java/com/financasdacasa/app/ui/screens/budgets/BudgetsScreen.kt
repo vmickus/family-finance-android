@@ -72,7 +72,11 @@ fun BudgetsScreen(
     Scaffold(
         floatingActionButton = {
             if (viewModel.isCurrentMonth) {
-                FloatingActionButton(onClick = { viewModel.showAddForm() }) {
+                FloatingActionButton(
+                    onClick = { viewModel.showAddForm() },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                ) {
                     Icon(Lucide.Plus, contentDescription = stringResource(R.string.add_budget_limit))
                 }
             }

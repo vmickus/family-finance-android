@@ -17,9 +17,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,6 +34,8 @@ import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.CalendarClock
 import com.composables.icons.lucide.Droplets
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Repeat
+import com.composables.icons.lucide.Trash2
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.FlatAllocationItem
 import com.financasdacasa.app.data.model.Transaction
@@ -424,60 +424,74 @@ private fun TransactionRow(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Box {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Surface(
-                    shape = CircleShape,
-                    color = color.copy(alpha = 0.15f),
-                    modifier = Modifier.size(40.dp),
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            icon,
-                            contentDescription = null,
-                            tint = color,
-                            modifier = Modifier.size(20.dp),
-                        )
+            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        shape = CircleShape,
+                        color = color.copy(alpha = 0.15f),
+                        modifier = Modifier.size(36.dp),
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                icon,
+                                contentDescription = null,
+                                tint = color,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        }
                     }
-                }
 
-                Spacer(Modifier.width(12.dp))
+                    Spacer(Modifier.width(8.dp))
 
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(tx.description, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
                     Text(
                         tx.category?.name ?: "",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
                     )
-                }
 
-                Column(horizontalAlignment = Alignment.End) {
+                    Spacer(Modifier.width(8.dp))
+
                     Text(
                         prefix + formatCurrency(tx.amount),
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = amountColor,
                     )
-                    if (tx.recurringTransactionId != null) {
+
+                    Spacer(Modifier.width(4.dp))
+
+                    IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
                         Icon(
-                            Icons.Default.Repeat,
-                            null,
-                            Modifier.size(14.dp),
+                            Lucide.Trash2,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
 
-                Spacer(Modifier.width(4.dp))
-
-                IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
+                Row(
+                    modifier = Modifier.padding(top = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (tx.recurringTransactionId != null) {
+                        Icon(
+                            Lucide.Repeat,
+                            contentDescription = null,
+                            modifier = Modifier.size(12.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(Modifier.width(4.dp))
+                    }
+                    Text(
+                        tx.description.ifBlank { "-" },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

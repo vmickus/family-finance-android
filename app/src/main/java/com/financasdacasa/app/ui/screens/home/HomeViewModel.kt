@@ -59,11 +59,11 @@ class HomeViewModel @Inject constructor(
         loadData()
     }
 
-    fun loadData() {
+    fun loadData(showLoading: Boolean = true) {
         val id = houseId ?: return
         val s = _uiState.value
         viewModelScope.launch {
-            _uiState.value = s.copy(isLoading = true, error = null)
+            _uiState.value = s.copy(isLoading = if (showLoading) true else s.isLoading, error = null)
             try {
                 if (s.viewMode == ViewMode.MONTHLY) {
                     val txDeferred = async {
@@ -175,7 +175,7 @@ class HomeViewModel @Inject constructor(
         searchJob = viewModelScope.launch {
             delay(300)
             _uiState.value = _uiState.value.copy(searchFilter = value)
-            loadData()
+            loadData(showLoading = false)
         }
     }
 

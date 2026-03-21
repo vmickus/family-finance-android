@@ -10,20 +10,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.TrendingDown
 import com.composables.icons.lucide.TrendingUp
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.AnnualReport
+import com.financasdacasa.app.util.formatCompactCurrency
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
+import com.patrykandpatrick.vico.core.cartesian.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import com.patrykandpatrick.vico.core.common.Fill
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
@@ -79,11 +86,47 @@ fun CashFlowCard(
                     }
                 }
 
+                val incomeColumn = rememberLineComponent(Fill(0xFF10B981.toInt()), thickness = 8.dp)
+                val expenseColumn = rememberLineComponent(Fill(0xFFF43F5E.toInt()), thickness = 8.dp)
+
+                val axisLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                val axisLabel = rememberTextComponent(color = axisLabelColor, textSize = 10.sp)
+                val dashedGuideline = rememberLineComponent(
+                    Fill(0xFFE2E8E4.toInt()),
+                    thickness = 1.dp,
+                )
+
+                val bottomFormatter = CartesianValueFormatter { _, x, _ ->
+                    chartData.getOrNull(x.toInt())?.label ?: ""
+                }
+                val startFormatter = CartesianValueFormatter { _, y, _ ->
+                    when {
+                        y >= 1_000_000 -> "${(y / 1_000_000).toInt()}M"
+                        y >= 1_000 -> "${(y / 1_000).toInt()}k"
+                        else -> y.toInt().toString()
+                    }
+                }
+
                 CartesianChartHost(
                     chart = rememberCartesianChart(
-                        rememberColumnCartesianLayer(),
-                        startAxis = VerticalAxis.rememberStart(guideline = null),
-                        bottomAxis = HorizontalAxis.rememberBottom(guideline = null),
+                        rememberColumnCartesianLayer(
+                            columnProvider = ColumnCartesianLayer.ColumnProvider.series(incomeColumn, expenseColumn),
+                        ),
+                        startAxis = VerticalAxis.rememberStart(
+                            label = axisLabel,
+                            line = null,
+                            tick = null,
+                            guideline = dashedGuideline,
+                            valueFormatter = startFormatter,
+                            itemPlacer = VerticalAxis.ItemPlacer.count({ 5 }),
+                        ),
+                        bottomAxis = HorizontalAxis.rememberBottom(
+                            label = axisLabel,
+                            line = null,
+                            tick = null,
+                            guideline = null,
+                            valueFormatter = bottomFormatter,
+                        ),
                     ),
                     modelProducer = modelProducer,
                     modifier = Modifier.fillMaxWidth().height(160.dp),

@@ -155,7 +155,7 @@ fun SpendingByCategoryScreen(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(Color(0xFFF1F5F9))
                         .padding(2.dp),
                 ) {
                     ToggleChipItem(

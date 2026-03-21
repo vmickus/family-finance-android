@@ -1,8 +1,10 @@
 package com.financasdacasa.app.ui.screens.home
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -15,9 +17,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.border
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.financasdacasa.app.R
@@ -182,7 +187,11 @@ private fun MonthlyContent(
                 }
 
                 Spacer(Modifier.height(12.dp))
+            }
+        }
 
+        item(key = "monthly-search") {
+            Column {
                 CompactSearchField(
                     value = uiState.searchInput,
                     onValueChange = { viewModel.onSearchChange(it) },
@@ -211,32 +220,54 @@ private fun CompactSearchField(
     value: String,
     onValueChange: (String) -> Unit,
 ) {
-    TextField(
+    val textStyle = MaterialTheme.typography.bodySmall.copy(
+        color = MaterialTheme.colorScheme.onSurface,
+    )
+    val containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+    val placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val primaryColor = MaterialTheme.colorScheme.primary
+    var isFocused by remember { mutableStateOf(false) }
+    val shape = RoundedCornerShape(8.dp)
+
+    BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = {
-            Text(
-                stringResource(R.string.search_transactions),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        },
-        leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-            )
-        },
         singleLine = true,
-        shape = RoundedCornerShape(12.dp),
-        colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        ),
-        textStyle = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier.fillMaxWidth().height(48.dp),
+        textStyle = textStyle,
+        decorationBox = { innerTextField ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(containerColor, shape)
+                    .then(
+                        if (isFocused) Modifier.border(1.5.dp, primaryColor, shape)
+                        else Modifier,
+                    )
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = if (isFocused) primaryColor else placeholderColor,
+                )
+                Spacer(Modifier.width(8.dp))
+                Box(Modifier.weight(1f)) {
+                    if (value.isEmpty()) {
+                        Text(
+                            stringResource(R.string.search_transactions),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = placeholderColor,
+                        )
+                    }
+                    innerTextField()
+                }
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged { isFocused = it.isFocused },
     )
 }
 
@@ -281,7 +312,7 @@ private fun AnnualContent(
             )
         }
 
-        item(key = "annual-header") {
+        item(key = "annual-search") {
             Column {
                 Spacer(Modifier.height(12.dp))
 

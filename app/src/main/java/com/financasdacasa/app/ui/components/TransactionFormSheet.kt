@@ -72,45 +72,52 @@ fun TransactionFormSheet(
             // Type toggle — segmented control matching web
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(4.dp),
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                val expenseSelected = state.type == "expense"
-                val incomeSelected = state.type == "income"
+                Row(
+                    modifier = Modifier
+                        .widthIn(max = 260.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(3.dp),
+                ) {
+                    val expenseSelected = state.type == "expense"
+                    val incomeSelected = state.type == "income"
 
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(if (expenseSelected) Color(0xFFF43F5E) else Color.Transparent)
-                        .clickable { viewModel.onTypeChange("expense") }
-                        .padding(vertical = 10.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        stringResource(R.string.expense),
-                        color = if (expenseSelected) Color.White
-                        else MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(if (incomeSelected) Color(0xFF059669) else Color.Transparent)
-                        .clickable { viewModel.onTypeChange("income") }
-                        .padding(vertical = 10.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        stringResource(R.string.income),
-                        color = if (incomeSelected) Color.White
-                        else MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelLarge,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(21.dp))
+                            .background(if (expenseSelected) Color(0xFFF43F5E) else Color.Transparent)
+                            .clickable { viewModel.onTypeChange("expense") }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            stringResource(R.string.expense),
+                            color = if (expenseSelected) Color.White
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(21.dp))
+                            .background(if (incomeSelected) Color(0xFF059669) else Color.Transparent)
+                            .clickable { viewModel.onTypeChange("income") }
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            stringResource(R.string.income),
+                            color = if (incomeSelected) Color.White
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
                 }
             }
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.CalendarClock
 import com.composables.icons.lucide.Droplets
 import com.composables.icons.lucide.Lucide
@@ -200,12 +201,12 @@ fun LazyListScope.transactionListItems(
             val buttonContainer = if (isExpanded) {
                 primary.copy(alpha = 0.1f)
             } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                Color.White
             }
             val buttonBorder = if (isExpanded) {
                 primary.copy(alpha = 0.3f)
             } else {
-                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                Color(0xFFE2E8F0)
             }
             val buttonContentAlpha = if (isExpanded) 1f else 0.7f
 
@@ -361,15 +362,30 @@ private fun DateHeader(group: DateGroup) {
             )
             if (group.isScheduled) {
                 Spacer(Modifier.width(8.dp))
-                SuggestionChip(
-                    onClick = {},
-                    label = {
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Icon(
+                            Lucide.CalendarClock,
+                            contentDescription = null,
+                            modifier = Modifier.size(12.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                         Text(
                             stringResource(R.string.scheduled),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 10.sp,
+                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                    },
-                )
+                    }
+                }
             }
         }
         val totalColor = if (group.dailyTotal >= BigDecimal.ZERO) {
@@ -404,6 +420,8 @@ private fun TransactionRow(
 
     Card(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onEdit),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Box {
             Row(

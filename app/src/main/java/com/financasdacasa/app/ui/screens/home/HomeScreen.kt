@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -62,6 +63,8 @@ fun HomeScreen(
         // FAB
         FloatingActionButton(
             onClick = { viewModel.showCreateForm() },
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
@@ -223,7 +226,7 @@ private fun CompactSearchField(
     val textStyle = MaterialTheme.typography.bodySmall.copy(
         color = MaterialTheme.colorScheme.onSurface,
     )
-    val containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+    val containerColor = Color.White
     val placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant
     val primaryColor = MaterialTheme.colorScheme.primary
     var isFocused by remember { mutableStateOf(false) }

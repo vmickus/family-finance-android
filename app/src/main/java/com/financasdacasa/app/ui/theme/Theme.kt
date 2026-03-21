@@ -21,6 +21,10 @@ private val LightColorScheme = lightColorScheme(
     onSecondaryContainer = Teal10,
     tertiary = Teal40,
     onTertiary = Teal99,
+    background = Teal99,
+    onBackground = Teal10,
+    surface = Teal99,
+    surfaceContainerHigh = Teal95,
 )
 
 private val DarkColorScheme = darkColorScheme(

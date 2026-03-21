@@ -121,9 +121,10 @@ private fun SummaryCard(
             containerColor = if (isSelected) {
                 color.copy(alpha = 0.1f)
             } else {
-                MaterialTheme.colorScheme.surfaceContainerHigh
+                Color.White
             },
         ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(
             modifier = Modifier.padding(12.dp).fillMaxWidth(),

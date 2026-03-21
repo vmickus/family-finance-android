@@ -14,3 +14,10 @@ val Teal80 = Color(0xFF8AEBCC)
 val Teal90 = Color(0xFFB5F5E1)
 val Teal95 = Color(0xFFDAFAF0)
 val Teal99 = Color(0xFFF5FDF9)
+
+// Surface colors matching web CSS variables
+val WebBackground = Color(0xFFF9FBFA)       // HSL(150, 20%, 98%) — web --background
+val WebCard = Color(0xFFFFFFFF)             // HSL(0, 0%, 100%) — web --card
+val WebForeground = Color(0xFF14252E)       // HSL(200, 20%, 10%) — web --foreground
+val WebSecondary = Color(0xFFEEF1F0)        // HSL(150, 10%, 94%) — web --secondary/muted
+val WebBorder = Color(0xFFE2E6E4)           // HSL(150, 10%, 90%) — web --border

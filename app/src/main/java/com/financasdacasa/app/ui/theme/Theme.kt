@@ -12,19 +12,20 @@ import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
     primary = Teal50,
-    onPrimary = Teal99,
+    onPrimary = WebCard,
     primaryContainer = Teal90,
     onPrimaryContainer = Teal10,
     secondary = Teal60,
-    onSecondary = Teal99,
-    secondaryContainer = Teal95,
-    onSecondaryContainer = Teal10,
+    onSecondary = WebCard,
+    secondaryContainer = WebSecondary,
+    onSecondaryContainer = WebForeground,
     tertiary = Teal40,
-    onTertiary = Teal99,
-    background = Teal99,
-    onBackground = Teal10,
-    surface = Teal99,
-    surfaceContainerHigh = Teal95,
+    onTertiary = WebCard,
+    background = WebBackground,
+    onBackground = WebForeground,
+    surface = WebCard,
+    onSurface = WebForeground,
+    surfaceContainerHigh = WebSecondary,
 )
 
 private val DarkColorScheme = darkColorScheme(

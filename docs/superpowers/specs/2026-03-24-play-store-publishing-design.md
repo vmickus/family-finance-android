@@ -11,12 +11,13 @@ Prepare the Finanças da Casa Android app for Google Play Store publication. The
 - Generate upload keystore (`upload-keystore.jks`) via `keytool`
 - Add `signingConfigs.release` in `app/build.gradle.kts`, reading credentials from `~/.gradle/gradle.properties` (never committed to repo)
 - Use Google Play App Signing (Google manages the final distribution key; we hold the upload key)
+- Add `*.jks` and `*.keystore` to `.gitignore` to prevent accidental commit of signing keys
 
 ### Production Build Config
 
 In `app/build.gradle.kts`:
 
-- `API_BASE_URL` (release) → `https://app.financasdacasa.com.br/api`
+- `API_BASE_URL` (release) → `https://app.financasdacasa.com.br/api` (must be added as `buildConfigField` inside the `release {}` block, since `defaultConfig` falls back to the emulator URL)
 - `GOOGLE_CLIENT_ID` → read from `gradle.properties` (set after creating OAuth credential in GCP)
 - `GP_MONTHLY_PRODUCT_ID` = `financas_monthly` (already set)
 - `GP_ANNUAL_PRODUCT_ID` = `financas_annual` (already set)
@@ -34,6 +35,8 @@ Create `app/proguard-rules.pro` with keep rules for:
 - Google Play Billing
 - OkHttp
 - Kotlin coroutines/serialization
+- Room (entities, DAOs)
+- AndroidX Security / EncryptedSharedPreferences (uses reflection internally)
 
 ### Build Output
 
@@ -44,7 +47,9 @@ Create `app/proguard-rules.pro` with keep rules for:
 ### cleartext Traffic
 
 - Remove `android:usesCleartextTraffic="true"` from main manifest
-- Add `src/debug/AndroidManifest.xml` with `usesCleartextTraffic="true"` (debug only)
+- Add `res/xml/network_security_config.xml` allowing cleartext only for debug domains (10.0.2.2, localhost)
+- Reference the config via `android:networkSecurityConfig` in manifest
+- This is the Google-recommended approach over a debug manifest overlay
 
 ### Backup Rules
 
@@ -91,7 +96,16 @@ Both are runtime permissions requested at point of use.
 
 Email/password login remains fully functional as an alternative.
 
-## 4. Google Play Billing
+## 4. Deep Links / Digital Asset Links
+
+The manifest already declares `android:autoVerify="true"` for `app.financasdacasa.com.br/invite/*`. For App Links verification to work on Play Store installs:
+
+- Host `/.well-known/assetlinks.json` on `app.financasdacasa.com.br`
+- Must contain the SHA-256 fingerprint of the **Play-managed signing certificate** (not the upload key)
+- The Play-managed certificate fingerprint is available in Play Console after first `.aab` upload
+- Without this, deep links fall back to a disambiguation dialog instead of opening the app directly
+
+## 5. Google Play Billing
 
 ### Products (to create in Play Console)
 
@@ -106,12 +120,18 @@ Pricing to match the web Mercado Pago plans.
 - Billing only works on apps installed via Play Store (not debug/sideload)
 - Internal Testing track is essential for testing real purchases
 
+### Purchase Acknowledgment
+
+- Google Play automatically refunds purchases not acknowledged within 3 days
+- Either the client (`BillingClient.acknowledgePurchase`) or server must acknowledge
+- Verify that `BillingManager` calls `acknowledgePurchase` after successful purchase; if not, add it
+
 ### Server-Side Validation
 
 - Backend needs endpoint to validate Google Play purchase receipts
 - Prevents subscription fraud
 
-## 5. Play Store Listing
+## 6. Play Store Listing
 
 ### Texts (PT-BR)
 
@@ -125,10 +145,12 @@ Pricing to match the web Mercado Pago plans.
 - **Feature graphic**: 1024x500 PNG (create based on landing `og-image.png`)
 - **Screenshots**: 4-8 screenshots from the Android app running on emulator
 
-### Privacy Policy
+### Privacy Policy (hard prerequisite for Phase 1)
 
 - Public URL required (e.g., `https://app.financasdacasa.com.br/privacidade`)
 - Must cover: data collected, usage, third-party sharing, account deletion
+- Play Console will not allow submission (even Internal Testing) without this URL if the app requests Camera permission or accesses user data
+- Must be live and accessible before first `.aab` upload
 
 ### Categorization
 
@@ -136,7 +158,18 @@ Pricing to match the web Mercado Pago plans.
 - Content rating: fill questionnaire in Play Console (expected: "Everyone")
 - Type: App (not game)
 
-## 6. Release Strategy
+## 7. Release Strategy
+
+### Version Management
+
+- `versionCode` must be monotonically increasing for every Play Store upload
+- Bump `versionCode` in `app/build.gradle.kts` before each upload
+- Follow semver for `versionName` (currently `1.0.0`)
+
+### Pre-Upload Verification
+
+- Run `./gradlew bundleRelease` and install on a physical device to verify: no R8 crashes, correct API URL, non-billing flows work
+- This catches obfuscation issues before wasting iterations on Play Console uploads
 
 ### Phase 1: Internal Testing
 
@@ -174,8 +207,9 @@ Pricing to match the web Mercado Pago plans.
 - ProGuard/R8 rules file
 - AndroidManifest fixes (cleartext, backup, permissions)
 - Production API URL and build config
-- Debug-only manifest overlay
+- Network security config XML
 - Data extraction rules XML
+- `.gitignore` updates for keystore files
 - Play Store description texts (draft)
 
 ### Out of scope (manual steps - guided with instructions)
@@ -188,3 +222,4 @@ Pricing to match the web Mercado Pago plans.
 - Feature graphic creation
 - Privacy policy page creation and hosting
 - Upload and submission to Play Store
+- Digital Asset Links (`assetlinks.json`) hosting (requires Play-managed certificate fingerprint)

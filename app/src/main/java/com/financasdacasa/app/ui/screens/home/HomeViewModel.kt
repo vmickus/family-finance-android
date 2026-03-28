@@ -37,6 +37,7 @@ data class HomeUiState(
     val error: String? = null,
     val editingTransaction: Transaction? = null,
     val showTransactionForm: Boolean = false,
+    val lastUsedDate: String? = null,
 )
 
 enum class ViewMode { MONTHLY, ANNUAL }
@@ -200,8 +201,12 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun onTransactionSaved() {
-        dismissForm()
+    fun onTransactionSaved(savedDate: String? = null) {
+        _uiState.value = _uiState.value.copy(
+            showTransactionForm = false,
+            editingTransaction = null,
+            lastUsedDate = savedDate ?: _uiState.value.lastUsedDate,
+        )
         loadData()
     }
 

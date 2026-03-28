@@ -32,15 +32,16 @@ import java.time.LocalDate
 @Composable
 fun TransactionFormSheet(
     editTransaction: Transaction?,
+    lastUsedDate: String? = null,
     onDismiss: () -> Unit,
-    onSaved: () -> Unit,
+    onSaved: (savedDate: String) -> Unit,
     viewModel: TransactionFormViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
     LaunchedEffect(editTransaction) {
-        viewModel.initialize(editTransaction)
+        viewModel.initialize(editTransaction, lastUsedDate)
     }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

@@ -51,7 +51,7 @@ class TransactionFormViewModel @Inject constructor(
 
     fun getEvaluatedAmount(): Double? = evaluateExpression(_state.value.amountExpression)
 
-    fun initialize(editTransaction: Transaction?) {
+    fun initialize(editTransaction: Transaction?, lastUsedDate: String? = null) {
         if (editTransaction != null) {
             val amountStr = try {
                 editTransaction.amount.toBigDecimal().toPlainString()
@@ -66,7 +66,7 @@ class TransactionFormViewModel @Inject constructor(
                 description = editTransaction.description,
             )
         } else {
-            _state.value = TransactionFormState()
+            _state.value = TransactionFormState(date = lastUsedDate ?: getTodayLocalDate())
         }
         loadCategories()
     }
@@ -135,7 +135,7 @@ class TransactionFormViewModel @Inject constructor(
     }
 
     @Suppress("ReturnCount")
-    fun save(editTransactionId: String?, onSuccess: () -> Unit) {
+    fun save(editTransactionId: String?, onSuccess: (savedDate: String) -> Unit) {
         val s = _state.value
         val id = houseId ?: return
 
@@ -200,7 +200,7 @@ class TransactionFormViewModel @Inject constructor(
                     )
                 }
                 _state.value = _state.value.copy(isSaving = false)
-                onSuccess()
+                onSuccess(s.date)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isSaving = false,

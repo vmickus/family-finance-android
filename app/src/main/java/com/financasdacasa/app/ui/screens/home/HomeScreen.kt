@@ -77,8 +77,9 @@ fun HomeScreen(
     if (uiState.showTransactionForm) {
         TransactionFormSheet(
             editTransaction = uiState.editingTransaction,
+            lastUsedDate = uiState.lastUsedDate,
             onDismiss = { viewModel.dismissForm() },
-            onSaved = { viewModel.onTransactionSaved() },
+            onSaved = { savedDate -> viewModel.onTransactionSaved(savedDate) },
         )
     }
 

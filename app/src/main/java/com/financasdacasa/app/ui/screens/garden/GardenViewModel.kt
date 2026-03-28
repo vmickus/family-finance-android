@@ -7,6 +7,8 @@ import com.financasdacasa.app.data.model.*
 import com.financasdacasa.app.data.repository.GoalRepository
 import com.financasdacasa.app.data.repository.TransactionRepository
 import com.financasdacasa.app.util.DEFAULT_GOAL_COLOR
+import com.financasdacasa.app.util.evaluateExpression
+import com.financasdacasa.app.util.normalizeExpressionInput
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +28,7 @@ data class GardenUiState(
     val showGoalForm: Boolean = false,
     val editingGoal: Goal? = null,
     val formName: String = "",
-    val formTargetDigits: String = "",
+    val formTargetExpression: String = "",
     val formPlantType: String = "tree",
     val formColor: String = DEFAULT_GOAL_COLOR,
     val formPriority: Int = 0,
@@ -110,7 +112,7 @@ class GardenViewModel @Inject constructor(
             showGoalForm = true,
             editingGoal = null,
             formName = "",
-            formTargetDigits = "",
+            formTargetExpression = "",
             formPlantType = "tree",
             formColor = DEFAULT_GOAL_COLOR,
             formPriority = 0,
@@ -120,12 +122,13 @@ class GardenViewModel @Inject constructor(
     }
 
     fun showEditForm(goal: Goal) {
-        val targetCents = ((goal.targetAmount.toDoubleOrNull() ?: 0.0) * 100).toLong().toString()
+        val target = goal.targetAmount.toDoubleOrNull() ?: 0.0
+        val formatted = if (target % 1.0 == 0.0) target.toLong().toString() else target.toString()
         _uiState.value = _uiState.value.copy(
             showGoalForm = true,
             editingGoal = goal,
             formName = goal.name,
-            formTargetDigits = targetCents,
+            formTargetExpression = formatted,
             formPlantType = goal.plantType,
             formColor = goal.color,
             formPriority = goal.priorityPercent,
@@ -139,7 +142,7 @@ class GardenViewModel @Inject constructor(
     }
 
     fun onFormNameChange(v: String) { _uiState.value = _uiState.value.copy(formName = v, formError = null) }
-    fun onFormTargetChange(v: String) { _uiState.value = _uiState.value.copy(formTargetDigits = v.filter { it.isDigit() }, formError = null) }
+    fun onFormTargetChange(v: String) { _uiState.value = _uiState.value.copy(formTargetExpression = normalizeExpressionInput(v), formError = null) }
     fun onFormPlantTypeChange(v: String) { _uiState.value = _uiState.value.copy(formPlantType = v) }
     fun onFormColorChange(v: String) { _uiState.value = _uiState.value.copy(formColor = v) }
     fun onFormPriorityChange(v: Int) { _uiState.value = _uiState.value.copy(formPriority = v.coerceIn(0, availablePriority)) }
@@ -150,8 +153,8 @@ class GardenViewModel @Inject constructor(
         val name = s.formName.trim()
         if (name.isEmpty()) { _uiState.value = s.copy(formError = "NAME_REQUIRED"); return }
         if (name.length > 50) { _uiState.value = s.copy(formError = "NAME_MAX"); return }
-        val cents = s.formTargetDigits.toLongOrNull() ?: 0L
-        if (cents <= 0 && s.editingGoal == null) { _uiState.value = s.copy(formError = "TARGET_REQUIRED"); return }
+        val targetAmount = evaluateExpression(s.formTargetExpression)?.let { Math.round(it * 100) / 100.0 } ?: 0.0
+        if (targetAmount <= 0 && s.editingGoal == null) { _uiState.value = s.copy(formError = "TARGET_REQUIRED"); return }
 
         val id = houseId ?: return
         _uiState.value = s.copy(isSaving = true, formError = null)
@@ -162,7 +165,7 @@ class GardenViewModel @Inject constructor(
                 if (editing != null) {
                     goalRepository.update(editing.id, UpdateGoalRequest(
                         name = name,
-                        targetAmount = if (cents > 0) cents / 100.0 else null,
+                        targetAmount = if (targetAmount > 0) targetAmount else null,
                         plantType = s.formPlantType,
                         color = s.formColor,
                         priorityPercent = s.formPriority,
@@ -172,7 +175,7 @@ class GardenViewModel @Inject constructor(
                     goalRepository.create(CreateGoalRequest(
                         houseId = id,
                         name = name,
-                        targetAmount = cents / 100.0,
+                        targetAmount = targetAmount,
                         plantType = s.formPlantType,
                         color = s.formColor,
                         priorityPercent = s.formPriority,
@@ -230,9 +233,9 @@ class GardenViewModel @Inject constructor(
         val amounts = goals.associate { goal ->
             val share = (goal.priorityPercent.toDouble() / totalPriority) * free
             val remaining = (goal.targetAmount.toDoubleOrNull() ?: 0.0) - (goal.currentAmount.toDoubleOrNull() ?: 0.0)
-            val amount = minOf(share, remaining.coerceAtLeast(0.0))
-            val cents = (amount * 100).toLong().toString()
-            goal.id to cents
+            val amount = Math.round(minOf(share, remaining.coerceAtLeast(0.0)) * 100) / 100.0
+            val formatted = if (amount % 1.0 == 0.0) amount.toLong().toString() else amount.toString()
+            goal.id to formatted
         }
 
         _uiState.value = _uiState.value.copy(
@@ -249,9 +252,9 @@ class GardenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(waterDescription = value.take(200))
     }
 
-    fun onWaterAmountChange(goalId: String, digits: String) {
+    fun onWaterAmountChange(goalId: String, raw: String) {
         val amounts = _uiState.value.waterAmounts.toMutableMap()
-        amounts[goalId] = digits.filter { it.isDigit() }
+        amounts[goalId] = normalizeExpressionInput(raw)
         _uiState.value = _uiState.value.copy(waterAmounts = amounts, waterError = null)
     }
 
@@ -259,9 +262,9 @@ class GardenViewModel @Inject constructor(
         val id = houseId ?: return
         val s = _uiState.value
         val desc = s.waterDescription.trim().ifEmpty { null }
-        val allocations = s.waterAmounts.mapNotNull { (goalId, digits) ->
-            val cents = digits.toLongOrNull() ?: 0L
-            if (cents > 0) AllocationItemRequest(goalId, cents / 100.0, desc) else null
+        val allocations = s.waterAmounts.mapNotNull { (goalId, expr) ->
+            val amount = evaluateExpression(expr)?.let { Math.round(it * 100) / 100.0 } ?: 0.0
+            if (amount > 0) AllocationItemRequest(goalId, amount, desc) else null
         }
         if (allocations.isEmpty()) return
 

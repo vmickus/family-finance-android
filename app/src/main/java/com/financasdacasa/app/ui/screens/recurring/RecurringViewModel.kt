@@ -8,6 +8,8 @@ import com.financasdacasa.app.data.model.RecurringTransaction
 import com.financasdacasa.app.data.model.UpdateRecurringTransactionRequest
 import com.financasdacasa.app.data.repository.CategoryRepository
 import com.financasdacasa.app.data.repository.RecurringTransactionRepository
+import com.financasdacasa.app.util.evaluateExpression
+import com.financasdacasa.app.util.normalizeExpressionInput
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,7 @@ data class RecurringUiState(
     // Edit form
     val editingItem: RecurringTransaction? = null,
     val formCategoryId: String = "",
-    val formAmountDigits: String = "",
+    val formAmountExpression: String = "",
     val formDescription: String = "",
     val isSaving: Boolean = false,
     // Delete
@@ -64,11 +66,12 @@ class RecurringViewModel @Inject constructor(
     // --- Edit ---
 
     fun showEditForm(item: RecurringTransaction) {
-        val amountCents = ((item.amount.toDoubleOrNull() ?: 0.0) * 100).toLong().toString()
+        val amount = item.amount.toDoubleOrNull() ?: 0.0
+        val formatted = if (amount % 1.0 == 0.0) amount.toLong().toString() else amount.toString()
         _uiState.value = _uiState.value.copy(
             editingItem = item,
             formCategoryId = item.categoryId ?: "",
-            formAmountDigits = amountCents,
+            formAmountExpression = formatted,
             formDescription = item.description,
         )
     }
@@ -78,18 +81,18 @@ class RecurringViewModel @Inject constructor(
     }
 
     fun onFormCategoryChange(id: String) { _uiState.value = _uiState.value.copy(formCategoryId = id) }
-    fun onFormAmountChange(v: String) { _uiState.value = _uiState.value.copy(formAmountDigits = v.filter { it.isDigit() }) }
+    fun onFormAmountChange(v: String) { _uiState.value = _uiState.value.copy(formAmountExpression = normalizeExpressionInput(v)) }
     fun onFormDescriptionChange(v: String) { _uiState.value = _uiState.value.copy(formDescription = v) }
 
     fun saveEdit() {
         val item = _uiState.value.editingItem ?: return
-        val cents = _uiState.value.formAmountDigits.toLongOrNull() ?: 0L
+        val amount = evaluateExpression(_uiState.value.formAmountExpression)?.let { Math.round(it * 100) / 100.0 } ?: 0.0
         _uiState.value = _uiState.value.copy(isSaving = true)
         viewModelScope.launch {
             try {
                 recurringRepository.update(item.id, UpdateRecurringTransactionRequest(
                     categoryId = _uiState.value.formCategoryId.ifEmpty { null },
-                    amount = if (cents > 0) cents / 100.0 else null,
+                    amount = if (amount > 0) amount else null,
                     description = _uiState.value.formDescription.ifEmpty { null },
                 ))
                 _uiState.value = _uiState.value.copy(editingItem = null, isSaving = false)

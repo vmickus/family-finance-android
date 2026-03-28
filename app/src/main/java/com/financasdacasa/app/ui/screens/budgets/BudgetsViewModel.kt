@@ -10,6 +10,8 @@ import com.financasdacasa.app.data.model.UpsertBudgetLimitRequest
 import com.financasdacasa.app.data.repository.BudgetLimitRepository
 import com.financasdacasa.app.data.repository.CategoryRepository
 import com.financasdacasa.app.data.repository.TransactionRepository
+import com.financasdacasa.app.util.evaluateExpression
+import com.financasdacasa.app.util.normalizeExpressionInput
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +31,7 @@ data class BudgetsUiState(
     // Add form
     val showAddForm: Boolean = false,
     val selectedCategoryId: String = "",
-    val amountDigits: String = "",
+    val amountExpression: String = "",
     val isSaving: Boolean = false,
     // Delete
     val deletingLimitId: String? = null,
@@ -100,7 +102,7 @@ class BudgetsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             showAddForm = true,
             selectedCategoryId = "",
-            amountDigits = "",
+            amountExpression = "",
         )
     }
 
@@ -112,15 +114,15 @@ class BudgetsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(selectedCategoryId = categoryId)
     }
 
-    fun onAmountChange(digits: String) {
-        _uiState.value = _uiState.value.copy(amountDigits = digits.filter { it.isDigit() })
+    fun onAmountChange(raw: String) {
+        _uiState.value = _uiState.value.copy(amountExpression = normalizeExpressionInput(raw))
     }
 
     fun saveBudgetLimit() {
         val s = _uiState.value
         val id = houseId ?: return
-        val cents = s.amountDigits.toLongOrNull() ?: 0L
-        if (s.selectedCategoryId.isEmpty() || cents <= 0) return
+        val amount = evaluateExpression(s.amountExpression)?.let { Math.round(it * 100) / 100.0 } ?: 0.0
+        if (s.selectedCategoryId.isEmpty() || amount <= 0) return
 
         _uiState.value = s.copy(isSaving = true)
         viewModelScope.launch {
@@ -129,7 +131,7 @@ class BudgetsViewModel @Inject constructor(
                     UpsertBudgetLimitRequest(
                         houseId = id,
                         categoryId = s.selectedCategoryId,
-                        monthlyLimit = cents / 100.0,
+                        monthlyLimit = amount,
                     ),
                 )
                 _uiState.value = _uiState.value.copy(showAddForm = false, isSaving = false)

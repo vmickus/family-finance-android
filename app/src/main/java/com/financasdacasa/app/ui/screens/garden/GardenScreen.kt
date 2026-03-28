@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +29,7 @@ import com.composables.icons.lucide.Plus
 import com.composables.icons.lucide.Sprout
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.Goal
+import com.financasdacasa.app.ui.components.CalculatorAmountField
 import com.financasdacasa.app.util.*
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -370,17 +369,21 @@ private fun GoalFormSheet(
             )
 
             // Target amount
-            OutlinedTextField(
-                value = if (state.formTargetDigits.isNotBlank()) formatAmountFromDigits(state.formTargetDigits) else "",
+            CalculatorAmountField(
+                value = state.formTargetExpression,
                 onValueChange = { onTargetChange(it) },
+                evaluatedAmount = evaluateExpression(state.formTargetExpression),
                 label = { Text(stringResource(R.string.target_amount)) },
-                prefix = { Text("R$") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
                 isError = state.formError == "TARGET_REQUIRED",
-                supportingText = if (state.formError == "TARGET_REQUIRED") ({ Text(stringResource(R.string.error_target_required)) }) else null,
                 modifier = Modifier.fillMaxWidth(),
             )
+            if (state.formError == "TARGET_REQUIRED") {
+                Text(
+                    stringResource(R.string.error_target_required),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
 
             // Priority
             Text(
@@ -457,7 +460,7 @@ private fun WaterGardenSheet(
 
             // Goal amount inputs
             for (goal in activeGoals) {
-                val digits = state.waterAmounts[goal.id] ?: ""
+                val expr = state.waterAmounts[goal.id] ?: ""
                 val color = try { Color(android.graphics.Color.parseColor(goal.color)) } catch (_: Exception) { Color(0xFF5B8A72) }
 
                 Row(
@@ -472,13 +475,11 @@ private fun WaterGardenSheet(
                     Column(modifier = Modifier.weight(1f)) {
                         Text(goal.name, style = MaterialTheme.typography.bodySmall)
                     }
-                    OutlinedTextField(
-                        value = if (digits.isNotBlank()) formatAmountFromDigits(digits) else "",
+                    CalculatorAmountField(
+                        value = expr,
                         onValueChange = { onAmountChange(goal.id, it) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true,
-                        modifier = Modifier.width(120.dp),
-                        textStyle = MaterialTheme.typography.bodySmall,
+                        evaluatedAmount = evaluateExpression(expr),
+                        modifier = Modifier.width(160.dp),
                     )
                 }
             }
@@ -494,7 +495,7 @@ private fun WaterGardenSheet(
             )
 
             // Total
-            val total = state.waterAmounts.values.sumOf { (it.toLongOrNull() ?: 0L) / 100.0 }
+            val total = state.waterAmounts.values.sumOf { evaluateExpression(it) ?: 0.0 }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

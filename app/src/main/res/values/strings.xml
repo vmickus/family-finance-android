@@ -358,6 +358,10 @@
     <string name="deactivation_transfer_success">Ownership transferred</string>
     <string name="deactivation_delete_success">House deleted</string>
 
+    <!-- Calculator -->
+    <string name="calculator_result">= %s</string>
+    <string name="invalid_expression">Invalid expression</string>
+
     <!-- Offline -->
     <string name="offline_banner">You are offline. Showing cached data.</string>
 </resources>

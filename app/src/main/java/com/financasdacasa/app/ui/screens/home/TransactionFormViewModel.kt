@@ -11,8 +11,9 @@ import com.financasdacasa.app.data.model.UpdateTransactionRequest
 import com.financasdacasa.app.data.repository.CategoryRepository
 import com.financasdacasa.app.data.repository.RecurringTransactionRepository
 import com.financasdacasa.app.data.repository.TransactionRepository
-import com.financasdacasa.app.util.amountDigitsToDouble
+import com.financasdacasa.app.util.evaluateExpression
 import com.financasdacasa.app.util.getTodayLocalDate
+import com.financasdacasa.app.util.normalizeExpressionInput
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 data class TransactionFormState(
     val type: String = "expense",
-    val amountDigits: String = "",
+    val amountExpression: String = "",
     val date: String = getTodayLocalDate(),
     val categoryId: String? = null,
     val description: String = "",
@@ -48,17 +49,18 @@ class TransactionFormViewModel @Inject constructor(
 
     private val houseId: String? get() = sessionManager.getSelectedHouseId()
 
+    fun getEvaluatedAmount(): Double? = evaluateExpression(_state.value.amountExpression)
+
     fun initialize(editTransaction: Transaction?) {
         if (editTransaction != null) {
-            val amountCents = try {
-                (editTransaction.amount.toBigDecimal() * 100.toBigDecimal())
-                    .toLong().toString()
+            val amountStr = try {
+                editTransaction.amount.toBigDecimal().toPlainString()
             } catch (_: Exception) {
                 ""
             }
             _state.value = TransactionFormState(
                 type = editTransaction.type,
-                amountDigits = amountCents,
+                amountExpression = amountStr,
                 date = editTransaction.transactionDate,
                 categoryId = editTransaction.categoryId,
                 description = editTransaction.description,
@@ -93,9 +95,9 @@ class TransactionFormViewModel @Inject constructor(
         )
     }
 
-    fun onAmountChange(digits: String) {
-        val cleaned = digits.filter { it.isDigit() }
-        _state.value = _state.value.copy(amountDigits = cleaned, error = null)
+    fun onAmountChange(raw: String) {
+        val normalized = normalizeExpressionInput(raw)
+        _state.value = _state.value.copy(amountExpression = normalized, error = null)
     }
 
     fun onDateChange(date: String) {
@@ -142,7 +144,7 @@ class TransactionFormViewModel @Inject constructor(
                 _state.value = s.copy(error = "CATEGORY_REQUIRED")
                 return
             }
-            s.amountDigits.isBlank() || s.amountDigits.toLongOrNull() == 0L -> {
+            evaluateExpression(s.amountExpression).let { it == null || it <= 0 } -> {
                 _state.value = s.copy(error = "AMOUNT_REQUIRED")
                 return
             }
@@ -156,7 +158,8 @@ class TransactionFormViewModel @Inject constructor(
             }
         }
 
-        val amount = amountDigitsToDouble(s.amountDigits)
+        val evaluated = evaluateExpression(s.amountExpression) ?: return
+        val amount = Math.round(evaluated * 100) / 100.0
 
         viewModelScope.launch {
             _state.value = s.copy(isSaving = true, error = null)

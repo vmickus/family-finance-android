@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.composables.icons.lucide.*
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.RecurringTransaction
-import com.financasdacasa.app.util.formatAmountFromDigits
+import com.financasdacasa.app.ui.components.CalculatorAmountField
+import com.financasdacasa.app.util.evaluateExpression
 import com.financasdacasa.app.util.formatCurrency
 import com.financasdacasa.app.util.getLucideIcon
 import java.math.BigDecimal
@@ -278,13 +277,11 @@ private fun EditRecurringSheet(
             }
 
             // Amount
-            OutlinedTextField(
-                value = if (state.formAmountDigits.isNotBlank()) formatAmountFromDigits(state.formAmountDigits) else "",
+            CalculatorAmountField(
+                value = state.formAmountExpression,
                 onValueChange = { onAmountChange(it) },
+                evaluatedAmount = evaluateExpression(state.formAmountExpression),
                 label = { Text(stringResource(R.string.amount)) },
-                prefix = { Text("R$") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
 

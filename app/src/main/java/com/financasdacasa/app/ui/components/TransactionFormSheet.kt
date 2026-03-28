@@ -13,13 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.composables.icons.lucide.CalendarDays
@@ -27,7 +24,6 @@ import com.composables.icons.lucide.Lucide
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.Transaction
 import com.financasdacasa.app.ui.screens.home.TransactionFormViewModel
-import com.financasdacasa.app.util.formatAmountFromDigits
 import com.financasdacasa.app.util.formatTransactionDate
 import com.financasdacasa.app.util.getLucideIcon
 import java.time.LocalDate
@@ -129,33 +125,12 @@ fun TransactionFormSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 // Amount — calculator-style input
-                val formattedAmount = formatAmountFromDigits(state.amountDigits)
-                var amountFieldValue by remember(formattedAmount) {
-                    mutableStateOf(
-                        TextFieldValue(
-                            text = formattedAmount,
-                            selection = TextRange(formattedAmount.length),
-                        ),
-                    )
-                }
-                OutlinedTextField(
-                    value = amountFieldValue,
-                    onValueChange = { newValue ->
-                        viewModel.onAmountChange(newValue.text)
-                    },
+                CalculatorAmountField(
+                    value = state.amountExpression,
+                    onValueChange = { viewModel.onAmountChange(it) },
+                    evaluatedAmount = viewModel.getEvaluatedAmount(),
                     label = { Text(stringResource(R.string.amount)) },
-                    placeholder = { Text("R$ 0,00") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .onFocusChanged { focusState ->
-                            if (focusState.isFocused) {
-                                amountFieldValue = amountFieldValue.copy(
-                                    selection = TextRange(amountFieldValue.text.length),
-                                )
-                            }
-                        },
+                    modifier = Modifier.weight(1f),
                 )
 
                 // Date picker

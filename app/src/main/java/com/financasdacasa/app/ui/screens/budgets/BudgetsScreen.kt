@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.composables.icons.lucide.ChevronLeft
@@ -31,7 +29,8 @@ import com.composables.icons.lucide.Target
 import com.composables.icons.lucide.Trash2
 import com.financasdacasa.app.R
 import com.financasdacasa.app.data.model.BudgetLimit
-import com.financasdacasa.app.util.formatAmountFromDigits
+import com.financasdacasa.app.ui.components.CalculatorAmountField
+import com.financasdacasa.app.util.evaluateExpression
 import com.financasdacasa.app.util.formatCurrency
 import com.financasdacasa.app.util.getLucideIcon
 import java.math.BigDecimal
@@ -469,13 +468,11 @@ private fun AddBudgetSheet(
             }
 
             // Amount input
-            Text(stringResource(R.string.monthly_limit), style = MaterialTheme.typography.labelLarge)
-            OutlinedTextField(
-                value = formatAmountFromDigits(state.amountDigits),
+            CalculatorAmountField(
+                value = state.amountExpression,
                 onValueChange = { onAmountChange(it) },
-                prefix = { Text("R$") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
+                evaluatedAmount = evaluateExpression(state.amountExpression),
+                label = { Text(stringResource(R.string.monthly_limit)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -483,7 +480,7 @@ private fun AddBudgetSheet(
             Button(
                 onClick = onSave,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !state.isSaving && state.selectedCategoryId.isNotEmpty() && state.amountDigits.isNotEmpty(),
+                enabled = !state.isSaving && state.selectedCategoryId.isNotEmpty() && state.amountExpression.isNotEmpty(),
             ) {
                 if (state.isSaving) {
                     CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
